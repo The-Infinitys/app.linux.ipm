@@ -1,0 +1,12 @@
+{
+    "about":{
+        "name":"Infinity Package Manager's Default Package",
+        "id":"ipm-default-pack",
+        "author":{
+            "name":"The Infinity's",
+            "id":"the-infinitys"
+        },
+        "description":"README.md",
+        "license":"LICENSE"
+    }
+}
