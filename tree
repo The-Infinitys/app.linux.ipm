@@ -1,0 +1,686 @@
+.
+├── ipm-cli
+│   └── README.md
+├── ipm-core
+│   ├── Cargo.lock
+│   ├── Cargo.toml
+│   ├── src
+│   │   └── main.rs
+│   └── target
+│       ├── CACHEDIR.TAG
+│       └── debug
+│           ├── build
+│           │   ├── anyhow-691403aa0d6cd98e
+│           │   │   ├── build-script-build
+│           │   │   ├── build_script_build-691403aa0d6cd98e
+│           │   │   └── build_script_build-691403aa0d6cd98e.d
+│           │   ├── anyhow-87ff832bded2cae3
+│           │   │   └── out
+│           │   ├── bzip2-sys-3e526bf62188ad16
+│           │   │   ├── build-script-build
+│           │   │   ├── build_script_build-3e526bf62188ad16
+│           │   │   └── build_script_build-3e526bf62188ad16.d
+│           │   ├── bzip2-sys-7c29a923c40a9f80
+│           │   │   ├── invoked.timestamp
+│           │   │   ├── out
+│           │   │   │   ├── include
+│           │   │   │   │   └── bzlib.h
+│           │   │   │   └── lib
+│           │   │   │       ├── a9dc8ba631b1466a-blocksort.o
+│           │   │   │       ├── a9dc8ba631b1466a-bzlib.o
+│           │   │   │       ├── a9dc8ba631b1466a-compress.o
+│           │   │   │       ├── a9dc8ba631b1466a-crctable.o
+│           │   │   │       ├── a9dc8ba631b1466a-decompress.o
+│           │   │   │       ├── a9dc8ba631b1466a-huffman.o
+│           │   │   │       ├── a9dc8ba631b1466a-randtable.o
+│           │   │   │       └── libbz2.a
+│           │   │   ├── output
+│           │   │   ├── root-output
+│           │   │   └── stderr
+│           │   ├── generic-array-010921923321f37d
+│           │   │   ├── build-script-build
+│           │   │   ├── build_script_build-010921923321f37d
+│           │   │   └── build_script_build-010921923321f37d.d
+│           │   ├── generic-array-e3ee2026fbc7b4e4
+│           │   │   ├── invoked.timestamp
+│           │   │   ├── out
+│           │   │   ├── output
+│           │   │   ├── root-output
+│           │   │   └── stderr
+│           │   ├── httparse-983c2f1d675491d4
+│           │   │   ├── invoked.timestamp
+│           │   │   ├── out
+│           │   │   ├── output
+│           │   │   ├── root-output
+│           │   │   └── stderr
+│           │   ├── httparse-cd84ad4fdce8f6ca
+│           │   │   ├── build-script-build
+│           │   │   ├── build_script_build-cd84ad4fdce8f6ca
+│           │   │   └── build_script_build-cd84ad4fdce8f6ca.d
+│           │   ├── icu_locid_transform_data-35dc825b18c865c7
+│           │   │   ├── build-script-build
+│           │   │   ├── build_script_build-35dc825b18c865c7
+│           │   │   └── build_script_build-35dc825b18c865c7.d
+│           │   ├── icu_locid_transform_data-692bdffed3bafbd5
+│           │   │   ├── invoked.timestamp
+│           │   │   ├── out
+│           │   │   ├── output
+│           │   │   ├── root-output
+│           │   │   └── stderr
+│           │   ├── icu_normalizer_data-a273d6d36109e876
+│           │   │   ├── invoked.timestamp
+│           │   │   ├── out
+│           │   │   ├── output
+│           │   │   ├── root-output
+│           │   │   └── stderr
+│           │   ├── icu_normalizer_data-c8ca7373d2e91b9a
+│           │   │   ├── build-script-build
+│           │   │   ├── build_script_build-c8ca7373d2e91b9a
+│           │   │   └── build_script_build-c8ca7373d2e91b9a.d
+│           │   ├── icu_properties_data-673b615e7cd163aa
+│           │   │   ├── build-script-build
+│           │   │   ├── build_script_build-673b615e7cd163aa
+│           │   │   └── build_script_build-673b615e7cd163aa.d
+│           │   ├── icu_properties_data-bc528b6138664c4a
+│           │   │   ├── invoked.timestamp
+│           │   │   ├── out
+│           │   │   ├── output
+│           │   │   ├── root-output
+│           │   │   └── stderr
+│           │   ├── libc-2b330fabff593e89
+│           │   │   ├── build-script-build
+│           │   │   ├── build_script_build-2b330fabff593e89
+│           │   │   └── build_script_build-2b330fabff593e89.d
+│           │   ├── libc-62f8bcd3ebe99c48
+│           │   │   ├── invoked.timestamp
+│           │   │   ├── out
+│           │   │   ├── output
+│           │   │   ├── root-output
+│           │   │   └── stderr
+│           │   ├── native-tls-20ef2d68388673a8
+│           │   │   ├── invoked.timestamp
+│           │   │   ├── out
+│           │   │   ├── output
+│           │   │   ├── root-output
+│           │   │   └── stderr
+│           │   ├── native-tls-94ce01ace9c08ee9
+│           │   │   ├── build-script-build
+│           │   │   ├── build_script_build-94ce01ace9c08ee9
+│           │   │   └── build_script_build-94ce01ace9c08ee9.d
+│           │   ├── openssl-1dbf54a59485caa9
+│           │   │   ├── build-script-build
+│           │   │   ├── build_script_build-1dbf54a59485caa9
+│           │   │   └── build_script_build-1dbf54a59485caa9.d
+│           │   ├── openssl-c2990369933a6658
+│           │   │   ├── invoked.timestamp
+│           │   │   ├── out
+│           │   │   ├── output
+│           │   │   ├── root-output
+│           │   │   └── stderr
+│           │   ├── openssl-sys-86e6623820ace7f4
+│           │   │   ├── build-script-main
+│           │   │   ├── build_script_main-86e6623820ace7f4
+│           │   │   └── build_script_main-86e6623820ace7f4.d
+│           │   ├── openssl-sys-b4220d8c73a0136d
+│           │   │   ├── invoked.timestamp
+│           │   │   ├── out
+│           │   │   ├── output
+│           │   │   ├── root-output
+│           │   │   └── stderr
+│           │   ├── proc-macro2-129dd563fe2e9f6e
+│           │   │   ├── invoked.timestamp
+│           │   │   ├── out
+│           │   │   ├── output
+│           │   │   ├── root-output
+│           │   │   └── stderr
+│           │   ├── proc-macro2-b6a1c6e559d3c9b1
+│           │   │   ├── build-script-build
+│           │   │   ├── build_script_build-b6a1c6e559d3c9b1
+│           │   │   └── build_script_build-b6a1c6e559d3c9b1.d
+│           │   ├── rustix-1804f8a0c80076f4
+│           │   │   ├── invoked.timestamp
+│           │   │   ├── out
+│           │   │   ├── output
+│           │   │   ├── root-output
+│           │   │   └── stderr
+│           │   ├── rustix-4ed6f2869afdd330
+│           │   │   ├── build-script-build
+│           │   │   ├── build_script_build-4ed6f2869afdd330
+│           │   │   └── build_script_build-4ed6f2869afdd330.d
+│           │   ├── semver-4192f3b85d112250
+│           │   │   ├── build-script-build
+│           │   │   ├── build_script_build-4192f3b85d112250
+│           │   │   └── build_script_build-4192f3b85d112250.d
+│           │   ├── semver-827444ef965f67c0
+│           │   │   └── out
+│           │   ├── serde-441b3daadc48cbff
+│           │   │   ├── invoked.timestamp
+│           │   │   ├── out
+│           │   │   ├── output
+│           │   │   ├── root-output
+│           │   │   └── stderr
+│           │   ├── serde-d8192c128407b2cc
+│           │   │   ├── build-script-build
+│           │   │   ├── build_script_build-d8192c128407b2cc
+│           │   │   └── build_script_build-d8192c128407b2cc.d
+│           │   ├── serde_json-0bac153c467984cc
+│           │   │   ├── build-script-build
+│           │   │   ├── build_script_build-0bac153c467984cc
+│           │   │   └── build_script_build-0bac153c467984cc.d
+│           │   ├── serde_json-4654aeb4e3d61e99
+│           │   │   └── out
+│           │   ├── slab-ba6eccd474830350
+│           │   │   ├── invoked.timestamp
+│           │   │   ├── out
+│           │   │   │   └── autocfg_61d9537327aec653_0.ll
+│           │   │   ├── output
+│           │   │   ├── root-output
+│           │   │   └── stderr
+│           │   ├── slab-c9e04f9c5dbd840e
+│           │   │   ├── build-script-build
+│           │   │   ├── build_script_build-c9e04f9c5dbd840e
+│           │   │   └── build_script_build-c9e04f9c5dbd840e.d
+│           │   ├── thiserror-6701bd2fbbf39cb5
+│           │   │   ├── build-script-build
+│           │   │   ├── build_script_build-6701bd2fbbf39cb5
+│           │   │   └── build_script_build-6701bd2fbbf39cb5.d
+│           │   ├── thiserror-7916c3e7b8145fdf
+│           │   │   └── out
+│           │   ├── typenum-1500ca72bfd7dd5f
+│           │   │   ├── invoked.timestamp
+│           │   │   ├── out
+│           │   │   │   └── tests.rs
+│           │   │   ├── output
+│           │   │   ├── root-output
+│           │   │   └── stderr
+│           │   ├── typenum-383b6a47d4e450c0
+│           │   │   ├── build-script-build
+│           │   │   ├── build_script_build-383b6a47d4e450c0
+│           │   │   └── build_script_build-383b6a47d4e450c0.d
+│           │   ├── zstd-safe-196cae6fddf4b465
+│           │   │   ├── build-script-build
+│           │   │   ├── build_script_build-196cae6fddf4b465
+│           │   │   └── build_script_build-196cae6fddf4b465.d
+│           │   ├── zstd-safe-5bfb7c6ed64de1b6
+│           │   │   ├── invoked.timestamp
+│           │   │   ├── out
+│           │   │   ├── output
+│           │   │   ├── root-output
+│           │   │   └── stderr
+│           │   ├── zstd-sys-40e9a4341e97a813
+│           │   │   ├── invoked.timestamp
+│           │   │   ├── out
+│           │   │   │   ├── 3f451b2306bc13c8-zstd_v01.o
+│           │   │   │   ├── 3f451b2306bc13c8-zstd_v02.o
+│           │   │   │   ├── 3f451b2306bc13c8-zstd_v03.o
+│           │   │   │   ├── 3f451b2306bc13c8-zstd_v04.o
+│           │   │   │   ├── 3f451b2306bc13c8-zstd_v05.o
+│           │   │   │   ├── 3f451b2306bc13c8-zstd_v06.o
+│           │   │   │   ├── 3f451b2306bc13c8-zstd_v07.o
+│           │   │   │   ├── 44ff4c55aa9e5133-debug.o
+│           │   │   │   ├── 44ff4c55aa9e5133-entropy_common.o
+│           │   │   │   ├── 44ff4c55aa9e5133-error_private.o
+│           │   │   │   ├── 44ff4c55aa9e5133-fse_decompress.o
+│           │   │   │   ├── 44ff4c55aa9e5133-pool.o
+│           │   │   │   ├── 44ff4c55aa9e5133-threading.o
+│           │   │   │   ├── 44ff4c55aa9e5133-zstd_common.o
+│           │   │   │   ├── 7faed3f8272f2313-huf_decompress_amd64.o
+│           │   │   │   ├── 88f362f13b0528ed-huf_decompress.o
+│           │   │   │   ├── 88f362f13b0528ed-zstd_ddict.o
+│           │   │   │   ├── 88f362f13b0528ed-zstd_decompress_block.o
+│           │   │   │   ├── 88f362f13b0528ed-zstd_decompress.o
+│           │   │   │   ├── a6c81c75fc82913a-cover.o
+│           │   │   │   ├── a6c81c75fc82913a-divsufsort.o
+│           │   │   │   ├── a6c81c75fc82913a-fastcover.o
+│           │   │   │   ├── a6c81c75fc82913a-zdict.o
+│           │   │   │   ├── fb80479a5fb81f6a-fse_compress.o
+│           │   │   │   ├── fb80479a5fb81f6a-hist.o
+│           │   │   │   ├── fb80479a5fb81f6a-huf_compress.o
+│           │   │   │   ├── fb80479a5fb81f6a-zstd_compress_literals.o
+│           │   │   │   ├── fb80479a5fb81f6a-zstd_compress.o
+│           │   │   │   ├── fb80479a5fb81f6a-zstd_compress_sequences.o
+│           │   │   │   ├── fb80479a5fb81f6a-zstd_compress_superblock.o
+│           │   │   │   ├── fb80479a5fb81f6a-zstd_double_fast.o
+│           │   │   │   ├── fb80479a5fb81f6a-zstd_fast.o
+│           │   │   │   ├── fb80479a5fb81f6a-zstd_lazy.o
+│           │   │   │   ├── fb80479a5fb81f6a-zstd_ldm.o
+│           │   │   │   ├── fb80479a5fb81f6a-zstdmt_compress.o
+│           │   │   │   ├── fb80479a5fb81f6a-zstd_opt.o
+│           │   │   │   ├── fb80479a5fb81f6a-zstd_preSplit.o
+│           │   │   │   ├── flag_check
+│           │   │   │   ├── flag_check.c
+│           │   │   │   ├── include
+│           │   │   │   │   ├── zdict.h
+│           │   │   │   │   ├── zstd_errors.h
+│           │   │   │   │   └── zstd.h
+│           │   │   │   └── libzstd.a
+│           │   │   ├── output
+│           │   │   ├── root-output
+│           │   │   └── stderr
+│           │   └── zstd-sys-9b827f5c9e91d60e
+│           │       ├── build-script-build
+│           │       ├── build_script_build-9b827f5c9e91d60e
+│           │       └── build_script_build-9b827f5c9e91d60e.d
+│           ├── deps
+│           │   ├── adler2-f33a6e9350b11aeb.d
+│           │   ├── anstream-4bca1e0d46aff4d2.d
+│           │   ├── anstyle-ce1debced68eda26.d
+│           │   ├── anstyle_parse-bede253d85ad2518.d
+│           │   ├── anstyle_query-2db4204a450bd7be.d
+│           │   ├── autocfg-3fca4cd3e570d19a.d
+│           │   ├── base64-70ba0a4ba1cdbf16.d
+│           │   ├── base64ct-d2741b699c939871.d
+│           │   ├── bitflags-581a16d3fef5ec49.d
+│           │   ├── block_buffer-c6d8c4ac97ce457b.d
+│           │   ├── bytes-0e1ef695647946fe.d
+│           │   ├── bzip2_sys-de19332b79f4a0c4.d
+│           │   ├── cc-9c003a56e7f7f9fe.d
+│           │   ├── cfg_if-574e11b886f995a8.d
+│           │   ├── cipher-a8558142bfa38f45.d
+│           │   ├── clap_lex-34baa78b78d16430.d
+│           │   ├── colorchoice-80f61d3c90862510.d
+│           │   ├── cpufeatures-3a53445a6dd63ce9.d
+│           │   ├── crc32fast-6babef480be3e227.d
+│           │   ├── crypto_common-234f64f759324eb3.d
+│           │   ├── deranged-d9f4c75c3bba057f.d
+│           │   ├── digest-bcb0feca94574fea.d
+│           │   ├── displaydoc-462a7b32a042332a.d
+│           │   ├── equivalent-092aef85020331e6.d
+│           │   ├── fnv-046fd700cac422ac.d
+│           │   ├── foreign_types-db57adca2f27039a.d
+│           │   ├── foreign_types_shared-4da1b79d4ca82601.d
+│           │   ├── form_urlencoded-812ae9b1186a8b4e.d
+│           │   ├── futures_channel-ab60c4425bc5af4b.d
+│           │   ├── futures_core-97860439ffe5f8a2.d
+│           │   ├── futures_io-a01c7af9bf4d9190.d
+│           │   ├── futures_sink-639b182048d9cb04.d
+│           │   ├── futures_task-d0f9bf296332fbb2.d
+│           │   ├── futures_util-24e0621105048c5b.d
+│           │   ├── generic_array-880a43c7d8819d08.d
+│           │   ├── h2-a17466855c00715a.d
+│           │   ├── hashbrown-0b24a224a3bf2862.d
+│           │   ├── heck-7a0aea1731885ec3.d
+│           │   ├── hmac-1d758acbbb6ce2b1.d
+│           │   ├── http-5790594094aec9c7.d
+│           │   ├── httparse-7503d55ed99205a5.d
+│           │   ├── http_body-ab1668f67a437acb.d
+│           │   ├── httpdate-52bbf6d332431475.d
+│           │   ├── hyper-4ed4018e1d1e900a.d
+│           │   ├── icu_collections-ff3052c0549c7961.d
+│           │   ├── icu_locid-4662379ab87af920.d
+│           │   ├── icu_locid_transform-0b599b865a96b8ff.d
+│           │   ├── icu_locid_transform_data-763d54878e972b7b.d
+│           │   ├── icu_normalizer_data-97acbe1cf8cf6a93.d
+│           │   ├── icu_normalizer-f7c95da43e6a8aa2.d
+│           │   ├── icu_properties-d3f809eaf6a3f5d9.d
+│           │   ├── icu_properties_data-722540075d16aec1.d
+│           │   ├── icu_provider-e5146ba15ee2bba6.d
+│           │   ├── icu_provider_macros-ba550e5b74aee3ce.d
+│           │   ├── idna-64873f4e0d30afad.d
+│           │   ├── idna_adapter-1d3874e16130f048.d
+│           │   ├── indexmap-f94fe18e429382d5.d
+│           │   ├── inout-5e25300d77d928ad.d
+│           │   ├── ipm_core-9dde0c409e26a922.d
+│           │   ├── is_terminal_polyfill-3dc01118e58fc26e.d
+│           │   ├── itoa-168a61ec00c46309.d
+│           │   ├── jobserver-57d3db81102e4089.d
+│           │   ├── libadler2-f33a6e9350b11aeb.rlib
+│           │   ├── libadler2-f33a6e9350b11aeb.rmeta
+│           │   ├── libanstream-4bca1e0d46aff4d2.rlib
+│           │   ├── libanstream-4bca1e0d46aff4d2.rmeta
+│           │   ├── libanstyle-ce1debced68eda26.rlib
+│           │   ├── libanstyle-ce1debced68eda26.rmeta
+│           │   ├── libanstyle_parse-bede253d85ad2518.rlib
+│           │   ├── libanstyle_parse-bede253d85ad2518.rmeta
+│           │   ├── libanstyle_query-2db4204a450bd7be.rlib
+│           │   ├── libanstyle_query-2db4204a450bd7be.rmeta
+│           │   ├── libautocfg-3fca4cd3e570d19a.rlib
+│           │   ├── libautocfg-3fca4cd3e570d19a.rmeta
+│           │   ├── libbase64-70ba0a4ba1cdbf16.rlib
+│           │   ├── libbase64-70ba0a4ba1cdbf16.rmeta
+│           │   ├── libbase64ct-d2741b699c939871.rlib
+│           │   ├── libbase64ct-d2741b699c939871.rmeta
+│           │   ├── libbitflags-581a16d3fef5ec49.rlib
+│           │   ├── libbitflags-581a16d3fef5ec49.rmeta
+│           │   ├── libblock_buffer-c6d8c4ac97ce457b.rlib
+│           │   ├── libblock_buffer-c6d8c4ac97ce457b.rmeta
+│           │   ├── libbytes-0e1ef695647946fe.rlib
+│           │   ├── libbytes-0e1ef695647946fe.rmeta
+│           │   ├── libbzip2_sys-de19332b79f4a0c4.rlib
+│           │   ├── libbzip2_sys-de19332b79f4a0c4.rmeta
+│           │   ├── libc-4f4b67a75c952142.d
+│           │   ├── libcc-9c003a56e7f7f9fe.rlib
+│           │   ├── libcc-9c003a56e7f7f9fe.rmeta
+│           │   ├── libcfg_if-574e11b886f995a8.rlib
+│           │   ├── libcfg_if-574e11b886f995a8.rmeta
+│           │   ├── libcipher-a8558142bfa38f45.rlib
+│           │   ├── libcipher-a8558142bfa38f45.rmeta
+│           │   ├── libclap_lex-34baa78b78d16430.rlib
+│           │   ├── libclap_lex-34baa78b78d16430.rmeta
+│           │   ├── libcolorchoice-80f61d3c90862510.rlib
+│           │   ├── libcolorchoice-80f61d3c90862510.rmeta
+│           │   ├── libcpufeatures-3a53445a6dd63ce9.rlib
+│           │   ├── libcpufeatures-3a53445a6dd63ce9.rmeta
+│           │   ├── libcrc32fast-6babef480be3e227.rlib
+│           │   ├── libcrc32fast-6babef480be3e227.rmeta
+│           │   ├── libcrypto_common-234f64f759324eb3.rlib
+│           │   ├── libcrypto_common-234f64f759324eb3.rmeta
+│           │   ├── libderanged-d9f4c75c3bba057f.rlib
+│           │   ├── libderanged-d9f4c75c3bba057f.rmeta
+│           │   ├── libdigest-bcb0feca94574fea.rlib
+│           │   ├── libdigest-bcb0feca94574fea.rmeta
+│           │   ├── libdisplaydoc-462a7b32a042332a.so
+│           │   ├── libequivalent-092aef85020331e6.rlib
+│           │   ├── libequivalent-092aef85020331e6.rmeta
+│           │   ├── libfnv-046fd700cac422ac.rlib
+│           │   ├── libfnv-046fd700cac422ac.rmeta
+│           │   ├── libforeign_types-db57adca2f27039a.rlib
+│           │   ├── libforeign_types-db57adca2f27039a.rmeta
+│           │   ├── libforeign_types_shared-4da1b79d4ca82601.rlib
+│           │   ├── libforeign_types_shared-4da1b79d4ca82601.rmeta
+│           │   ├── libform_urlencoded-812ae9b1186a8b4e.rlib
+│           │   ├── libform_urlencoded-812ae9b1186a8b4e.rmeta
+│           │   ├── libfutures_channel-ab60c4425bc5af4b.rlib
+│           │   ├── libfutures_channel-ab60c4425bc5af4b.rmeta
+│           │   ├── libfutures_core-97860439ffe5f8a2.rlib
+│           │   ├── libfutures_core-97860439ffe5f8a2.rmeta
+│           │   ├── libfutures_io-a01c7af9bf4d9190.rlib
+│           │   ├── libfutures_io-a01c7af9bf4d9190.rmeta
+│           │   ├── libfutures_sink-639b182048d9cb04.rlib
+│           │   ├── libfutures_sink-639b182048d9cb04.rmeta
+│           │   ├── libfutures_task-d0f9bf296332fbb2.rlib
+│           │   ├── libfutures_task-d0f9bf296332fbb2.rmeta
+│           │   ├── libfutures_util-24e0621105048c5b.rlib
+│           │   ├── libfutures_util-24e0621105048c5b.rmeta
+│           │   ├── libgeneric_array-880a43c7d8819d08.rlib
+│           │   ├── libgeneric_array-880a43c7d8819d08.rmeta
+│           │   ├── libh2-a17466855c00715a.rlib
+│           │   ├── libh2-a17466855c00715a.rmeta
+│           │   ├── libhashbrown-0b24a224a3bf2862.rlib
+│           │   ├── libhashbrown-0b24a224a3bf2862.rmeta
+│           │   ├── libheck-7a0aea1731885ec3.rlib
+│           │   ├── libheck-7a0aea1731885ec3.rmeta
+│           │   ├── libhmac-1d758acbbb6ce2b1.rlib
+│           │   ├── libhmac-1d758acbbb6ce2b1.rmeta
+│           │   ├── libhttp-5790594094aec9c7.rlib
+│           │   ├── libhttp-5790594094aec9c7.rmeta
+│           │   ├── libhttparse-7503d55ed99205a5.rlib
+│           │   ├── libhttparse-7503d55ed99205a5.rmeta
+│           │   ├── libhttp_body-ab1668f67a437acb.rlib
+│           │   ├── libhttp_body-ab1668f67a437acb.rmeta
+│           │   ├── libhttpdate-52bbf6d332431475.rlib
+│           │   ├── libhttpdate-52bbf6d332431475.rmeta
+│           │   ├── libhyper-4ed4018e1d1e900a.rlib
+│           │   ├── libhyper-4ed4018e1d1e900a.rmeta
+│           │   ├── libicu_collections-ff3052c0549c7961.rlib
+│           │   ├── libicu_collections-ff3052c0549c7961.rmeta
+│           │   ├── libicu_locid-4662379ab87af920.rlib
+│           │   ├── libicu_locid-4662379ab87af920.rmeta
+│           │   ├── libicu_locid_transform-0b599b865a96b8ff.rlib
+│           │   ├── libicu_locid_transform-0b599b865a96b8ff.rmeta
+│           │   ├── libicu_locid_transform_data-763d54878e972b7b.rlib
+│           │   ├── libicu_locid_transform_data-763d54878e972b7b.rmeta
+│           │   ├── libicu_normalizer_data-97acbe1cf8cf6a93.rlib
+│           │   ├── libicu_normalizer_data-97acbe1cf8cf6a93.rmeta
+│           │   ├── libicu_normalizer-f7c95da43e6a8aa2.rlib
+│           │   ├── libicu_normalizer-f7c95da43e6a8aa2.rmeta
+│           │   ├── libicu_properties-d3f809eaf6a3f5d9.rlib
+│           │   ├── libicu_properties-d3f809eaf6a3f5d9.rmeta
+│           │   ├── libicu_properties_data-722540075d16aec1.rlib
+│           │   ├── libicu_properties_data-722540075d16aec1.rmeta
+│           │   ├── libicu_provider-e5146ba15ee2bba6.rlib
+│           │   ├── libicu_provider-e5146ba15ee2bba6.rmeta
+│           │   ├── libicu_provider_macros-ba550e5b74aee3ce.so
+│           │   ├── libidna-64873f4e0d30afad.rlib
+│           │   ├── libidna-64873f4e0d30afad.rmeta
+│           │   ├── libidna_adapter-1d3874e16130f048.rlib
+│           │   ├── libidna_adapter-1d3874e16130f048.rmeta
+│           │   ├── libindexmap-f94fe18e429382d5.rlib
+│           │   ├── libindexmap-f94fe18e429382d5.rmeta
+│           │   ├── libinout-5e25300d77d928ad.rlib
+│           │   ├── libinout-5e25300d77d928ad.rmeta
+│           │   ├── libis_terminal_polyfill-3dc01118e58fc26e.rlib
+│           │   ├── libis_terminal_polyfill-3dc01118e58fc26e.rmeta
+│           │   ├── libitoa-168a61ec00c46309.rlib
+│           │   ├── libitoa-168a61ec00c46309.rmeta
+│           │   ├── libjobserver-57d3db81102e4089.rlib
+│           │   ├── libjobserver-57d3db81102e4089.rmeta
+│           │   ├── liblibc-4f4b67a75c952142.rlib
+│           │   ├── liblibc-4f4b67a75c952142.rmeta
+│           │   ├── liblinux_raw_sys-ced795a4edba233f.rlib
+│           │   ├── liblinux_raw_sys-ced795a4edba233f.rmeta
+│           │   ├── liblitemap-be66881dca4304db.rlib
+│           │   ├── liblitemap-be66881dca4304db.rmeta
+│           │   ├── liblog-82088eba16669bdb.rlib
+│           │   ├── liblog-82088eba16669bdb.rmeta
+│           │   ├── libmemchr-530cddad2744a89e.rlib
+│           │   ├── libmemchr-530cddad2744a89e.rmeta
+│           │   ├── libminiz_oxide-3e8a89d1dd09d4ca.rlib
+│           │   ├── libminiz_oxide-3e8a89d1dd09d4ca.rmeta
+│           │   ├── libmio-ccc6becd1b723a11.rlib
+│           │   ├── libmio-ccc6becd1b723a11.rmeta
+│           │   ├── libnative_tls-8e2becbbddd68bb7.rlib
+│           │   ├── libnative_tls-8e2becbbddd68bb7.rmeta
+│           │   ├── libnum_conv-012a86a2592d1efe.rlib
+│           │   ├── libnum_conv-012a86a2592d1efe.rmeta
+│           │   ├── libonce_cell-1a49552d978688c6.rlib
+│           │   ├── libonce_cell-1a49552d978688c6.rmeta
+│           │   ├── libopenssl-f8e8b57d62632b30.rlib
+│           │   ├── libopenssl-f8e8b57d62632b30.rmeta
+│           │   ├── libopenssl_macros-8a436ac896413698.so
+│           │   ├── libopenssl_probe-1ea74d54acc563cd.rlib
+│           │   ├── libopenssl_probe-1ea74d54acc563cd.rmeta
+│           │   ├── libopenssl_sys-ce0556f8be39068b.rlib
+│           │   ├── libopenssl_sys-ce0556f8be39068b.rmeta
+│           │   ├── libpassword_hash-02c448bcf9a8b6fc.rlib
+│           │   ├── libpassword_hash-02c448bcf9a8b6fc.rmeta
+│           │   ├── libpercent_encoding-46698087c7fc0800.rlib
+│           │   ├── libpercent_encoding-46698087c7fc0800.rmeta
+│           │   ├── libpin_project_lite-32fc6b29b0323fed.rlib
+│           │   ├── libpin_project_lite-32fc6b29b0323fed.rmeta
+│           │   ├── libpin_utils-a4b37c8e91db8085.rlib
+│           │   ├── libpin_utils-a4b37c8e91db8085.rmeta
+│           │   ├── libpkg_config-af41efb422e8f9de.rlib
+│           │   ├── libpkg_config-af41efb422e8f9de.rmeta
+│           │   ├── libpowerfmt-6f8a318acaeae3f0.rlib
+│           │   ├── libpowerfmt-6f8a318acaeae3f0.rmeta
+│           │   ├── libproc_macro2-d9702c7575aa18a0.rlib
+│           │   ├── libproc_macro2-d9702c7575aa18a0.rmeta
+│           │   ├── libquote-f24a6261d903343d.rlib
+│           │   ├── libquote-f24a6261d903343d.rmeta
+│           │   ├── librand_core-3013acd3fefedaa3.rlib
+│           │   ├── librand_core-3013acd3fefedaa3.rmeta
+│           │   ├── librustix-d50bb95188a9cb7d.rlib
+│           │   ├── librustix-d50bb95188a9cb7d.rmeta
+│           │   ├── libryu-60c6d50bed860378.rlib
+│           │   ├── libryu-60c6d50bed860378.rmeta
+│           │   ├── libserde-95649f8981b6a5bf.rlib
+│           │   ├── libserde-95649f8981b6a5bf.rmeta
+│           │   ├── libserde_derive-6853ee84eb52f213.so
+│           │   ├── libserde_spanned-52298613f5c52310.rlib
+│           │   ├── libserde_spanned-52298613f5c52310.rmeta
+│           │   ├── libsha2-acb01946437f7213.rlib
+│           │   ├── libsha2-acb01946437f7213.rmeta
+│           │   ├── libshlex-878ad937ca2a5716.rlib
+│           │   ├── libshlex-878ad937ca2a5716.rmeta
+│           │   ├── libslab-dd946c900eef45f6.rlib
+│           │   ├── libslab-dd946c900eef45f6.rmeta
+│           │   ├── libsmallvec-3bb0c37aa5c6a793.rlib
+│           │   ├── libsmallvec-3bb0c37aa5c6a793.rmeta
+│           │   ├── libsocket2-d55d7ab6d51b94c8.rlib
+│           │   ├── libsocket2-d55d7ab6d51b94c8.rmeta
+│           │   ├── libstable_deref_trait-0229345a2ffd1a8d.rlib
+│           │   ├── libstable_deref_trait-0229345a2ffd1a8d.rmeta
+│           │   ├── libstrsim-62f76430ecbf8c32.rmeta
+│           │   ├── libsubtle-6fa10d3f12d6d9f6.rlib
+│           │   ├── libsubtle-6fa10d3f12d6d9f6.rmeta
+│           │   ├── libsyn-2db559c768b88f6f.rlib
+│           │   ├── libsyn-2db559c768b88f6f.rmeta
+│           │   ├── libsynstructure-21599cb9c0a5a466.rlib
+│           │   ├── libsynstructure-21599cb9c0a5a466.rmeta
+│           │   ├── libtime_core-a4113ac6bc43ab18.rlib
+│           │   ├── libtime_core-a4113ac6bc43ab18.rmeta
+│           │   ├── libtinystr-b803b3c82242b7a4.rlib
+│           │   ├── libtinystr-b803b3c82242b7a4.rmeta
+│           │   ├── libtokio-6fc415df5a740757.rlib
+│           │   ├── libtokio-6fc415df5a740757.rmeta
+│           │   ├── libtokio_native_tls-3a651f6448fc06b2.rlib
+│           │   ├── libtokio_native_tls-3a651f6448fc06b2.rmeta
+│           │   ├── libtokio_util-e8401940d52044ea.rlib
+│           │   ├── libtokio_util-e8401940d52044ea.rmeta
+│           │   ├── libtoml_datetime-aa0d0540598023bd.rlib
+│           │   ├── libtoml_datetime-aa0d0540598023bd.rmeta
+│           │   ├── libtower_service-50858fb85246f5e5.rlib
+│           │   ├── libtower_service-50858fb85246f5e5.rmeta
+│           │   ├── libtracing-2ef5f1b60c228e35.rlib
+│           │   ├── libtracing-2ef5f1b60c228e35.rmeta
+│           │   ├── libtracing_core-7142a82a9b6cb05e.rlib
+│           │   ├── libtracing_core-7142a82a9b6cb05e.rmeta
+│           │   ├── libtry_lock-f27aa6897c2f93f1.rlib
+│           │   ├── libtry_lock-f27aa6897c2f93f1.rmeta
+│           │   ├── libtypenum-b773f9a8eaadce88.rlib
+│           │   ├── libtypenum-b773f9a8eaadce88.rmeta
+│           │   ├── libunicode_ident-74024e64c69498e4.rlib
+│           │   ├── libunicode_ident-74024e64c69498e4.rmeta
+│           │   ├── libutf16_iter-0469b2d14e44af22.rlib
+│           │   ├── libutf16_iter-0469b2d14e44af22.rmeta
+│           │   ├── libutf8_iter-50e886ee97a888d4.rlib
+│           │   ├── libutf8_iter-50e886ee97a888d4.rmeta
+│           │   ├── libutf8parse-32d60f5ddc690260.rlib
+│           │   ├── libutf8parse-32d60f5ddc690260.rmeta
+│           │   ├── libvcpkg-a36ed856b5bacca7.rlib
+│           │   ├── libvcpkg-a36ed856b5bacca7.rmeta
+│           │   ├── libversion_check-0455a1ab2c2f1aca.rlib
+│           │   ├── libversion_check-0455a1ab2c2f1aca.rmeta
+│           │   ├── libwant-01012f96e5517c38.rlib
+│           │   ├── libwant-01012f96e5517c38.rmeta
+│           │   ├── libwinnow-4b0780e43845a88a.rlib
+│           │   ├── libwinnow-4b0780e43845a88a.rmeta
+│           │   ├── libwrite16-15320ca2a8a479c4.rlib
+│           │   ├── libwrite16-15320ca2a8a479c4.rmeta
+│           │   ├── libwriteable-0ffa627437d27418.rlib
+│           │   ├── libwriteable-0ffa627437d27418.rmeta
+│           │   ├── libyoke_derive-793f74bc20926fcd.so
+│           │   ├── libyoke-e9b7df4faf59c3c1.rlib
+│           │   ├── libyoke-e9b7df4faf59c3c1.rmeta
+│           │   ├── libzerofrom-b0a6e912f247bdee.rlib
+│           │   ├── libzerofrom-b0a6e912f247bdee.rmeta
+│           │   ├── libzerofrom_derive-cbf72e853fc71f96.so
+│           │   ├── libzerovec-96d83f91d6df6d78.rlib
+│           │   ├── libzerovec-96d83f91d6df6d78.rmeta
+│           │   ├── libzerovec_derive-b1d87038e0621398.so
+│           │   ├── libzstd_safe-9170f011b78898e8.rlib
+│           │   ├── libzstd_safe-9170f011b78898e8.rmeta
+│           │   ├── libzstd_sys-fb3cc22da8d4fde1.rlib
+│           │   ├── libzstd_sys-fb3cc22da8d4fde1.rmeta
+│           │   ├── linux_raw_sys-ced795a4edba233f.d
+│           │   ├── litemap-be66881dca4304db.d
+│           │   ├── log-82088eba16669bdb.d
+│           │   ├── memchr-530cddad2744a89e.d
+│           │   ├── miniz_oxide-3e8a89d1dd09d4ca.d
+│           │   ├── mio-ccc6becd1b723a11.d
+│           │   ├── native_tls-8e2becbbddd68bb7.d
+│           │   ├── num_conv-012a86a2592d1efe.d
+│           │   ├── once_cell-1a49552d978688c6.d
+│           │   ├── openssl-f8e8b57d62632b30.d
+│           │   ├── openssl_macros-8a436ac896413698.d
+│           │   ├── openssl_probe-1ea74d54acc563cd.d
+│           │   ├── openssl_sys-ce0556f8be39068b.d
+│           │   ├── password_hash-02c448bcf9a8b6fc.d
+│           │   ├── percent_encoding-46698087c7fc0800.d
+│           │   ├── pin_project_lite-32fc6b29b0323fed.d
+│           │   ├── pin_utils-a4b37c8e91db8085.d
+│           │   ├── pkg_config-af41efb422e8f9de.d
+│           │   ├── powerfmt-6f8a318acaeae3f0.d
+│           │   ├── proc_macro2-d9702c7575aa18a0.d
+│           │   ├── quote-f24a6261d903343d.d
+│           │   ├── rand_core-3013acd3fefedaa3.d
+│           │   ├── rustix-d50bb95188a9cb7d.d
+│           │   ├── ryu-60c6d50bed860378.d
+│           │   ├── serde-95649f8981b6a5bf.d
+│           │   ├── serde_derive-6853ee84eb52f213.d
+│           │   ├── serde_spanned-52298613f5c52310.d
+│           │   ├── sha2-acb01946437f7213.d
+│           │   ├── shlex-878ad937ca2a5716.d
+│           │   ├── slab-dd946c900eef45f6.d
+│           │   ├── smallvec-3bb0c37aa5c6a793.d
+│           │   ├── socket2-d55d7ab6d51b94c8.d
+│           │   ├── stable_deref_trait-0229345a2ffd1a8d.d
+│           │   ├── strsim-62f76430ecbf8c32.d
+│           │   ├── strsim-62f76430ecbf8c32.strsim.3bed3d602b21d8ac-cgu.0.rcgu.o
+│           │   ├── strsim-62f76430ecbf8c32.strsim.3bed3d602b21d8ac-cgu.1.rcgu.o
+│           │   ├── strsim-62f76430ecbf8c32.strsim.3bed3d602b21d8ac-cgu.3.rcgu.o
+│           │   ├── strsim-62f76430ecbf8c32.strsim.3bed3d602b21d8ac-cgu.4.rcgu.o
+│           │   ├── subtle-6fa10d3f12d6d9f6.d
+│           │   ├── syn-2db559c768b88f6f.d
+│           │   ├── synstructure-21599cb9c0a5a466.d
+│           │   ├── time_core-a4113ac6bc43ab18.d
+│           │   ├── tinystr-b803b3c82242b7a4.d
+│           │   ├── tokio-6fc415df5a740757.d
+│           │   ├── tokio_native_tls-3a651f6448fc06b2.d
+│           │   ├── tokio_util-e8401940d52044ea.d
+│           │   ├── toml_datetime-aa0d0540598023bd.d
+│           │   ├── tower_service-50858fb85246f5e5.d
+│           │   ├── tracing-2ef5f1b60c228e35.d
+│           │   ├── tracing_core-7142a82a9b6cb05e.d
+│           │   ├── try_lock-f27aa6897c2f93f1.d
+│           │   ├── typenum-b773f9a8eaadce88.d
+│           │   ├── unicode_ident-74024e64c69498e4.d
+│           │   ├── utf16_iter-0469b2d14e44af22.d
+│           │   ├── utf8_iter-50e886ee97a888d4.d
+│           │   ├── utf8parse-32d60f5ddc690260.d
+│           │   ├── vcpkg-a36ed856b5bacca7.d
+│           │   ├── version_check-0455a1ab2c2f1aca.d
+│           │   ├── want-01012f96e5517c38.d
+│           │   ├── winnow-4b0780e43845a88a.d
+│           │   ├── write16-15320ca2a8a479c4.d
+│           │   ├── writeable-0ffa627437d27418.d
+│           │   ├── yoke_derive-793f74bc20926fcd.d
+│           │   ├── yoke-e9b7df4faf59c3c1.d
+│           │   ├── zerofrom-b0a6e912f247bdee.d
+│           │   ├── zerofrom_derive-cbf72e853fc71f96.d
+│           │   ├── zerovec-96d83f91d6df6d78.d
+│           │   ├── zerovec_derive-b1d87038e0621398.d
+│           │   ├── zstd_safe-9170f011b78898e8.d
+│           │   └── zstd_sys-fb3cc22da8d4fde1.d
+│           ├── examples
+│           ├── incremental
+│           │   └── ipm_core-1l6jwaor3ei8q
+│           │       ├── s-h5wdzbs9ar-1cvlo92-1vpvq1ny3k5f4icfztg8sfx6h
+│           │       │   ├── 0ivg9x47exve8dbedhg3hgx1p.o
+│           │       │   ├── 2s3u8j6mqdl2b3xrqkd658a76.o
+│           │       │   ├── 6073n1lzww757fmn4ylur5ij3.o
+│           │       │   ├── 7t5hjp8cd5z8d108s2nr2nnon.o
+│           │       │   ├── 9kct3p8yizv3n6kh7llxenaxo.o
+│           │       │   ├── 9smehwjd3dd3v0kumofcy1b39.o
+│           │       │   ├── dep-graph.bin
+│           │       │   ├── query-cache.bin
+│           │       │   └── work-products.bin
+│           │       ├── s-h5wdzbs9ar-1cvlo92.lock
+│           │       ├── s-h5wefyhd87-0rse3ox.lock
+│           │       └── s-h5wefyhd87-0rse3ox-working
+│           │           ├── 0ivg9x47exve8dbedhg3hgx1p.o
+│           │           ├── 2s3u8j6mqdl2b3xrqkd658a76.o
+│           │           ├── 6073n1lzww757fmn4ylur5ij3.o
+│           │           ├── 7t5hjp8cd5z8d108s2nr2nnon.o
+│           │           ├── 9kct3p8yizv3n6kh7llxenaxo.o
+│           │           ├── 9smehwjd3dd3v0kumofcy1b39.o
+│           │           ├── dep-graph.bin
+│           │           ├── dep-graph.part.bin
+│           │           ├── query-cache.bin
+│           │           └── work-products.bin
+│           ├── ipm-core
+│           └── ipm-core.d
+├── ipm-examples
+│   ├── ipm-default
+│   │   ├── information.json
+│   │   ├── LICENSE
+│   │   ├── README.md
+│   │   ├── shell.d
+│   │   └── source
+│   └── README.md
+├── LICENSE
+├── README.md
+└── tree
+
+83 directories, 601 files
