@@ -2,5 +2,14 @@
 name = "ipm-core"
 version = "0.1.0"
 edition = "2024"
+authors = ["The Infinity's <the.infinity.s.infinity@gmail.com>"]
+description = "Infinity Package Manager"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/The-Infinitys/app.linux.ipm"
+
 
 [dependencies]
+
+[target.'cfg(unix)'.dependencies]
+
+[build-dependencies]
