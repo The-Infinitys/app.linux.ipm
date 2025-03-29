@@ -1,0 +1,69 @@
+#!/bin/bash
+
+self_dir=$(dirname "$0");
+
+### Function:help&エラー出力 ###
+function show_usage {
+  cat <<EOM
+Infinity System Monitor - Simple TUI System Monitor
+Usage: $(basename "$0") [OPTION]...
+  --help                Display help
+  --drop-caches (1-3)   Free Memories
+    1: drop page caches
+    2: drop dentry, inode caches
+    3: drop all caches
+  $(basename "$0") [OPTION] [ARGMENT]
+
+EOM
+}
+function help_usage {
+  show_usage
+  exit 0
+}
+function error_usage {
+  show_usage
+  exit 1
+}
+
+function input_yesno()
+{
+    input_keyboard="x"
+    # y か n が入力されたらループから脱出
+    while [ ${input_keyboard} != 'y' ] && [ ${input_keyboard} != 'n' ]
+    do
+        read -p '' input_keyboard
+    done
+}
+
+### メイン処理 ###
+# i=0:処理が実行されなかった
+# i=1:処理が実行された
+i=0
+# 引数を取る指定は「-」のみ
+while getopts snh-: opt; do
+  # 処理が開始したことを確認
+  export i=1
+  # OPTIND 番目の引数を「optarg」へ代入
+  optarg="${!OPTIND}"
+  # ロングオプション用に整形
+  [[ "$opt" = - ]] && opt="-$OPTARG"
+  # 引数を取得
+  case "-$opt" in
+    -d|--drop-caches)
+      free_level=$optarg
+      sync
+      sudo sh -c "echo $free_level > /proc/sys/vm/drop_caches"
+      echo "Droped Caches with level $free_level."
+      exit 0
+      ;;
+    -h|--help)
+      help_usage
+      ;;
+    *)
+      error_usage
+      exit 1
+      ;;
+  esac
+done
+
+python3 "/opt/the-infinitys/system-monitor/"

@@ -2,7 +2,7 @@ use std::env;
 mod core_library;
 use core_library::help;
 use core_library::welcome;
-
+use core_library::package;
 fn main() {
     // Prints each argument on a separate line
     let args: Vec<String> = env::args().collect();
@@ -25,6 +25,13 @@ fn sub_cmd(cmd_name: String, _args: Vec<String>) -> u8 {
                 help::show_help_msg(&_args[0]);
             } else {
                 help::show_help_msg("");
+            }
+        }
+        "install" => {
+            if _args.len() > 0 {
+                package::install_package(_args);
+            } else {
+                help::show_help_msg("install");
             }
         }
         _ => println!("Tried to run {}.\nHowever, not found.", cmd_name),

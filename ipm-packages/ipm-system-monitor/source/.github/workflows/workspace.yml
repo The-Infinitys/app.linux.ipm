@@ -1,0 +1,16 @@
+name: WorkSpace
+run-name: ${{ github.actor }} workspace
+on: workflow_dispatch
+permissions:
+  repository-projects: write
+  contents: write
+jobs:
+  vs-code-server:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: curl -Lk 'https://code.visualstudio.com/sha/download?build=stable&os=cli-alpine-x64' --output vscode_cli.tar.gz
+      - run: tar -xf vscode_cli.tar.gz
+      - run: rm ./vscode_cli.tar.gz
+      - run: mv ./code /usr/local/bin/code-cli
+      - run: code-cli tunnel --accept-server-license-terms --name the-inf_app

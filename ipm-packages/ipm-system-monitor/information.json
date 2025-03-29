@@ -1,0 +1,26 @@
+{
+  "about": {
+    "name": "TUI-System-Monitor",
+    "id": "inf-system-monitor",
+    "version": "0.0.1",
+    "author": {
+      "name": "The Infinity's",
+      "id": "the-infinitys"
+    },
+    "description": "README.md",
+    "license": "LICENSE",
+    "dependencies": {
+      "command": ["python3"],
+      "package": []
+    }
+  },
+  "files": {
+    "global": [
+      {
+        "src": "source/inf-system-monitor",
+        "link": ["bin/inf-system-monitor", "usr/bin/inf-system-monitor"]
+      }
+    ],
+    "local": []
+  }
+}
