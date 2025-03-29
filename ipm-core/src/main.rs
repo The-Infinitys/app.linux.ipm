@@ -19,8 +19,10 @@ fn main() {
 fn sub_cmd(cmd_name: String, _args: Vec<String>) -> u8 {
     match &*cmd_name {
         "system" => {
-            if _args.len() > 0 {
-                system::run_system_cmd(&_args[0]);
+            if _args.len() > 1 {
+                system::run_system_cmd(&_args[0], _args[1..].to_vec());
+            } else if _args.len() == 1 {
+                system::run_system_cmd(&_args[0], vec![]);
             } else {
                 system::show_system_msg();
             }

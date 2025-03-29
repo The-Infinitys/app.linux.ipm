@@ -1,5 +1,6 @@
 // ∆use std::io;
 use std::io::{self, Write};
+use std::process::Command;
 
 pub fn init(args: Vec<String>) {
     println!("Init IPM Core System");
@@ -22,6 +23,20 @@ pub fn init(args: Vec<String>) {
                                     .current_dir(x)
                                     .output()
                                     .expect("failed to execute process");
+                                if output.status.success() {
+                                    println!("Initialization completed successfully.");
+                                } else {
+                                    eprintln!(
+                                        "Initialization failed with status: {}",
+                                        output.status
+                                    );
+                                    if let Ok(output_str) = String::from_utf8(output.stdout) {
+                                        println!("Output: {}", output_str);
+                                    }
+                                    if let Ok(error_str) = String::from_utf8(output.stderr) {
+                                        eprintln!("Error: {}", error_str);
+                                    }
+                                }
                             }
                             Err(err) => {
                                 eprintln!("{:?}", err);
@@ -50,6 +65,20 @@ pub fn init(args: Vec<String>) {
                             .current_dir(x)
                             .output()
                             .expect("failed to execute process");
+                        if output.status.success() {
+                            println!("Initialization completed successfully.");
+                        } else {
+                            eprintln!(
+                                "Initialization failed with status: {}",
+                                output.status
+                            );
+                            if let Ok(output_str) = String::from_utf8(output.stdout) {
+                                println!("Output: {}", output_str);
+                            }
+                            if let Ok(error_str) = String::from_utf8(output.stderr) {
+                                eprintln!("Error: {}", error_str);
+                            }
+                        }
                     }
                     Err(err) => {
                         eprintln!("{:?}", err);
@@ -64,6 +93,20 @@ pub fn init(args: Vec<String>) {
                             .current_dir(x)
                             .output()
                             .expect("failed to execute process");
+                        if output.status.success() {
+                            println!("Initialization completed successfully.");
+                        } else {
+                            eprintln!(
+                                "Initialization failed with status: {}",
+                                output.status
+                            );
+                            if let Ok(output_str) = String::from_utf8(output.stdout) {
+                                println!("Output: {}", output_str);
+                            }
+                            if let Ok(error_str) = String::from_utf8(output.stderr) {
+                                eprintln!("Error: {}", error_str);
+                            }
+                        }
                     }
                     Err(err) => {
                         eprintln!("{:?}", err);

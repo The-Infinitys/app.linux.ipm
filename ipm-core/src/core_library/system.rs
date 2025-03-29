@@ -17,10 +17,10 @@ pub fn show_system_msg() {
     );
 }
 
-pub fn run_system_cmd(cmd: &str) {
+pub fn run_system_cmd(cmd: &str,args: Vec<String>) {
     match cmd {
-        "init" => init::init(),
-        "remove" => remove::remove(),
+        "init" => init::init(args),
+        "remove" => remove::remove(args),
         _ => println!("Unknown command: {}", cmd),
     }
 }
