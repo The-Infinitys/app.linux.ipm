@@ -1,8 +1,8 @@
 use std::env;
 mod core_library;
 use core_library::help;
-use core_library::welcome;
 use core_library::system;
+use core_library::welcome;
 
 fn main() {
     // Prints each argument on a separate line

@@ -1,4 +1,4 @@
-Usage:
+ Usage:
 {command_name} search <search-query>
 
 パッケージを検索します。

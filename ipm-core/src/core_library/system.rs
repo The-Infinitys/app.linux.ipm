@@ -7,8 +7,14 @@ pub fn show_system_msg() {
     println!("System command");
     println!("Usage: ipm system <init|remove>");
     println!("Commands:");
-    println!("  init     Initialize the {command_name} system",command_name=COMMAND_NAME);
-    println!("  remove   Remove the {command_name} system",command_name=COMMAND_NAME);
+    println!(
+        "  init     Initialize the {command_name} system",
+        command_name = COMMAND_NAME
+    );
+    println!(
+        "  remove   Remove the {command_name} system",
+        command_name = COMMAND_NAME
+    );
 }
 
 pub fn run_system_cmd(cmd: &str) {

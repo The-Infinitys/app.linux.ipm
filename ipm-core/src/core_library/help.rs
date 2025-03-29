@@ -28,7 +28,7 @@ pub fn show_help_msg(help_type: &str) {
     const HELP_MESSAGES: HelpMessage = HelpMessage::new();
     match help_type {
         "" => show_help(HELP_MESSAGES.general),
-        "all" => show_help(&format!("{}",md(HELP_MESSAGES.all))),
+        "all" => show_help(&format!("{}", md(HELP_MESSAGES.all))),
         "install" => show_help(HELP_MESSAGES.install),
         "uninstall" => show_help(HELP_MESSAGES.uninstall),
         "update" => show_help(HELP_MESSAGES.update),

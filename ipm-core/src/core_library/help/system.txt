@@ -1,0 +1,7 @@
+Usage:
+
+{command_name} system
+{command_name} system local
+{command_name} system global
+
+IPMシステムをローカルまたはグローバルに構築します。
