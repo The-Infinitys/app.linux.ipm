@@ -1,0 +1,5 @@
+Infinity Package Manager (Version: {version})
+Usage: {command_name} [options] command
+{command_name} is a useful commandline package manager.
+
+For more details, run "{command_name} help"

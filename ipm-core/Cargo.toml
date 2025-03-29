@@ -1,5 +1,5 @@
 [package]
-name = "ipm-core"
+name = "ipm"
 version = "0.1.0"
 edition = "2024"
 authors = ["The Infinity's <the.infinity.s.infinity@gmail.com>"]
