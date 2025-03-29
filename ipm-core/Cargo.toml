@@ -10,6 +10,8 @@ repository = "https://github.com/The-Infinitys/app.linux.ipm"
 
 [dependencies]
 termimad = "0.20"
+flate2="1.1.0"
+tar="0.4.44"
 
 [target.'cfg(unix)'.dependencies]
 

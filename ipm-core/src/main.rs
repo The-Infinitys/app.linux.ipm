@@ -1,9 +1,12 @@
 use std::env;
 mod core_library;
 use core_library::help;
-use core_library::welcome;
 use core_library::package;
+use core_library::system;
+use core_library::welcome;
 fn main() {
+    system::configure::configure();
+    println!("{}", env::current_dir().unwrap().display());
     // Prints each argument on a separate line
     let args: Vec<String> = env::args().collect();
     if args.len() < 2 {
