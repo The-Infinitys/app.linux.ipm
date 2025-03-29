@@ -1,7 +1,6 @@
 use std::env;
 mod core_library;
 use core_library::help;
-use core_library::system;
 use core_library::welcome;
 
 fn main() {
@@ -18,15 +17,6 @@ fn main() {
 
 fn sub_cmd(cmd_name: String, _args: Vec<String>) -> u8 {
     match &*cmd_name {
-        "system" => {
-            if _args.len() > 1 {
-                system::run_system_cmd(&_args[0], _args[1..].to_vec());
-            } else if _args.len() == 1 {
-                system::run_system_cmd(&_args[0], vec![]);
-            } else {
-                system::show_system_msg();
-            }
-        }
         "update" => println!("Run update!"),
         "search" => println!("Run search!"),
         "detail" => println!("Run detail!"),
