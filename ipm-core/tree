@@ -1,0 +1,568 @@
+.
+├── Cargo.lock
+├── Cargo.toml
+├── src
+│   ├── core_library
+│   │   ├── help
+│   │   │   ├── all.md
+│   │   │   ├── detail.txt
+│   │   │   ├── general.txt
+│   │   │   ├── install.txt
+│   │   │   ├── search.txt
+│   │   │   ├── system.txt
+│   │   │   ├── uninstall.txt
+│   │   │   └── update.txt
+│   │   ├── help.rs
+│   │   ├── welcome
+│   │   │   └── welcome.txt
+│   │   └── welcome.rs
+│   ├── core_library.rs
+│   └── main.rs
+├── target
+│   ├── CACHEDIR.TAG
+│   ├── debug
+│   │   ├── build
+│   │   │   ├── crossbeam-utils-891f3875cfdde6d1
+│   │   │   │   ├── build-script-build
+│   │   │   │   ├── build_script_build-891f3875cfdde6d1
+│   │   │   │   └── build_script_build-891f3875cfdde6d1.d
+│   │   │   ├── crossbeam-utils-9e27c580efcbfbf7
+│   │   │   │   ├── invoked.timestamp
+│   │   │   │   ├── out
+│   │   │   │   ├── output
+│   │   │   │   ├── root-output
+│   │   │   │   └── stderr
+│   │   │   ├── libc-6c563750c0b2d2a1
+│   │   │   │   ├── invoked.timestamp
+│   │   │   │   ├── out
+│   │   │   │   ├── output
+│   │   │   │   ├── root-output
+│   │   │   │   └── stderr
+│   │   │   ├── libc-ec02885712bbd6ce
+│   │   │   │   ├── build-script-build
+│   │   │   │   ├── build_script_build-ec02885712bbd6ce
+│   │   │   │   └── build_script_build-ec02885712bbd6ce.d
+│   │   │   ├── lock_api-74b8e05265e92d38
+│   │   │   │   ├── build-script-build
+│   │   │   │   ├── build_script_build-74b8e05265e92d38
+│   │   │   │   └── build_script_build-74b8e05265e92d38.d
+│   │   │   ├── lock_api-7b18e86b8ea07b99
+│   │   │   │   ├── invoked.timestamp
+│   │   │   │   ├── out
+│   │   │   │   │   └── autocfg_3e2637714b1d68bb_0.ll
+│   │   │   │   ├── output
+│   │   │   │   ├── root-output
+│   │   │   │   └── stderr
+│   │   │   ├── parking_lot_core-8874bcc49a86680f
+│   │   │   │   ├── invoked.timestamp
+│   │   │   │   ├── out
+│   │   │   │   ├── output
+│   │   │   │   ├── root-output
+│   │   │   │   └── stderr
+│   │   │   ├── parking_lot_core-904cc6b271ab6306
+│   │   │   │   ├── build-script-build
+│   │   │   │   ├── build_script_build-904cc6b271ab6306
+│   │   │   │   └── build_script_build-904cc6b271ab6306.d
+│   │   │   ├── proc-macro2-08bd07bf4905bd1c
+│   │   │   │   ├── build-script-build
+│   │   │   │   ├── build_script_build-08bd07bf4905bd1c
+│   │   │   │   └── build_script_build-08bd07bf4905bd1c.d
+│   │   │   ├── proc-macro2-e82878500ca77bd4
+│   │   │   │   ├── invoked.timestamp
+│   │   │   │   ├── out
+│   │   │   │   ├── output
+│   │   │   │   ├── root-output
+│   │   │   │   └── stderr
+│   │   │   ├── signal-hook-00a9c1800e3ea257
+│   │   │   │   ├── build-script-build
+│   │   │   │   ├── build_script_build-00a9c1800e3ea257
+│   │   │   │   └── build_script_build-00a9c1800e3ea257.d
+│   │   │   ├── signal-hook-3e95715eddf4d309
+│   │   │   │   ├── invoked.timestamp
+│   │   │   │   ├── out
+│   │   │   │   ├── output
+│   │   │   │   ├── root-output
+│   │   │   │   └── stderr
+│   │   │   ├── thiserror-3f1869984656edf9
+│   │   │   │   ├── invoked.timestamp
+│   │   │   │   ├── out
+│   │   │   │   ├── output
+│   │   │   │   ├── root-output
+│   │   │   │   └── stderr
+│   │   │   └── thiserror-a94d111db55321cf
+│   │   │       ├── build-script-build
+│   │   │       ├── build_script_build-a94d111db55321cf
+│   │   │       └── build_script_build-a94d111db55321cf.d
+│   │   ├── deps
+│   │   │   ├── autocfg-c9dae9cf541556c5.d
+│   │   │   ├── bitflags-3d16b95db940364c.d
+│   │   │   ├── bitflags-b5327de0e847e297.d
+│   │   │   ├── cfg_if-6161ded082730f03.d
+│   │   │   ├── cfg_if-7813607556629eb9.d
+│   │   │   ├── coolor-2bb92eae0c824add.d
+│   │   │   ├── coolor-98f30d844e488c37.d
+│   │   │   ├── crossbeam-1c7e0435f96eea42.d
+│   │   │   ├── crossbeam-aa9d852e887384d3.d
+│   │   │   ├── crossbeam_channel-63d284221914b074.d
+│   │   │   ├── crossbeam_channel-b72b7b9efcd5c3c5.d
+│   │   │   ├── crossbeam_deque-2763e9ba0c4bdd62.d
+│   │   │   ├── crossbeam_deque-88d12950076deaad.d
+│   │   │   ├── crossbeam_epoch-74c177ebb398e8f4.d
+│   │   │   ├── crossbeam_epoch-dac54ffec3dca385.d
+│   │   │   ├── crossbeam_queue-1c07edcc8a4503ec.d
+│   │   │   ├── crossbeam_queue-f753351f9fa4c725.d
+│   │   │   ├── crossbeam_utils-339f63e62b4b72ca.d
+│   │   │   ├── crossbeam_utils-5d02eac3737fe81a.d
+│   │   │   ├── crossterm-3763bb2b75191062.d
+│   │   │   ├── crossterm-5597b47654bb1fe6.d
+│   │   │   ├── ipm-1751db3a54dab908
+│   │   │   ├── ipm-1751db3a54dab908.d
+│   │   │   ├── ipm-481a66bf3a5ecc6d
+│   │   │   ├── ipm-481a66bf3a5ecc6d.d
+│   │   │   ├── ipm-4a92115e76523235.d
+│   │   │   ├── ipm-8202e1b521da2ddd.d
+│   │   │   ├── ipm-88dc4ab39d203b59.d
+│   │   │   ├── ipm-9513c89856616b65.d
+│   │   │   ├── libautocfg-c9dae9cf541556c5.rlib
+│   │   │   ├── libautocfg-c9dae9cf541556c5.rmeta
+│   │   │   ├── libbitflags-3d16b95db940364c.rmeta
+│   │   │   ├── libbitflags-b5327de0e847e297.rlib
+│   │   │   ├── libbitflags-b5327de0e847e297.rmeta
+│   │   │   ├── libc-9f0ea4c221cf0ea6.d
+│   │   │   ├── libc-d67ab5e61115ff61.d
+│   │   │   ├── libcfg_if-6161ded082730f03.rmeta
+│   │   │   ├── libcfg_if-7813607556629eb9.rlib
+│   │   │   ├── libcfg_if-7813607556629eb9.rmeta
+│   │   │   ├── libcoolor-2bb92eae0c824add.rlib
+│   │   │   ├── libcoolor-2bb92eae0c824add.rmeta
+│   │   │   ├── libcoolor-98f30d844e488c37.rmeta
+│   │   │   ├── libcrossbeam-1c7e0435f96eea42.rmeta
+│   │   │   ├── libcrossbeam-aa9d852e887384d3.rlib
+│   │   │   ├── libcrossbeam-aa9d852e887384d3.rmeta
+│   │   │   ├── libcrossbeam_channel-63d284221914b074.rmeta
+│   │   │   ├── libcrossbeam_channel-b72b7b9efcd5c3c5.rlib
+│   │   │   ├── libcrossbeam_channel-b72b7b9efcd5c3c5.rmeta
+│   │   │   ├── libcrossbeam_deque-2763e9ba0c4bdd62.rlib
+│   │   │   ├── libcrossbeam_deque-2763e9ba0c4bdd62.rmeta
+│   │   │   ├── libcrossbeam_deque-88d12950076deaad.rmeta
+│   │   │   ├── libcrossbeam_epoch-74c177ebb398e8f4.rmeta
+│   │   │   ├── libcrossbeam_epoch-dac54ffec3dca385.rlib
+│   │   │   ├── libcrossbeam_epoch-dac54ffec3dca385.rmeta
+│   │   │   ├── libcrossbeam_queue-1c07edcc8a4503ec.rlib
+│   │   │   ├── libcrossbeam_queue-1c07edcc8a4503ec.rmeta
+│   │   │   ├── libcrossbeam_queue-f753351f9fa4c725.rmeta
+│   │   │   ├── libcrossbeam_utils-339f63e62b4b72ca.rmeta
+│   │   │   ├── libcrossbeam_utils-5d02eac3737fe81a.rlib
+│   │   │   ├── libcrossbeam_utils-5d02eac3737fe81a.rmeta
+│   │   │   ├── libcrossterm-3763bb2b75191062.rlib
+│   │   │   ├── libcrossterm-3763bb2b75191062.rmeta
+│   │   │   ├── libcrossterm-5597b47654bb1fe6.rmeta
+│   │   │   ├── libipm-4a92115e76523235.rmeta
+│   │   │   ├── libipm-8202e1b521da2ddd.rmeta
+│   │   │   ├── libipm-88dc4ab39d203b59.rmeta
+│   │   │   ├── libipm-9513c89856616b65.rmeta
+│   │   │   ├── liblibc-9f0ea4c221cf0ea6.rmeta
+│   │   │   ├── liblibc-d67ab5e61115ff61.rlib
+│   │   │   ├── liblibc-d67ab5e61115ff61.rmeta
+│   │   │   ├── liblock_api-3786d828abee8823.rmeta
+│   │   │   ├── liblock_api-58ceaa82bb2665e7.rlib
+│   │   │   ├── liblock_api-58ceaa82bb2665e7.rmeta
+│   │   │   ├── liblog-0901c970fd62da42.rlib
+│   │   │   ├── liblog-0901c970fd62da42.rmeta
+│   │   │   ├── liblog-28bb2a0e4122a253.rmeta
+│   │   │   ├── libminimad-9707b4c207826b4c.rlib
+│   │   │   ├── libminimad-9707b4c207826b4c.rmeta
+│   │   │   ├── libminimad-f30c57a4ffd4f653.rmeta
+│   │   │   ├── libmio-70011f8c45eb3d56.rlib
+│   │   │   ├── libmio-70011f8c45eb3d56.rmeta
+│   │   │   ├── libmio-747e2cb6fd95ee6e.rmeta
+│   │   │   ├── libonce_cell-79faaeddc52a8104.rmeta
+│   │   │   ├── libonce_cell-9264e6fb3f1b9589.rlib
+│   │   │   ├── libonce_cell-9264e6fb3f1b9589.rmeta
+│   │   │   ├── libparking_lot-2ac3ed5dffcae5c7.rlib
+│   │   │   ├── libparking_lot-2ac3ed5dffcae5c7.rmeta
+│   │   │   ├── libparking_lot-7824df3fa859ae81.rmeta
+│   │   │   ├── libparking_lot_core-bbfd58fa6cb06613.rlib
+│   │   │   ├── libparking_lot_core-bbfd58fa6cb06613.rmeta
+│   │   │   ├── libparking_lot_core-de38298f3a8b78b7.rmeta
+│   │   │   ├── libproc_macro2-6a6ff795dba3dbfb.rlib
+│   │   │   ├── libproc_macro2-6a6ff795dba3dbfb.rmeta
+│   │   │   ├── libquote-e8c808a5f66fa222.rlib
+│   │   │   ├── libquote-e8c808a5f66fa222.rmeta
+│   │   │   ├── libscopeguard-2a2966b221a71224.rmeta
+│   │   │   ├── libscopeguard-98a9f28500f73df7.rlib
+│   │   │   ├── libscopeguard-98a9f28500f73df7.rmeta
+│   │   │   ├── libsignal_hook-9388cd9e6fe5876d.rlib
+│   │   │   ├── libsignal_hook-9388cd9e6fe5876d.rmeta
+│   │   │   ├── libsignal_hook-9774ebe3d322288a.rmeta
+│   │   │   ├── libsignal_hook_mio-151fb586210ca37f.rmeta
+│   │   │   ├── libsignal_hook_mio-621b09f371431341.rlib
+│   │   │   ├── libsignal_hook_mio-621b09f371431341.rmeta
+│   │   │   ├── libsignal_hook_registry-0e181db935531030.rlib
+│   │   │   ├── libsignal_hook_registry-0e181db935531030.rmeta
+│   │   │   ├── libsignal_hook_registry-27bb6fb469e77259.rmeta
+│   │   │   ├── libsmallvec-15165418c4c5874b.rmeta
+│   │   │   ├── libsmallvec-2ce383fea021af1e.rlib
+│   │   │   ├── libsmallvec-2ce383fea021af1e.rmeta
+│   │   │   ├── libsyn-5da9c0df68588be1.rlib
+│   │   │   ├── libsyn-5da9c0df68588be1.rmeta
+│   │   │   ├── libtermimad-13c4d605218d2b8d.rlib
+│   │   │   ├── libtermimad-13c4d605218d2b8d.rmeta
+│   │   │   ├── libtermimad-799a7f3bfc6ce64a.rmeta
+│   │   │   ├── libthiserror-14bc72c7990b440c.rmeta
+│   │   │   ├── libthiserror-4d437cf0353a4856.rlib
+│   │   │   ├── libthiserror-4d437cf0353a4856.rmeta
+│   │   │   ├── libthiserror_impl-6b7163406514f496.so
+│   │   │   ├── libunicode_ident-ebbaf91844991633.rlib
+│   │   │   ├── libunicode_ident-ebbaf91844991633.rmeta
+│   │   │   ├── libunicode_width-8806afc497943bde.rmeta
+│   │   │   ├── libunicode_width-b484a804d1879843.rlib
+│   │   │   ├── libunicode_width-b484a804d1879843.rmeta
+│   │   │   ├── lock_api-3786d828abee8823.d
+│   │   │   ├── lock_api-58ceaa82bb2665e7.d
+│   │   │   ├── log-0901c970fd62da42.d
+│   │   │   ├── log-28bb2a0e4122a253.d
+│   │   │   ├── minimad-9707b4c207826b4c.d
+│   │   │   ├── minimad-f30c57a4ffd4f653.d
+│   │   │   ├── mio-70011f8c45eb3d56.d
+│   │   │   ├── mio-747e2cb6fd95ee6e.d
+│   │   │   ├── once_cell-79faaeddc52a8104.d
+│   │   │   ├── once_cell-9264e6fb3f1b9589.d
+│   │   │   ├── parking_lot-2ac3ed5dffcae5c7.d
+│   │   │   ├── parking_lot-7824df3fa859ae81.d
+│   │   │   ├── parking_lot_core-bbfd58fa6cb06613.d
+│   │   │   ├── parking_lot_core-de38298f3a8b78b7.d
+│   │   │   ├── proc_macro2-6a6ff795dba3dbfb.d
+│   │   │   ├── quote-e8c808a5f66fa222.d
+│   │   │   ├── scopeguard-2a2966b221a71224.d
+│   │   │   ├── scopeguard-98a9f28500f73df7.d
+│   │   │   ├── signal_hook-9388cd9e6fe5876d.d
+│   │   │   ├── signal_hook-9774ebe3d322288a.d
+│   │   │   ├── signal_hook_mio-151fb586210ca37f.d
+│   │   │   ├── signal_hook_mio-621b09f371431341.d
+│   │   │   ├── signal_hook_registry-0e181db935531030.d
+│   │   │   ├── signal_hook_registry-27bb6fb469e77259.d
+│   │   │   ├── smallvec-15165418c4c5874b.d
+│   │   │   ├── smallvec-2ce383fea021af1e.d
+│   │   │   ├── syn-5da9c0df68588be1.d
+│   │   │   ├── termimad-13c4d605218d2b8d.d
+│   │   │   ├── termimad-799a7f3bfc6ce64a.d
+│   │   │   ├── thiserror-14bc72c7990b440c.d
+│   │   │   ├── thiserror-4d437cf0353a4856.d
+│   │   │   ├── thiserror_impl-6b7163406514f496.d
+│   │   │   ├── unicode_ident-ebbaf91844991633.d
+│   │   │   ├── unicode_width-8806afc497943bde.d
+│   │   │   └── unicode_width-b484a804d1879843.d
+│   │   ├── examples
+│   │   ├── incremental
+│   │   │   ├── ipm-15hbguivljv9w
+│   │   │   │   ├── s-h5x68ajoyt-1pid288-4ll4jsav49uimywl2b3zi433z
+│   │   │   │   │   ├── dep-graph.bin
+│   │   │   │   │   ├── query-cache.bin
+│   │   │   │   │   └── work-products.bin
+│   │   │   │   └── s-h5x68ajoyt-1pid288.lock
+│   │   │   ├── ipm-1u3tvobgnml4z
+│   │   │   │   ├── s-h5x68ajp2y-0pcx1l8-0fw9sws33g12g1olzpj2hikd9
+│   │   │   │   │   ├── dep-graph.bin
+│   │   │   │   │   ├── query-cache.bin
+│   │   │   │   │   └── work-products.bin
+│   │   │   │   └── s-h5x68ajp2y-0pcx1l8.lock
+│   │   │   ├── ipm-2joafcz37vkmn
+│   │   │   │   ├── s-h5x990ct57-1e0c3ng-a09lce4qcr0umm6op33lcla5q
+│   │   │   │   │   ├── 0042xdt8w1bt2ovsr44cj6xrz.o
+│   │   │   │   │   ├── 007nfqlicoal1jooppxdebqrg.o
+│   │   │   │   │   ├── 0hegu6zm51u5kli0akbu2c57x.o
+│   │   │   │   │   ├── 0rrmjeepzo5o0kk9v7fl6i53l.o
+│   │   │   │   │   ├── 0vksap9l4scrhtfbqz6bm98bo.o
+│   │   │   │   │   ├── 1c28iyix4pyn4hfp0d5bi5234.o
+│   │   │   │   │   ├── 1uir5iu8wqmtgznezkfk5mkee.o
+│   │   │   │   │   ├── 1wa0z029u89w7nzio8iis628g.o
+│   │   │   │   │   ├── 2ciam7ys20yjr7jycok1lbmm7.o
+│   │   │   │   │   ├── 2d8p59iibskhixcrio1e0b3bk.o
+│   │   │   │   │   ├── 2mcn44qhxk4q2ixqoqye5tx62.o
+│   │   │   │   │   ├── 2ptxa4suo6z332qtsvoflacfx.o
+│   │   │   │   │   ├── 2s8r2gejso17jnsauxhvfeb9u.o
+│   │   │   │   │   ├── 3om9h40ab7hnyctcjl1pd4768.o
+│   │   │   │   │   ├── 3vsnp9nkex6sjkgj1nci39ayt.o
+│   │   │   │   │   ├── 4f1mnxs503v1inpz0a3w2o4lj.o
+│   │   │   │   │   ├── 4x9k7k19dmkufnt1ojt64lp3k.o
+│   │   │   │   │   ├── 4zd6zjvx57f5jm2jivlo8xx81.o
+│   │   │   │   │   ├── 58uw5ds485k4lvdhvphhurv9t.o
+│   │   │   │   │   ├── 5qhptuep76yh8wnokwj9ikww8.o
+│   │   │   │   │   ├── 5y8pp3d723y90qsuf0j95odoq.o
+│   │   │   │   │   ├── 5z2bgyrlxu9537bqmdkbetiuj.o
+│   │   │   │   │   ├── 64b9q6zslvljrwftuvsfuk63e.o
+│   │   │   │   │   ├── 77rjeuw26z86atfybfsgdkcom.o
+│   │   │   │   │   ├── 7jfiy65zjr9h96plbzpfmop19.o
+│   │   │   │   │   ├── 7tt7spj41s6tu16jinngmxncl.o
+│   │   │   │   │   ├── 8im54sywi36go7cgn118rlnla.o
+│   │   │   │   │   ├── 9j1pmu0pl4wnvbxj555plrsc3.o
+│   │   │   │   │   ├── a5jkrgpdn70il2rt6vr6avhs3.o
+│   │   │   │   │   ├── a8ooxe8x9a9rrcc629oaca3ve.o
+│   │   │   │   │   ├── agfzlrfqfm2arvzh6x9371cdi.o
+│   │   │   │   │   ├── ahukknkxg32ox3sf1m1uj7yye.o
+│   │   │   │   │   ├── aq2g8hfvvt6fs3bo7utvd9fu8.o
+│   │   │   │   │   ├── arcy53phwtsfwysggrbkefqod.o
+│   │   │   │   │   ├── bjx41b4gc6f4014qrwwot3xvu.o
+│   │   │   │   │   ├── bputwmfpnhe39i3nudzblpvhw.o
+│   │   │   │   │   ├── bx1pqfuni5xbwheiu7vm6n4tb.o
+│   │   │   │   │   ├── dep-graph.bin
+│   │   │   │   │   ├── dr3eel47ifdjat1sado4fdwfc.o
+│   │   │   │   │   ├── dxciutcb4tk82q3q1tzw5xms2.o
+│   │   │   │   │   ├── el6u1f7yha1lomxhgog0lxqjv.o
+│   │   │   │   │   ├── er86wn65k6p1jrgowzv6jr9wa.o
+│   │   │   │   │   ├── exd651yldsuk2kavwswdhdan7.o
+│   │   │   │   │   ├── exx7meeha4aze1h6jzge7kf1z.o
+│   │   │   │   │   ├── query-cache.bin
+│   │   │   │   │   └── work-products.bin
+│   │   │   │   └── s-h5x990ct57-1e0c3ng.lock
+│   │   │   ├── ipm-2wyaq7pmc79zq
+│   │   │   │   ├── s-h5x9bg7u2b-1mf1hp9-working
+│   │   │   │   │   ├── dep-graph.bin
+│   │   │   │   │   ├── dep-graph.part.bin
+│   │   │   │   │   ├── query-cache.bin
+│   │   │   │   │   └── work-products.bin
+│   │   │   │   ├── s-h5x9bg7u2b-1mf1hp9.lock
+│   │   │   │   ├── s-h5x9bjns81-15lgz1l-byebobmedwd57z2sbx3y1nf83
+│   │   │   │   │   ├── dep-graph.bin
+│   │   │   │   │   ├── query-cache.bin
+│   │   │   │   │   └── work-products.bin
+│   │   │   │   └── s-h5x9bjns81-15lgz1l.lock
+│   │   │   ├── ipm-3hbnx2v0xgi21
+│   │   │   │   ├── s-h5x6jcpia2-1gqzv44-4s81cgnvz8ddydw19h2kbse7l
+│   │   │   │   │   ├── 0vse2h421ukz05f7qksumg36a.o
+│   │   │   │   │   ├── 0y1gosgsq1atadu9duydvoihu.o
+│   │   │   │   │   ├── 0yy6osru0oqp69ub1ui9cnemm.o
+│   │   │   │   │   ├── 12ndjurbmkg6710uvg06wodcx.o
+│   │   │   │   │   ├── 238wnj3pcv5ge7sbfv94kcpdq.o
+│   │   │   │   │   ├── 2jyab49xh6mqdhvr31dps1bsm.o
+│   │   │   │   │   ├── 2q3xje03wj5bsb989t7ees84d.o
+│   │   │   │   │   ├── 2sbqa5vzyb3yh1yle6toge4ig.o
+│   │   │   │   │   ├── 313m0e1x214xfvmotqwex79oy.o
+│   │   │   │   │   ├── 34t8zvifiw28s4sl9icxpyz10.o
+│   │   │   │   │   ├── 3lhhsslh9blfj6whbjmh4ca4m.o
+│   │   │   │   │   ├── 3yfwziddknci5px46ucd5s9nx.o
+│   │   │   │   │   ├── 4aks1n8fv6qeov0j6gfqtazg3.o
+│   │   │   │   │   ├── 4sjojfn63tdzxlvybqy0qkmd8.o
+│   │   │   │   │   ├── 5bclkkii2tfwaexlefdpg99vy.o
+│   │   │   │   │   ├── 6md9q10behdygawhin1lyxnc3.o
+│   │   │   │   │   ├── 6nwn3gbbjx6xjt7vmqvmzf4of.o
+│   │   │   │   │   ├── 72mq9pqpd0crmbi7r49gq4x5b.o
+│   │   │   │   │   ├── 730mk4budvyacs1ab1xj3qb0q.o
+│   │   │   │   │   ├── 7deia8c9ivobmv8m35pih902b.o
+│   │   │   │   │   ├── 7rko7py77caoxeyg050os2ir9.o
+│   │   │   │   │   ├── 8czymyrdpszh82pj1pfc2xejj.o
+│   │   │   │   │   ├── 8tlflt9dzriwx7ygyq4r3d9ud.o
+│   │   │   │   │   ├── 90zif736yesjouzsdh5u6sj7h.o
+│   │   │   │   │   ├── 9ds3z3mkps6bh6sro5dl9vn5z.o
+│   │   │   │   │   ├── 9glvlapxx45s8d7ssw6mtpm89.o
+│   │   │   │   │   ├── 9v6mjwedw32rcgx5ry3v0lcc2.o
+│   │   │   │   │   ├── 9z00945c72jzyhqjtqdvz6pxm.o
+│   │   │   │   │   ├── aap7wdymfjs4abd4zwrww4ci6.o
+│   │   │   │   │   ├── aqf6304bhqifyp6oen9ntxuj5.o
+│   │   │   │   │   ├── bxo8wdonw0uu9p157d97rmg1h.o
+│   │   │   │   │   ├── c7bd0uh793o2nkdtv3qmm9gvz.o
+│   │   │   │   │   ├── dep-graph.bin
+│   │   │   │   │   ├── dkpg4f0miwizcw6kdjvg3bxe5.o
+│   │   │   │   │   ├── dxrn78scxng886d6bnbq84nub.o
+│   │   │   │   │   ├── e8lqrfhdk3tmalah99k0h4cag.o
+│   │   │   │   │   ├── e8zsbxfa1ozhnfsmuy5qym2hz.o
+│   │   │   │   │   ├── eqt4udd2a858ojxbtkhcjqisb.o
+│   │   │   │   │   ├── esqgczvyw6eqki29t9vytp2lg.o
+│   │   │   │   │   ├── ezp0j9qvnj5e65xymdmn52fog.o
+│   │   │   │   │   ├── f1g3xrltc5q2q7ob9zpwrs4l9.o
+│   │   │   │   │   ├── query-cache.bin
+│   │   │   │   │   └── work-products.bin
+│   │   │   │   └── s-h5x6jcpia2-1gqzv44.lock
+│   │   │   └── ipm-3nyg1l4eiibs3
+│   │   │       ├── s-h5x9bg7z2n-1s1k10z-working
+│   │   │       │   ├── dep-graph.bin
+│   │   │       │   ├── dep-graph.part.bin
+│   │   │       │   ├── query-cache.bin
+│   │   │       │   └── work-products.bin
+│   │   │       ├── s-h5x9bg7z2n-1s1k10z.lock
+│   │   │       ├── s-h5x9bjnqns-0jxx864-ble3h0kwkf59gn38pkhon5lbw
+│   │   │       │   ├── dep-graph.bin
+│   │   │       │   ├── query-cache.bin
+│   │   │       │   └── work-products.bin
+│   │   │       └── s-h5x9bjnqns-0jxx864.lock
+│   │   ├── ipm
+│   │   └── ipm.d
+│   └── release
+│       ├── build
+│       │   ├── crossbeam-utils-8f274616bc1cdb59
+│       │   │   ├── build-script-build
+│       │   │   ├── build_script_build-8f274616bc1cdb59
+│       │   │   └── build_script_build-8f274616bc1cdb59.d
+│       │   ├── crossbeam-utils-aa6c6f05e998a333
+│       │   │   ├── invoked.timestamp
+│       │   │   ├── out
+│       │   │   ├── output
+│       │   │   ├── root-output
+│       │   │   └── stderr
+│       │   ├── libc-b1ea5005ee631cb6
+│       │   │   ├── build-script-build
+│       │   │   ├── build_script_build-b1ea5005ee631cb6
+│       │   │   └── build_script_build-b1ea5005ee631cb6.d
+│       │   ├── libc-b57e4343022a4e61
+│       │   │   ├── invoked.timestamp
+│       │   │   ├── out
+│       │   │   ├── output
+│       │   │   ├── root-output
+│       │   │   └── stderr
+│       │   ├── lock_api-473b0ed38b2ca6fe
+│       │   │   ├── invoked.timestamp
+│       │   │   ├── out
+│       │   │   │   └── autocfg_108dd573fc4fe615_0.ll
+│       │   │   ├── output
+│       │   │   ├── root-output
+│       │   │   └── stderr
+│       │   ├── lock_api-9ea70c7e47b34a71
+│       │   │   ├── build-script-build
+│       │   │   ├── build_script_build-9ea70c7e47b34a71
+│       │   │   └── build_script_build-9ea70c7e47b34a71.d
+│       │   ├── parking_lot_core-6d7204f008b62cff
+│       │   │   ├── invoked.timestamp
+│       │   │   ├── out
+│       │   │   ├── output
+│       │   │   ├── root-output
+│       │   │   └── stderr
+│       │   ├── parking_lot_core-e21b8b16659bbbfc
+│       │   │   ├── build-script-build
+│       │   │   ├── build_script_build-e21b8b16659bbbfc
+│       │   │   └── build_script_build-e21b8b16659bbbfc.d
+│       │   ├── proc-macro2-5e7ddafc80428609
+│       │   │   ├── build-script-build
+│       │   │   ├── build_script_build-5e7ddafc80428609
+│       │   │   └── build_script_build-5e7ddafc80428609.d
+│       │   ├── proc-macro2-f6dc5e095febd24f
+│       │   │   ├── invoked.timestamp
+│       │   │   ├── out
+│       │   │   ├── output
+│       │   │   ├── root-output
+│       │   │   └── stderr
+│       │   ├── signal-hook-537454b460ce117a
+│       │   │   ├── invoked.timestamp
+│       │   │   ├── out
+│       │   │   ├── output
+│       │   │   ├── root-output
+│       │   │   └── stderr
+│       │   ├── signal-hook-9a8e3086d106d862
+│       │   │   ├── build-script-build
+│       │   │   ├── build_script_build-9a8e3086d106d862
+│       │   │   └── build_script_build-9a8e3086d106d862.d
+│       │   ├── thiserror-4cac672121273c6a
+│       │   │   ├── invoked.timestamp
+│       │   │   ├── out
+│       │   │   ├── output
+│       │   │   ├── root-output
+│       │   │   └── stderr
+│       │   └── thiserror-a71d59d513705bbd
+│       │       ├── build-script-build
+│       │       ├── build_script_build-a71d59d513705bbd
+│       │       └── build_script_build-a71d59d513705bbd.d
+│       ├── deps
+│       │   ├── autocfg-d21cab4726d6ac50.d
+│       │   ├── bitflags-b2ac34f8025967b5.d
+│       │   ├── cfg_if-a820a746488b924b.d
+│       │   ├── coolor-9c7935cab30df2ed.d
+│       │   ├── crossbeam-293a3ebb31f96586.d
+│       │   ├── crossbeam_channel-392085bff8f5d30a.d
+│       │   ├── crossbeam_deque-d2d2ba0e6dad1b3b.d
+│       │   ├── crossbeam_epoch-fbb3907bb8d59d04.d
+│       │   ├── crossbeam_queue-28d83a83d466f611.d
+│       │   ├── crossbeam_utils-d7ec531852b9ef25.d
+│       │   ├── crossterm-d8b87afa00d2c282.d
+│       │   ├── ipm-e9cea550b838556d
+│       │   ├── ipm-e9cea550b838556d.d
+│       │   ├── libautocfg-d21cab4726d6ac50.rlib
+│       │   ├── libautocfg-d21cab4726d6ac50.rmeta
+│       │   ├── libbitflags-b2ac34f8025967b5.rlib
+│       │   ├── libbitflags-b2ac34f8025967b5.rmeta
+│       │   ├── libc-e13d5a4c2d27670c.d
+│       │   ├── libcfg_if-a820a746488b924b.rlib
+│       │   ├── libcfg_if-a820a746488b924b.rmeta
+│       │   ├── libcoolor-9c7935cab30df2ed.rlib
+│       │   ├── libcoolor-9c7935cab30df2ed.rmeta
+│       │   ├── libcrossbeam-293a3ebb31f96586.rlib
+│       │   ├── libcrossbeam-293a3ebb31f96586.rmeta
+│       │   ├── libcrossbeam_channel-392085bff8f5d30a.rlib
+│       │   ├── libcrossbeam_channel-392085bff8f5d30a.rmeta
+│       │   ├── libcrossbeam_deque-d2d2ba0e6dad1b3b.rlib
+│       │   ├── libcrossbeam_deque-d2d2ba0e6dad1b3b.rmeta
+│       │   ├── libcrossbeam_epoch-fbb3907bb8d59d04.rlib
+│       │   ├── libcrossbeam_epoch-fbb3907bb8d59d04.rmeta
+│       │   ├── libcrossbeam_queue-28d83a83d466f611.rlib
+│       │   ├── libcrossbeam_queue-28d83a83d466f611.rmeta
+│       │   ├── libcrossbeam_utils-d7ec531852b9ef25.rlib
+│       │   ├── libcrossbeam_utils-d7ec531852b9ef25.rmeta
+│       │   ├── libcrossterm-d8b87afa00d2c282.rlib
+│       │   ├── libcrossterm-d8b87afa00d2c282.rmeta
+│       │   ├── liblibc-e13d5a4c2d27670c.rlib
+│       │   ├── liblibc-e13d5a4c2d27670c.rmeta
+│       │   ├── liblock_api-681f8bbb1f28c968.rlib
+│       │   ├── liblock_api-681f8bbb1f28c968.rmeta
+│       │   ├── liblog-7e91fc1bd7e79ede.rlib
+│       │   ├── liblog-7e91fc1bd7e79ede.rmeta
+│       │   ├── libminimad-154a648537ab8f2d.rlib
+│       │   ├── libminimad-154a648537ab8f2d.rmeta
+│       │   ├── libmio-9e42f31610990d77.rlib
+│       │   ├── libmio-9e42f31610990d77.rmeta
+│       │   ├── libonce_cell-8fc17fef6cc11651.rlib
+│       │   ├── libonce_cell-8fc17fef6cc11651.rmeta
+│       │   ├── libparking_lot-69f67493c943eb6a.rlib
+│       │   ├── libparking_lot-69f67493c943eb6a.rmeta
+│       │   ├── libparking_lot_core-f640acf61f1a5bd6.rlib
+│       │   ├── libparking_lot_core-f640acf61f1a5bd6.rmeta
+│       │   ├── libproc_macro2-ef7166b510b113fd.rlib
+│       │   ├── libproc_macro2-ef7166b510b113fd.rmeta
+│       │   ├── libquote-e899922ade404fc6.rlib
+│       │   ├── libquote-e899922ade404fc6.rmeta
+│       │   ├── libscopeguard-82c0e9315d278e4f.rlib
+│       │   ├── libscopeguard-82c0e9315d278e4f.rmeta
+│       │   ├── libsignal_hook-8a0722c08cfaf081.rlib
+│       │   ├── libsignal_hook-8a0722c08cfaf081.rmeta
+│       │   ├── libsignal_hook_mio-eeaeeebcdc63f04b.rlib
+│       │   ├── libsignal_hook_mio-eeaeeebcdc63f04b.rmeta
+│       │   ├── libsignal_hook_registry-644b606fc23c6b04.rlib
+│       │   ├── libsignal_hook_registry-644b606fc23c6b04.rmeta
+│       │   ├── libsmallvec-b1fbe1c13a2362ef.rlib
+│       │   ├── libsmallvec-b1fbe1c13a2362ef.rmeta
+│       │   ├── libsyn-ab9fa5ce8e603571.rlib
+│       │   ├── libsyn-ab9fa5ce8e603571.rmeta
+│       │   ├── libtermimad-c17185b211b32978.rlib
+│       │   ├── libtermimad-c17185b211b32978.rmeta
+│       │   ├── libthiserror-be160b7ade15f853.rlib
+│       │   ├── libthiserror-be160b7ade15f853.rmeta
+│       │   ├── libthiserror_impl-67f14d0ca15cb5f6.so
+│       │   ├── libunicode_ident-341b9ea33806f649.rlib
+│       │   ├── libunicode_ident-341b9ea33806f649.rmeta
+│       │   ├── libunicode_width-d29b8b74152c33fc.rlib
+│       │   ├── libunicode_width-d29b8b74152c33fc.rmeta
+│       │   ├── lock_api-681f8bbb1f28c968.d
+│       │   ├── log-7e91fc1bd7e79ede.d
+│       │   ├── minimad-154a648537ab8f2d.d
+│       │   ├── mio-9e42f31610990d77.d
+│       │   ├── once_cell-8fc17fef6cc11651.d
+│       │   ├── parking_lot-69f67493c943eb6a.d
+│       │   ├── parking_lot_core-f640acf61f1a5bd6.d
+│       │   ├── proc_macro2-ef7166b510b113fd.d
+│       │   ├── quote-e899922ade404fc6.d
+│       │   ├── scopeguard-82c0e9315d278e4f.d
+│       │   ├── signal_hook-8a0722c08cfaf081.d
+│       │   ├── signal_hook_mio-eeaeeebcdc63f04b.d
+│       │   ├── signal_hook_registry-644b606fc23c6b04.d
+│       │   ├── smallvec-b1fbe1c13a2362ef.d
+│       │   ├── syn-ab9fa5ce8e603571.d
+│       │   ├── termimad-c17185b211b32978.d
+│       │   ├── thiserror-be160b7ade15f853.d
+│       │   ├── thiserror_impl-67f14d0ca15cb5f6.d
+│       │   ├── unicode_ident-341b9ea33806f649.d
+│       │   └── unicode_width-d29b8b74152c33fc.d
+│       ├── examples
+│       ├── incremental
+│       ├── ipm
+│       └── ipm.d
+└── tree
+
+72 directories, 494 files

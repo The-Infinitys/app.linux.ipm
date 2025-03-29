@@ -1,0 +1,3 @@
+# Ignore Export directory
+export/build/*
+export/package/*
