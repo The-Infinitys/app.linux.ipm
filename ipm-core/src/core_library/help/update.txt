@@ -1,0 +1,4 @@
+Usage:
+{command_name} update <package-name>
+
+パッケージを更新します。

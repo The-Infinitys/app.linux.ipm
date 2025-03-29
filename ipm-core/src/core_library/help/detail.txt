@@ -1,0 +1,4 @@
+Usage:
+{command_name} detail <package-name>
+
+パッケージの詳細を表示します。

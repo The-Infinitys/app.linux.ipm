@@ -1,0 +1,12 @@
+Infinity Package Manager (Version: {version})
+Usage: {command_name}  <command>
+{command_name} is a useful commandline package manager.
+
+install: install packages
+uninstall: uninstall packages
+update: update packages
+search: search packages
+detail: get a detail of package
+
+For more information about a command, run "{command_name} help <command>".
+For a short summary of all commands, run "{command_name} help --all".

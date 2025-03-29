@@ -1,0 +1,4 @@
+ Usage:
+{command_name} install <package-name>
+
+パッケージをインストールします。
