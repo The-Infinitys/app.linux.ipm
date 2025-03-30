@@ -74,32 +74,35 @@ pub fn install_packages() {
     }
     // ここでパッケージのインストール処理を行う
     if let Ok(entries) = fs::read_dir(".") {
-    let package_count = fs::read_dir(".").into_iter().count();
-    println!("Installing {package_count} packages...", package_count = package_count);
-    for entry in entries {
-        if let Ok(entry) = entry {
-        let path = entry.path();
-        if path.is_dir() {
-            println!("Directory: {}", path.display());
-            if let Err(e) = env::set_current_dir(&path) {
-            eprintln!(
-                "Error: Failed to change directory to {}: {}",
-                path.display(),
-                e
-            );
-            } else {
-            println!("Successfully changed directory to {}", path.display());
-            // ここでパッケージのインストール処理を行う
-            install_process();
+        let package_count = fs::read_dir(".").into_iter().count();
+        println!(
+            "Installing {package_count} packages...",
+            package_count = package_count
+        );
+        for entry in entries {
+            if let Ok(entry) = entry {
+                let path = entry.path();
+                if path.is_dir() {
+                    println!("Directory: {}", path.display());
+                    if let Err(e) = env::set_current_dir(&path) {
+                        eprintln!(
+                            "Error: Failed to change directory to {}: {}",
+                            path.display(),
+                            e
+                        );
+                    } else {
+                        println!("Successfully changed directory to {}", path.display());
+                        // ここでパッケージのインストール処理を行う
+                        install_process();
+                    }
+                    env::set_current_dir("..").unwrap_or_else(|e| {
+                        eprintln!("Error: Failed to change directory to ..: {}", e);
+                    });
+                } else {
+                    println!("File: {}", path.display());
+                }
             }
-            env::set_current_dir("..").unwrap_or_else(|e| {
-            eprintln!("Error: Failed to change directory to ..: {}", e);
-            });
-        } else {
-            println!("File: {}", path.display());
         }
-        }
-    }
     } else {
         eprintln!("Error: Failed to read the directory.");
     }
@@ -150,9 +153,43 @@ fn install_process() {
             for file in &info.files.local {
                 println!("  From: {}, To: {:?}", file.from, file.to);
             }
+
+            let destination_dir = Path::new("../package/installed/");
+            if !destination_dir.exists() {
+                if let Err(e) = fs::create_dir_all(&destination_dir) {
+                    eprintln!(
+                        "Error: Failed to create destination directory {}: {}",
+                        destination_dir.display(),
+                        e
+                    );
+                    return;
+                } else {
+                    println!(
+                        "Successfully created destination directory: {}",
+                        destination_dir.display()
+                    );
+                }
+            }
+
+            let package_dir_name = info.about.id.clone();
+            let destination_path = destination_dir.join(&package_dir_name);
+
+            if let Err(e) = fs::rename(".", &destination_path) {
+                eprintln!(
+                    "Error: Failed to move package to {}: {}",
+                    destination_path.display(),
+                    e
+                );
+            } else {
+                println!(
+                    "Successfully moved package to {}",
+                    destination_path.display()
+                );
+            }
         }
         Err(e) => {
             eprintln!("Error: Failed to parse package information: {}", e);
+            return;
         }
     }
 }
