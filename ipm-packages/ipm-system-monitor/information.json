@@ -17,8 +17,8 @@
   "files": {
     "global": [
       {
-        "src": "source/inf-system-monitor",
-        "link": ["bin/inf-system-monitor", "usr/bin/inf-system-monitor"]
+        "from": "source/inf-system-monitor",
+        "to": ["bin/inf-system-monitor", "usr/bin/inf-system-monitor"]
       }
     ],
     "local": []

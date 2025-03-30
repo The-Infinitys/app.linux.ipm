@@ -2,6 +2,7 @@
     "about": {
         "name": "Infinity Package Manager's Default Package",
         "id": "ipm-default-pack",
+        "version":"0.1.0",
         "author": {
             "name": "The Infinity's",
             "id": "the-infinitys"
@@ -16,7 +17,7 @@
             "package": [
                 {
                     "name": "apt",
-                    "type": "dpkg",
+                    "package-type": "dpkg",
                     "version": "*"
                 }
             ]
@@ -25,8 +26,8 @@
     "files": {
         "global": [
             {
-                "src": "source/exec.sh",
-                "link": [
+                "from": "source/exec.sh",
+                "to": [
                     "bin/ipm-example",
                     "usr/bin/ipm-example"
                 ]
