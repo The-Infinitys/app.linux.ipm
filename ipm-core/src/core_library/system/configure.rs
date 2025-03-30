@@ -28,12 +28,18 @@ pub fn configure() {
     env::set_current_dir(&work_dir).expect("作業ディレクトリに移動できません");
 
     // 必要なディレクトリを作成
+    // パッケージの保存場所
     create_dir_if_not_exists("package");
-    create_dir_if_not_exists("package/cache");
+    create_dir_if_not_exists("package/www"); // パッケージのリポジトリ
     create_dir_if_not_exists("package/installed");
-    create_dir_if_not_exists("package/logs");
+    // バイナリの保存場所
     create_dir_if_not_exists("bin");
-
+    // 設定ファイルの保存場所
+    create_dir_if_not_exists("setting");
+    // ログの保存場所
+    create_dir_if_not_exists("log");
+    // 一時ディレクトリの保存場所
+    create_dir_if_not_exists("tmp");
     // 本来の作業ディレクトリに移動
     env::set_current_dir(&_current_dir).expect("作業ディレクトリに移動できません");
 }

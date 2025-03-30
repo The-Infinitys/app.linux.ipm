@@ -18,7 +18,7 @@ pub fn install_package(args: Vec<String>) {
 
     for arg in &args {
         let path = Path::new(arg);
-        if path.exists(){
+        if path.exists() {
             println!("File found: {}. Importing as local package...", arg);
             import_package_from_local(arg);
         } else {
@@ -28,8 +28,25 @@ pub fn install_package(args: Vec<String>) {
 }
 
 pub fn import_package_from_local(file_path: &str) {
+    // tmpディレクトリの中身を空にする
+    let tmp_dir = Path::new("./tmp");
+    if tmp_dir.exists() {
+        if let Err(e) = fs::remove_dir_all(tmp_dir) {
+            eprintln!("Failed to clear tmp directory: {}", e);
+            return;
+        }
+    }
+    if let Err(e) = fs::create_dir_all(tmp_dir) {
+        eprintln!("Failed to recreate tmp directory: {}", e);
+        return;
+    }
+    println!("Successfully cleared tmp directory.");
     // 1. ファイル、フォルダのデータを先に取得する
-    let path = Path::new(file_path);
+    let path = &fs::canonicalize(file_path).unwrap_or_else(|_| {
+        eprintln!("Failed to resolve absolute path for: {}", file_path);
+        Path::new(file_path).to_path_buf()
+    });
+    let file_path = path.to_str().unwrap_or(file_path);
     if !path.exists() {
         eprintln!("File or directory does not exist: {}", file_path);
         return;
@@ -44,19 +61,19 @@ pub fn import_package_from_local(file_path: &str) {
     let current_dir = env::current_dir().unwrap();
     env::set_current_dir(&ipm_work_dir).expect("Failed to set current directory");
 
-    // 3. 予め取得したデータを ./package/cache にコピーする
-    let cache_dir = Path::new("./package/cache");
+    // 3. 予め取得したデータを ./tmp にコピーする
+    let cache_dir = Path::new("./tmp");
     if !cache_dir.exists() {
         fs::create_dir_all(cache_dir).expect("Failed to create cache directory");
     }
 
     if is_directory {
         // ディレクトリの場合
-        println!("Detected directory. Copying to ./package/cache...");
-        if let Err(e) = copy_directory(path, cache_dir) {
+        println!("Detected directory. Copying {} to ./tmp...", file_path);
+        if let Err(e) = copy_directory(path, &cache_dir.join(path.file_name().unwrap())) {
             eprintln!("Failed to copy directory: {}", e);
         } else {
-            println!("Successfully copied directory to ./package/cache");
+            println!("Successfully copied directory to ./tmp");
         }
     } else if let Some(extension) = path.extension() {
         // ファイルの場合
@@ -66,7 +83,7 @@ pub fn import_package_from_local(file_path: &str) {
                     path.file_stem().and_then(|s| Path::new(s).extension())
                 {
                     if parent_extension == "tar" {
-                        println!("Detected .tar.gz file. Extracting to ./package/cache...");
+                        println!("Detected .tar.gz file. Extracting to ./tmp...");
                         if let Err(e) = extract_tar_gz_to(file_path, cache_dir) {
                             eprintln!("Failed to extract .tar.gz file: {}", e);
                         }
@@ -76,17 +93,17 @@ pub fn import_package_from_local(file_path: &str) {
                 }
             }
             Some("tar") => {
-                println!("Detected .tar file. Extracting to ./package/cache...");
+                println!("Detected .tar file. Extracting to ./tmp...");
                 if let Err(e) = extract_tar_to(file_path, cache_dir) {
                     eprintln!("Failed to extract .tar file: {}", e);
                 }
             }
             _ => {
-                println!("Copying file to ./package/cache...");
+                println!("Copying file to ./tmp...");
                 if let Err(e) = fs::copy(path, cache_dir.join(path.file_name().unwrap())) {
                     eprintln!("Failed to copy file: {}", e);
                 } else {
-                    println!("Successfully copied file to ./package/cache");
+                    println!("Successfully copied file to ./tmp");
                 }
             }
         }
@@ -99,13 +116,27 @@ pub fn import_package_from_local(file_path: &str) {
 }
 
 fn copy_directory(src: &Path, dest: &Path) -> io::Result<()> {
+    if !src.exists() {
+        return Err(io::Error::new(
+            io::ErrorKind::NotFound,
+            "Source directory does not exist",
+        ));
+    }
     if !src.is_dir() {
         return Err(io::Error::new(
             io::ErrorKind::InvalidInput,
             "Source is not a directory",
         ));
     }
-
+    if !dest.exists() {
+        fs::create_dir_all(dest)?;
+    }
+    if !dest.is_dir() {
+        return Err(io::Error::new(
+            io::ErrorKind::InvalidInput,
+            "Destination is not a directory",
+        ));
+    }
     for entry in fs::read_dir(src)? {
         let entry = entry?;
         let entry_path = entry.path();
