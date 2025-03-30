@@ -5,7 +5,6 @@ use std::fs;
 use std::fs::File;
 use std::io::Read;
 use std::path::Path;
-
 // Define PackageInfo Struct
 use serde::Deserialize;
 
@@ -56,6 +55,7 @@ struct PackageInfo {
     about: About,
     files: Files,
 }
+
 pub fn install_packages() {
     println!("Starting package installation...");
     if let Ok(work_dir) = env::var("IPM_WORK_DIR") {
@@ -74,30 +74,32 @@ pub fn install_packages() {
     }
     // ここでパッケージのインストール処理を行う
     if let Ok(entries) = fs::read_dir(".") {
-        for entry in entries {
-            if let Ok(entry) = entry {
-                let path = entry.path();
-                if path.is_dir() {
-                    println!("Directory: {}", path.display());
-                    if let Err(e) = env::set_current_dir(&path) {
-                        eprintln!(
-                            "Error: Failed to change directory to {}: {}",
-                            path.display(),
-                            e
-                        );
-                    } else {
-                        println!("Successfully changed directory to {}", path.display());
-                        // ここでパッケージのインストール処理を行う
-                        install_process();
-                    }
-                    env::set_current_dir("..").unwrap_or_else(|e| {
-                        eprintln!("Error: Failed to change directory to ..: {}", e);
-                    });
-                } else {
-                    println!("File: {}", path.display());
-                }
+    let package_count = fs::read_dir(".").into_iter().count();
+    println!("Installing {package_count} packages...", package_count = package_count);
+    for entry in entries {
+        if let Ok(entry) = entry {
+        let path = entry.path();
+        if path.is_dir() {
+            println!("Directory: {}", path.display());
+            if let Err(e) = env::set_current_dir(&path) {
+            eprintln!(
+                "Error: Failed to change directory to {}: {}",
+                path.display(),
+                e
+            );
+            } else {
+            println!("Successfully changed directory to {}", path.display());
+            // ここでパッケージのインストール処理を行う
+            install_process();
             }
+            env::set_current_dir("..").unwrap_or_else(|e| {
+            eprintln!("Error: Failed to change directory to ..: {}", e);
+            });
+        } else {
+            println!("File: {}", path.display());
         }
+        }
+    }
     } else {
         eprintln!("Error: Failed to read the directory.");
     }
@@ -111,7 +113,7 @@ fn install_process() {
             if let Err(e) = file.read_to_string(&mut package_info) {
                 eprintln!("Error: Failed to read 'information.json': {}", e);
             } else {
-                println!("Successfully loaded package information: {}", package_info);
+                println!("Successfully loaded package information.");
             }
         } else {
             eprintln!("Error: Failed to open 'information.json'.");
@@ -131,10 +133,6 @@ fn install_process() {
                 info.about.author.name, info.about.author.id
             );
             println!("License: {}", info.about.license);
-            println!(
-                "Dependencies (Commands): {:?}",
-                info.about.dependencies.command
-            );
             for package in &info.about.dependencies.package {
                 println!(
                     "Dependency Package - Name: {}, Type: {}, Version: {}",

@@ -17,7 +17,7 @@
             "package": [
                 {
                     "name": "apt",
-                    "package-type": "dpkg",
+                    "package_type": "dpkg",
                     "version": "*"
                 }
             ]

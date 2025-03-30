@@ -31,6 +31,7 @@ pub fn install_package(args: Vec<String>) {
     }
 
     println!("Successfully cleared tmp directory.");
+    println!("Downloading {} packages...",args.len());
     for arg in &args {
         let path = Path::new(arg);
         if path.exists() {

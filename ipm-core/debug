@@ -1,0 +1,42 @@
+#!/bin/bash -l
+
+# DEBUG IPM CORE SYSTEM
+
+self_dir=$(dirname "$0");
+cd $self_dir
+
+echo "Start IPM debug..."
+
+cargo build
+
+# list testing command
+
+ipm=./target/debug/ipm
+
+commands=(
+  "$ipm version"
+  "$ipm help"
+  "$ipm update"
+  "$ipm install ../ipm-packages/ipm-default ../ipm-packages/ipm-system-monitor"
+)
+
+results=()
+
+for cmd in "${commands[@]}"; do
+  echo "Running: $cmd"
+  if $cmd; then
+    results+=("$cmd: SUCCESS")
+  else
+    results+=("$cmd: FAILURE")
+  fi
+  sleep 1
+done
+
+echo "
+
+
+" #scroll
+echo "Summary of results:"
+for result in "${results[@]}"; do
+  echo "$result"
+done

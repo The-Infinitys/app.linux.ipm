@@ -9,3 +9,7 @@ pub fn show_welcome_msg() {
         .replace("{command_name}", COMMAND_NAME);
     println!("{}", text);
 }
+
+pub fn show_version() {
+    println!("IPM version: {}",env!("CARGO_PKG_VERSION"));
+}
