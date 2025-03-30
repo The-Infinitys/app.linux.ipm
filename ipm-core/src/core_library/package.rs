@@ -15,7 +15,22 @@ pub fn install_package(args: Vec<String>) {
         println!("No package name or file path provided.");
         return;
     }
+    {
+        // tmpディレクトリの中身を空にする
+        let tmp_dir = Path::new("./tmp");
+        if tmp_dir.exists() {
+            if let Err(e) = fs::remove_dir_all(tmp_dir) {
+                eprintln!("Failed to clear tmp directory: {}", e);
+                return;
+            }
+        }
+        if let Err(e) = fs::create_dir_all(tmp_dir) {
+            eprintln!("Failed to recreate tmp directory: {}", e);
+            return;
+        }
+    }
 
+    println!("Successfully cleared tmp directory.");
     for arg in &args {
         let path = Path::new(arg);
         if path.exists() {
@@ -25,22 +40,11 @@ pub fn install_package(args: Vec<String>) {
             println!("Installing package: {}", arg);
         }
     }
+    // ここでパッケージのインストール処理を行う
+    install::install_packages();
 }
 
 pub fn import_package_from_local(file_path: &str) {
-    // tmpディレクトリの中身を空にする
-    let tmp_dir = Path::new("./tmp");
-    if tmp_dir.exists() {
-        if let Err(e) = fs::remove_dir_all(tmp_dir) {
-            eprintln!("Failed to clear tmp directory: {}", e);
-            return;
-        }
-    }
-    if let Err(e) = fs::create_dir_all(tmp_dir) {
-        eprintln!("Failed to recreate tmp directory: {}", e);
-        return;
-    }
-    println!("Successfully cleared tmp directory.");
     // 1. ファイル、フォルダのデータを先に取得する
     let path = &fs::canonicalize(file_path).unwrap_or_else(|_| {
         eprintln!("Failed to resolve absolute path for: {}", file_path);
