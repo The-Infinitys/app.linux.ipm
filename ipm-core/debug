@@ -4,7 +4,8 @@
 
 self_dir=$(dirname "$0");
 cd $self_dir
-
+rm -rf ./tmp
+mkdir tmp
 echo "Start IPM debug..."
 
 cargo build

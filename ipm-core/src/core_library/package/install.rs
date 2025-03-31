@@ -7,6 +7,34 @@ use std::io::Read;
 use std::path::Path;
 // Define PackageInfo Struct
 use serde::Deserialize;
+use std::io;
+
+fn copy_directory(src: &Path, dest: &Path) -> io::Result<()> {
+    if !src.is_dir() {
+        return Err(io::Error::new(
+            io::ErrorKind::InvalidInput,
+            "Source is not a directory",
+        ));
+    }
+
+    if !dest.exists() {
+        fs::create_dir_all(dest)?;
+    }
+
+    for entry in fs::read_dir(src)? {
+        let entry = entry?;
+        let entry_path = entry.path();
+        let dest_path = dest.join(entry.file_name());
+
+        if entry_path.is_dir() {
+            copy_directory(&entry_path, &dest_path)?;
+        } else {
+            fs::copy(&entry_path, &dest_path)?;
+        }
+    }
+
+    Ok(())
+}
 
 #[derive(Debug, Deserialize)]
 struct Author {
@@ -154,7 +182,7 @@ fn install_process() {
                 println!("  From: {}, To: {:?}", file.from, file.to);
             }
 
-            let destination_dir = Path::new("../package/installed/");
+            let destination_dir = Path::new("../../package/installed/");
             if !destination_dir.exists() {
                 if let Err(e) = fs::create_dir_all(&destination_dir) {
                     eprintln!(
@@ -174,7 +202,7 @@ fn install_process() {
             let package_dir_name = info.about.id.clone();
             let destination_path = destination_dir.join(&package_dir_name);
 
-            if let Err(e) = fs::rename(".", &destination_path) {
+            if let Err(e) = copy_directory(Path::new("."), &destination_path) {
                 eprintln!(
                     "Error: Failed to move package to {}: {}",
                     destination_path.display(),
