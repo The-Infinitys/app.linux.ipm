@@ -173,3 +173,19 @@ fn extract_tar_to(file_path: &str, dest: &Path) -> io::Result<()> {
     println!("Successfully extracted .tar file to {:?}", dest);
     Ok(())
 }
+
+pub fn list_installed_packages() {
+    // Function to list installed packages
+    let ipm_work_dir=env::var("IPM_WORK_DIR").expect("環境変数 IPM_WORK_DIR が設定されていません");
+    let installed_dir=Path::new(&ipm_work_dir).join("package").join("installed");
+    for entry in installed_dir.read_dir().unwrap() {
+        let entry = entry.unwrap();
+        let path = entry.path();
+        if path.is_dir() {
+            println!("{}", path.file_name().unwrap().to_str().unwrap());
+        }
+    }
+}
+
+
+    

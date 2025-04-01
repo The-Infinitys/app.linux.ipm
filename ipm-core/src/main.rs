@@ -20,6 +20,8 @@ fn main() {
 
 fn sub_cmd(cmd_name: String, _args: Vec<String>) -> u8 {
     match &*cmd_name {
+        "list" => package::list_installed_packages(),
+        "uninstall" => println!("Run uninstall! "),
         "update" => println!("Run update!"),
         "search" => println!("Run search!"),
         "detail" => println!("Run detail!"),

@@ -26,7 +26,7 @@ pub fn configure() {
     // 必要なディレクトリを作成
     // パッケージの保存場所
     create_dir_if_not_exists("package");
-    create_dir_if_not_exists("package/www"); // パッケージのリポジトリ
+    create_dir_if_not_exists("package/www");
     create_dir_if_not_exists("package/installed");
     // バイナリの保存場所
     create_dir_if_not_exists("bin");
