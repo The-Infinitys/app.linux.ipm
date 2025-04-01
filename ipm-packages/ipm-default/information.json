@@ -34,12 +34,6 @@
             }
         ],
         "local": [
-            {
-                "from": "source/text.txt",
-                "to": [
-                    ".local/ipm-default/text.txt"
-                ]
-            }
         ]
     }
 }

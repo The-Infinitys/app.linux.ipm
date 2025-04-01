@@ -220,23 +220,50 @@ fn install_process() {
                 );
             }
             let cache_dir = env::current_dir().expect("Failed to get current dir.");
-            env::set_current_dir(&destination_dir).expect("Failed to set current dir.");
+            env::set_current_dir(&destination_path).expect("Failed to set current dir.");
             {
                 // Install process.
                 // Global installation.
                 for global_file_set in info.files.global {
                     for to_path in global_file_set.to {
                         let absolute_to_path = Path::new("/").join(to_path);
-                        if let Err(e) = symlink(&global_file_set.from, &absolute_to_path) {
+                        if let Some(parent) = absolute_to_path.parent() {
+                            if !parent.exists() {
+                                if let Err(e) = fs::create_dir_all(parent) {
+                                    eprintln!(
+                                        "Error: Failed to create directory {}: {}",
+                                        parent.display(),
+                                        e
+                                    );
+                                    continue;
+                                } else {
+                                    println!("Successfully created directory: {}", parent.display());
+                                }
+                            }
+                        }
+                        if let Err(e) = fs::remove_file(&absolute_to_path) {
+                            if e.kind() != io::ErrorKind::NotFound {
+                                eprintln!(
+                                    "Error: Failed to remove existing file {}: {}",
+                                    absolute_to_path.display(),
+                                    e
+                                );
+                            }
+                        } else {
+                            println!("Successfully removed existing file: {}", absolute_to_path.display());
+                        }
+
+                        let absolute_from_path = Path::new(&env::current_dir().expect("failed")).join(&global_file_set.from);
+                        if let Err(e) = symlink(&absolute_from_path, &absolute_to_path) {
                             eprintln!(
-                                "Error: Failed to create symlink from {} to {}: {}",
+                                "Error: Failed to create symlink from {:?} to {}: {}",
                                 global_file_set.from,
                                 absolute_to_path.display(),
                                 e
                             );
                         } else {
                             println!(
-                                "Successfully created symlink from {} to {}",
+                                "Successfully created symlink from {:?} to {}",
                                 global_file_set.from,
                                 absolute_to_path.display()
                             );
@@ -247,24 +274,40 @@ fn install_process() {
                 for local_file_set in info.files.local {
                     for to_path in local_file_set.to {
                         let home_dirs = fs::read_dir("/home").unwrap();
-
                         for home_dir in home_dirs {
                             if let Ok(home_dir) = home_dir {
                                 let user_home = home_dir.path();
                                 if user_home.is_dir() {
                                     let absolute_to_path = user_home.join(&to_path);
-                                    if let Err(e) = symlink(&local_file_set.from, &absolute_to_path) {
+                                    if let Some(parent) = absolute_to_path.parent() {
+                                        if !parent.exists() {
+                                            if let Err(e) = fs::create_dir_all(parent) {
+                                                eprintln!(
+                                                    "Error: Failed to create directory {}: {}",
+                                                    parent.display(),
+                                                    e
+                                                );
+                                                continue;
+                                            } else {
+                                                println!(
+                                                    "Successfully created directory: {}",
+                                                    parent.display()
+                                                );
+                                            }
+                                        }
+                                    }
+                                    if let Err(e) = fs::copy(&local_file_set.from, &absolute_to_path) {
                                         eprintln!(
-                                            "Error: Failed to create symlink from {} to {}: {}",
+                                            "Error: Failed to copy file from {} to ~/{}: {}",
                                             local_file_set.from,
-                                            absolute_to_path.display(),
+                                            to_path,
                                             e
                                         );
                                     } else {
                                         println!(
-                                            "Successfully created symlink from {} to {}",
+                                            "Successfully copied file from {} to ~/{}",
                                             local_file_set.from,
-                                            absolute_to_path.display()
+                                            to_path
                                         );
                                     }
                                 }
