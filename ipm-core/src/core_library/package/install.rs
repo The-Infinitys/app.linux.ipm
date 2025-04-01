@@ -5,11 +5,6 @@ use std::fs;
 use std::fs::File;
 use std::io::Read;
 use std::path::Path;
-// Define PackageInfo Struct
-// extern crate caps;
-// use caps::CapSet;
-// extern crate nix;
-// use nix::unistd::{Gid, Uid, chown};
 use serde::Deserialize;
 use std::io;
 use std::os::unix::fs::symlink;
@@ -186,7 +181,10 @@ fn install_process() {
             for file in &info.files.local {
                 println!("  From: {}, To: {:?}", file.from, file.to);
             }
-
+            if !check_dependencies(info.about.dependencies) {
+                eprintln!("依存関係を修正できません。");
+                return;
+            }
             let destination_dir = Path::new("../../package/installed/");
             if !destination_dir.exists() {
                 if let Err(e) = fs::create_dir_all(&destination_dir) {
@@ -237,7 +235,10 @@ fn install_process() {
                                     );
                                     continue;
                                 } else {
-                                    println!("Successfully created directory: {}", parent.display());
+                                    println!(
+                                        "Successfully created directory: {}",
+                                        parent.display()
+                                    );
                                 }
                             }
                         }
@@ -250,10 +251,14 @@ fn install_process() {
                                 );
                             }
                         } else {
-                            println!("Successfully removed existing file: {}", absolute_to_path.display());
+                            println!(
+                                "Successfully removed existing file: {}",
+                                absolute_to_path.display()
+                            );
                         }
 
-                        let absolute_from_path = Path::new(&env::current_dir().expect("failed")).join(&global_file_set.from);
+                        let absolute_from_path = Path::new(&env::current_dir().expect("failed"))
+                            .join(&global_file_set.from);
                         if let Err(e) = symlink(&absolute_from_path, &absolute_to_path) {
                             eprintln!(
                                 "Error: Failed to create symlink from {:?} to {}: {}",
@@ -296,18 +301,17 @@ fn install_process() {
                                             }
                                         }
                                     }
-                                    if let Err(e) = fs::copy(&local_file_set.from, &absolute_to_path) {
+                                    if let Err(e) =
+                                        fs::copy(&local_file_set.from, &absolute_to_path)
+                                    {
                                         eprintln!(
                                             "Error: Failed to copy file from {} to ~/{}: {}",
-                                            local_file_set.from,
-                                            to_path,
-                                            e
+                                            local_file_set.from, to_path, e
                                         );
                                     } else {
                                         println!(
                                             "Successfully copied file from {} to ~/{}",
-                                            local_file_set.from,
-                                            to_path
+                                            local_file_set.from, to_path
                                         );
                                     }
                                 }
@@ -323,4 +327,9 @@ fn install_process() {
             return;
         }
     }
+}
+
+fn check_dependencies(info: Dependencies) -> bool {
+    for _depend_cmd in info.command {}
+    return true;
 }
