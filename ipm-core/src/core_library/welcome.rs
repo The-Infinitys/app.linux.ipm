@@ -11,5 +11,5 @@ pub fn show_welcome_msg() {
 }
 
 pub fn show_version() {
-    println!("IPM version: {}",env!("CARGO_PKG_VERSION"));
+    println!("IPM version: {}", env!("CARGO_PKG_VERSION"));
 }

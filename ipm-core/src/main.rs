@@ -36,7 +36,7 @@ fn sub_cmd(cmd_name: String, _args: Vec<String>) -> u8 {
             } else {
                 help::show_help_msg("install");
             }
-        },
+        }
         "version" => welcome::show_version(),
         _ => println!("Tried to run {}.\nHowever, not found.", cmd_name),
     }

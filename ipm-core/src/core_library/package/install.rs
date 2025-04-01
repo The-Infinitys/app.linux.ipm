@@ -6,8 +6,13 @@ use std::fs::File;
 use std::io::Read;
 use std::path::Path;
 // Define PackageInfo Struct
+// extern crate caps;
+// use caps::CapSet;
+// extern crate nix;
+// use nix::unistd::{Gid, Uid, chown};
 use serde::Deserialize;
 use std::io;
+use std::os::unix::fs::symlink;
 
 fn copy_directory(src: &Path, dest: &Path) -> io::Result<()> {
     if !src.is_dir() {
@@ -214,6 +219,61 @@ fn install_process() {
                     destination_path.display()
                 );
             }
+            let cache_dir = env::current_dir().expect("Failed to get current dir.");
+            env::set_current_dir(&destination_dir).expect("Failed to set current dir.");
+            {
+                // Install process.
+                // Global installation.
+                for global_file_set in info.files.global {
+                    for to_path in global_file_set.to {
+                        let absolute_to_path = Path::new("/").join(to_path);
+                        if let Err(e) = symlink(&global_file_set.from, &absolute_to_path) {
+                            eprintln!(
+                                "Error: Failed to create symlink from {} to {}: {}",
+                                global_file_set.from,
+                                absolute_to_path.display(),
+                                e
+                            );
+                        } else {
+                            println!(
+                                "Successfully created symlink from {} to {}",
+                                global_file_set.from,
+                                absolute_to_path.display()
+                            );
+                        }
+                    }
+                }
+                // Local installation.
+                for local_file_set in info.files.local {
+                    for to_path in local_file_set.to {
+                        let home_dirs = fs::read_dir("/home").unwrap();
+
+                        for home_dir in home_dirs {
+                            if let Ok(home_dir) = home_dir {
+                                let user_home = home_dir.path();
+                                if user_home.is_dir() {
+                                    let absolute_to_path = user_home.join(&to_path);
+                                    if let Err(e) = symlink(&local_file_set.from, &absolute_to_path) {
+                                        eprintln!(
+                                            "Error: Failed to create symlink from {} to {}: {}",
+                                            local_file_set.from,
+                                            absolute_to_path.display(),
+                                            e
+                                        );
+                                    } else {
+                                        println!(
+                                            "Successfully created symlink from {} to {}",
+                                            local_file_set.from,
+                                            absolute_to_path.display()
+                                        );
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            env::set_current_dir(cache_dir).expect("Failed to set current dir.");
         }
         Err(e) => {
             eprintln!("Error: Failed to parse package information: {}", e);

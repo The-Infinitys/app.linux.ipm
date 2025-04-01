@@ -12,11 +12,7 @@ pub fn configure() {
             Err(e) => eprintln!("Failed to get current directory: {}", e),
         }
     }
-    const IPM_WORK_DIR: &str = if DEBUG {
-        "./tmp"
-    } else {
-        "/opt/the-infinitys/ipm/"
-    };
+    const IPM_WORK_DIR: &str = if DEBUG { "./tmp" } else { "/opt/ipm/" };
     unsafe {
         env::set_var("IPM_EXEC_MODE", if DEBUG { "debug" } else { "release" });
         env::set_var("IPM_WORK_DIR", IPM_WORK_DIR);
