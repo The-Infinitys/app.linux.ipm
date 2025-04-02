@@ -21,7 +21,7 @@ impl HelpMessage {
             update: include_str!("help/update.txt"),
             search: include_str!("help/search.txt"),
             detail: include_str!("help/detail.txt"),
-            system: include_str!("help/system.txt")
+            system: include_str!("help/system.txt"),
         }
     }
 }
@@ -43,6 +43,6 @@ pub fn show_help_msg(help_type: &str) {
 fn show_help(text_data: &str) {
     const COMMAND_NAME: &'static str = env!("CARGO_PKG_NAME");
     let text = text_data.replace("{command_name}", COMMAND_NAME);
-    let text = format!("{}",md(&text));
+    let text = format!("{}", md(&text));
     println!("{}", text);
 }

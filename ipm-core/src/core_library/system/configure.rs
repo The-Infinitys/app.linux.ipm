@@ -1,7 +1,7 @@
+use nix;
 use std::env;
 use std::fs;
 use std::path::Path;
-use nix;
 
 pub fn configure() {
     // Configure Information
@@ -20,7 +20,7 @@ pub fn configure() {
     }
 }
 
-pub fn system_configure(){
+pub fn system_configure() {
     // Check for superuser privileges
     if !nix::unistd::Uid::effective().is_root() && !cfg!(debug_assertions) {
         eprintln!("Error: This program must be run as root.");

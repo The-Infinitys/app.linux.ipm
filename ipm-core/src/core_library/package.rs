@@ -5,13 +5,12 @@ use std::fs::File;
 use std::io;
 use std::path::Path;
 use tar::Archive;
-mod install;
-mod uninstall;
-pub mod list;
 pub mod detail;
+mod install;
+pub mod list;
+mod uninstall;
 use serde;
 use serde::Deserialize;
-
 
 #[derive(Deserialize, Debug)]
 struct Author {
@@ -225,4 +224,34 @@ fn extract_tar_to(file_path: &str, dest: &Path) -> io::Result<()> {
     archive.unpack(dest)?; // 指定されたディレクトリに展開
     println!("Successfully extracted .tar file to {:?}", dest);
     Ok(())
+}
+
+fn uninstall_packages(args: Vec<String>) {
+    // Function to uninstall packages
+    println!("Uninstalling packages...");
+    if args.is_empty() {
+        println!("No package name provided...");
+        return;
+    }
+    // ここでパッケージのアンインストール処理を行う
+    let package_list = list::data();
+    for arg in args {
+        let mut is_exist = false;
+        for package in &package_list {
+            if package.about.id == arg {
+                is_exist = true;
+                break;
+            }
+        }
+        if !is_exist {
+            println!("Package not found: {}", arg);
+            continue;
+        }
+        println!("Uninstalling package: {}", arg);
+        let current_dir=env::current_dir().expect("Failed to get current dir.");
+        let target_dir=Path::new(ipm_work_dir).join("packages");w
+        env::set_current_dir(target_dir);
+        uninstall::uninstall();
+        env::set_current_dir(current_dir);
+    }
 }

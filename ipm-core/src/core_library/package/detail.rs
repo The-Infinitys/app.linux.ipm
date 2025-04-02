@@ -47,14 +47,14 @@ pub fn show_from_info(package_info: &PackageInfo) {
         ),
     );
     let formatted_description = package_info
-      .about
-      .description
-      .lines()
-      .map(|line| format!("    {}", line))
-      .collect::<Vec<_>>()
-      .join("\n");
+        .about
+        .description
+        .lines()
+        .map(|line| format!("    {}", line))
+        .collect::<Vec<_>>()
+        .join("\n");
     let formatted_description = md(&formatted_description);
-    let formatted_description = format!("{}",formatted_description);
+    let formatted_description = format!("{}", formatted_description);
     show_info("description: |\n", &formatted_description);
     let mut depend_info = String::new();
     for command_depend in &package_info.about.dependencies.command {

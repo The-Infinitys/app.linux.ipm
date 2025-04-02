@@ -1,3 +1,6 @@
+use crate::core_library::package::Dependencies;
+use crate::core_library::package::PackageInfo;
+use crate::core_library::package::detail;
 use serde_json;
 use std::env;
 use std::fs;
@@ -6,9 +9,6 @@ use std::io;
 use std::io::Read;
 use std::os::unix::fs::symlink;
 use std::path::Path;
-use crate::core_library::package::PackageInfo;
-use crate::core_library::package::Dependencies;
-use crate::core_library::package::detail;
 
 fn copy_directory(src: &Path, dest: &Path) -> io::Result<()> {
     if !src.is_dir() {
@@ -36,7 +36,6 @@ fn copy_directory(src: &Path, dest: &Path) -> io::Result<()> {
 
     Ok(())
 }
-
 
 pub fn install_packages() {
     println!("Starting package installation...");
