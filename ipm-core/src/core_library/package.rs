@@ -60,7 +60,7 @@ pub struct PackageInfo {
     files: Files,
 }
 
-pub fn install_package(args: Vec<String>) {
+pub fn install_packages(args: Vec<String>) {
     // Function to install a package
     println!("Installing package...");
     if args.is_empty() {
@@ -226,32 +226,35 @@ fn extract_tar_to(file_path: &str, dest: &Path) -> io::Result<()> {
     Ok(())
 }
 
-fn uninstall_packages(args: Vec<String>) {
+pub fn uninstall_packages(args: Vec<String>) {
     // Function to uninstall packages
     println!("Uninstalling packages...");
+    let ipm_work_dir = env::var("IPM_WORK_DIR").expect("Failed to get work dir");
     if args.is_empty() {
         println!("No package name provided...");
         return;
     }
     // ここでパッケージのアンインストール処理を行う
     let package_list = list::data();
-    for arg in args {
+    let current_dir = env::current_dir().expect("Failed to get current dir.");
+    for package_id in args {
         let mut is_exist = false;
         for package in &package_list {
-            if package.about.id == arg {
+            if package.about.id == package_id {
                 is_exist = true;
                 break;
             }
         }
         if !is_exist {
-            println!("Package not found: {}", arg);
+            println!("Package not found: {}", package_id);
             continue;
         }
-        println!("Uninstalling package: {}", arg);
-        let current_dir=env::current_dir().expect("Failed to get current dir.");
-        let target_dir=Path::new(ipm_work_dir).join("packages");w
-        env::set_current_dir(target_dir);
+        println!("Uninstalling package: {}", package_id);
+        let target_dir = Path::new(&ipm_work_dir).join("package").join(&package_id);
+        println!("{:?}", target_dir);
+        env::set_current_dir(target_dir).expect("failed to set dir");
         uninstall::uninstall();
-        env::set_current_dir(current_dir);
     }
+
+    env::set_current_dir(current_dir).expect("failed to set dir");
 }

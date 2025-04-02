@@ -30,7 +30,13 @@ fn sub_cmd(cmd_name: String, _args: Vec<String>) -> u8 {
             }
         }
         "list" => package::list::installed_packages(),
-        "uninstall" => println!("Run uninstall! "),
+        "uninstall" => {
+            if _args.len() > 0 {
+                package::uninstall_packages(_args);
+            } else {
+                help::show_help_msg("uninstall");
+            }
+        }
         "update" => println!("Run update!"),
         "search" => println!("Run search!"),
         "detail" => {
@@ -49,7 +55,7 @@ fn sub_cmd(cmd_name: String, _args: Vec<String>) -> u8 {
         }
         "install" => {
             if _args.len() > 0 {
-                package::install_package(_args);
+                package::install_packages(_args);
             } else {
                 help::show_help_msg("install");
             }
