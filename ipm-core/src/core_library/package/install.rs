@@ -8,7 +8,7 @@ use std::os::unix::fs::symlink;
 use std::path::Path;
 use crate::core_library::package::PackageInfo;
 use crate::core_library::package::Dependencies;
-use crate::core_library::package::show_package_info;
+use crate::core_library::package::detail;
 
 fn copy_directory(src: &Path, dest: &Path) -> io::Result<()> {
     if !src.is_dir() {
@@ -109,12 +109,12 @@ fn install_process() {
     let package_info: Result<PackageInfo, _> = serde_json::from_str(&package_info);
     match package_info {
         Ok(info) => {
-            show_package_info(&info);
+            detail::show_from_info(&info);
             if !check_dependencies(info.about.dependencies) {
                 eprintln!("依存関係を修正できません。");
                 return;
             }
-            let destination_dir = Path::new("../../package/installed/");
+            let destination_dir = Path::new("../../package");
             if !destination_dir.exists() {
                 if let Err(e) = fs::create_dir_all(&destination_dir) {
                     eprintln!(

@@ -61,35 +61,6 @@ pub struct PackageInfo {
     files: Files,
 }
 
-pub fn show_package_info(info: &PackageInfo) {
-    println!("Package Name: {}", info.about.name);
-    println!("Package ID: {}", info.about.id);
-    println!("Version: {}", info.about.version);
-    println!("Description: {}", info.about.description);
-    println!(
-        "Author: {} (ID: {})",
-        info.about.author.name, info.about.author.id
-    );
-    println!("License: {}", info.about.license);
-    for package in &info.about.dependencies.package {
-        println!(
-            "Dependency Package - Name: {}, Type: {}, Version: {}",
-            package.name, package.package_type, package.version
-        );
-    }
-    for command in &info.about.dependencies.command {
-        println!("Dependency Command: {}", command);
-    }
-    println!("Files (Global):");
-    for file in &info.files.global {
-        println!("  From: {}, To: {:?}", file.from, file.to);
-    }
-    println!("Files (Local):");
-    for file in &info.files.local {
-        println!("  From: {}, To: {:?}", file.from, file.to);
-    }
-}
-
 pub fn install_package(args: Vec<String>) {
     // Function to install a package
     println!("Installing package...");

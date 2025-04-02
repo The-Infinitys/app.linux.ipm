@@ -35,10 +35,10 @@ pub fn system_configure(){
     // 必要なディレクトリを作成
     // パッケージの保存場所
     create_dir_if_not_exists("package");
-    create_dir_if_not_exists("package/www");
-    create_file_if_not_exists("package/www/list.json");
-    create_dir_if_not_exists("package/installed");
-    create_file_if_not_exists("package/installed/list.json");
+    create_file_if_not_exists("package/list.json");
+    // wwwリポジトリデータの保存場所
+    create_dir_if_not_exists("www");
+    create_file_if_not_exists("www/list.json");
     // バイナリの保存場所
     create_dir_if_not_exists("bin");
     create_file_if_not_exists("bin/ipm-info.md");
