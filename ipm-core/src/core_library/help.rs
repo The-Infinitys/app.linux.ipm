@@ -8,6 +8,7 @@ struct HelpMessage {
     update: &'static str,
     search: &'static str,
     detail: &'static str,
+    system: &'static str,
 }
 
 impl HelpMessage {
@@ -20,6 +21,7 @@ impl HelpMessage {
             update: include_str!("help/update.txt"),
             search: include_str!("help/search.txt"),
             detail: include_str!("help/detail.txt"),
+            system: include_str!("help/system.txt")
         }
     }
 }
@@ -28,7 +30,8 @@ pub fn show_help_msg(help_type: &str) {
     const HELP_MESSAGES: HelpMessage = HelpMessage::new();
     match help_type {
         "" => show_help(HELP_MESSAGES.general),
-        "all" => show_help(&format!("{}", md(HELP_MESSAGES.all))),
+        "system" => show_help(HELP_MESSAGES.system),
+        "all" => show_help(HELP_MESSAGES.all),
         "install" => show_help(HELP_MESSAGES.install),
         "uninstall" => show_help(HELP_MESSAGES.uninstall),
         "update" => show_help(HELP_MESSAGES.update),
@@ -40,5 +43,6 @@ pub fn show_help_msg(help_type: &str) {
 fn show_help(text_data: &str) {
     const COMMAND_NAME: &'static str = env!("CARGO_PKG_NAME");
     let text = text_data.replace("{command_name}", COMMAND_NAME);
+    let text = format!("{}",md(&text));
     println!("{}", text);
 }

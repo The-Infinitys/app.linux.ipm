@@ -1,7 +1,5 @@
 Usage:
 
-{command_name} system
-{command_name} system local
-{command_name} system global
+{command_name} system configure
 
-IPMシステムをローカルまたはグローバルに構築します。
+IPMシステムを構築します。

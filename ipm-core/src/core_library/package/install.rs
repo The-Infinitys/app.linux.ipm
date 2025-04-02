@@ -1,13 +1,14 @@
-use serde;
 use serde_json;
 use std::env;
 use std::fs;
 use std::fs::File;
-use std::io::Read;
-use std::path::Path;
-use serde::Deserialize;
 use std::io;
+use std::io::Read;
 use std::os::unix::fs::symlink;
+use std::path::Path;
+use crate::core_library::package::PackageInfo;
+use crate::core_library::package::Dependencies;
+use crate::core_library::package::show_package_info;
 
 fn copy_directory(src: &Path, dest: &Path) -> io::Result<()> {
     if !src.is_dir() {
@@ -36,53 +37,6 @@ fn copy_directory(src: &Path, dest: &Path) -> io::Result<()> {
     Ok(())
 }
 
-#[derive(Debug, Deserialize)]
-struct Author {
-    name: String,
-    id: String,
-}
-
-#[derive(Debug, Deserialize)]
-struct DependencyPackage {
-    name: String,
-    package_type: String,
-    version: String,
-}
-
-#[derive(Debug, Deserialize)]
-struct Dependencies {
-    command: Vec<String>,
-    package: Vec<DependencyPackage>,
-}
-
-#[derive(Debug, Deserialize)]
-struct FileMapping {
-    from: String,
-    to: Vec<String>,
-}
-
-#[derive(Debug, Deserialize)]
-struct Files {
-    global: Vec<FileMapping>,
-    local: Vec<FileMapping>,
-}
-
-#[derive(Debug, Deserialize)]
-struct About {
-    name: String,
-    id: String,
-    version: String,
-    author: Author,
-    description: String,
-    license: String,
-    dependencies: Dependencies,
-}
-
-#[derive(Debug, Deserialize)]
-struct PackageInfo {
-    about: About,
-    files: Files,
-}
 
 pub fn install_packages() {
     println!("Starting package installation...");
@@ -155,32 +109,7 @@ fn install_process() {
     let package_info: Result<PackageInfo, _> = serde_json::from_str(&package_info);
     match package_info {
         Ok(info) => {
-            println!("Package Name: {}", info.about.name);
-            println!("Package ID: {}", info.about.id);
-            println!("Version: {}", info.about.version);
-            println!("Description: {}", info.about.description);
-            println!(
-                "Author: {} (ID: {})",
-                info.about.author.name, info.about.author.id
-            );
-            println!("License: {}", info.about.license);
-            for package in &info.about.dependencies.package {
-                println!(
-                    "Dependency Package - Name: {}, Type: {}, Version: {}",
-                    package.name, package.package_type, package.version
-                );
-            }
-            for command in &info.about.dependencies.command {
-                println!("Dependency Command: {}", command);
-            }
-            println!("Files (Global):");
-            for file in &info.files.global {
-                println!("  From: {}, To: {:?}", file.from, file.to);
-            }
-            println!("Files (Local):");
-            for file in &info.files.local {
-                println!("  From: {}, To: {:?}", file.from, file.to);
-            }
+            show_package_info(&info);
             if !check_dependencies(info.about.dependencies) {
                 eprintln!("依存関係を修正できません。");
                 return;
@@ -204,7 +133,6 @@ fn install_process() {
 
             let package_dir_name = info.about.id.clone();
             let destination_path = destination_dir.join(&package_dir_name);
-
             if let Err(e) = copy_directory(Path::new("."), &destination_path) {
                 eprintln!(
                     "Error: Failed to move package to {}: {}",
@@ -275,7 +203,7 @@ fn install_process() {
                         }
                     }
                 }
-                // Local installation.
+                // Local installation
                 for local_file_set in info.files.local {
                     for to_path in local_file_set.to {
                         let home_dirs = fs::read_dir("/home").unwrap();

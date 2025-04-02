@@ -7,6 +7,87 @@ use std::path::Path;
 use tar::Archive;
 mod install;
 mod uninstall;
+pub mod list;
+use serde;
+use serde::Deserialize;
+
+
+#[derive(Deserialize, Debug)]
+struct Author {
+    name: String,
+    id: String,
+}
+
+#[derive(Deserialize, Debug)]
+struct DependencyPackage {
+    name: String,
+    package_type: String,
+    version: String,
+}
+
+#[derive(Deserialize, Debug)]
+pub struct Dependencies {
+    command: Vec<String>,
+    package: Vec<DependencyPackage>,
+}
+
+#[derive(Deserialize, Debug)]
+struct FileMapping {
+    from: String,
+    to: Vec<String>,
+}
+
+#[derive(Deserialize, Debug)]
+struct Files {
+    global: Vec<FileMapping>,
+    local: Vec<FileMapping>,
+}
+
+#[derive(Deserialize, Debug)]
+struct About {
+    name: String,
+    id: String,
+    version: String,
+    author: Author,
+    description: String,
+    license: String,
+    dependencies: Dependencies,
+}
+
+#[derive(Deserialize, Debug)]
+pub struct PackageInfo {
+    about: About,
+    files: Files,
+}
+
+pub fn show_package_info(info: &PackageInfo) {
+    println!("Package Name: {}", info.about.name);
+    println!("Package ID: {}", info.about.id);
+    println!("Version: {}", info.about.version);
+    println!("Description: {}", info.about.description);
+    println!(
+        "Author: {} (ID: {})",
+        info.about.author.name, info.about.author.id
+    );
+    println!("License: {}", info.about.license);
+    for package in &info.about.dependencies.package {
+        println!(
+            "Dependency Package - Name: {}, Type: {}, Version: {}",
+            package.name, package.package_type, package.version
+        );
+    }
+    for command in &info.about.dependencies.command {
+        println!("Dependency Command: {}", command);
+    }
+    println!("Files (Global):");
+    for file in &info.files.global {
+        println!("  From: {}, To: {:?}", file.from, file.to);
+    }
+    println!("Files (Local):");
+    for file in &info.files.local {
+        println!("  From: {}, To: {:?}", file.from, file.to);
+    }
+}
 
 pub fn install_package(args: Vec<String>) {
     // Function to install a package
@@ -173,19 +254,3 @@ fn extract_tar_to(file_path: &str, dest: &Path) -> io::Result<()> {
     println!("Successfully extracted .tar file to {:?}", dest);
     Ok(())
 }
-
-pub fn list_installed_packages() {
-    // Function to list installed packages
-    let ipm_work_dir=env::var("IPM_WORK_DIR").expect("環境変数 IPM_WORK_DIR が設定されていません");
-    let installed_dir=Path::new(&ipm_work_dir).join("package").join("installed");
-    for entry in installed_dir.read_dir().unwrap() {
-        let entry = entry.unwrap();
-        let path = entry.path();
-        if path.is_dir() {
-            println!("{}", path.file_name().unwrap().to_str().unwrap());
-        }
-    }
-}
-
-
-    

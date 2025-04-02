@@ -1,10 +1,13 @@
 use std::env;
 mod core_library;
+mod utilities;
 use core_library::help;
 use core_library::package;
 use core_library::system;
 use core_library::welcome;
+use utilities::shell;
 fn main() {
+    println!("{}", shell::cmd("echo Hello, World").output);
     system::configure::configure();
     println!("{}", env::current_dir().unwrap().display());
     // Prints each argument on a separate line
@@ -20,7 +23,16 @@ fn main() {
 
 fn sub_cmd(cmd_name: String, _args: Vec<String>) -> u8 {
     match &*cmd_name {
-        "list" => package::list_installed_packages(),
+        "system" => {
+            if _args.len() > 0{
+                if _args[0] == "configure"{
+                    system::configure::system_configure();
+                }
+            } else {
+                help::show_help_msg("system");
+            }
+        },
+        "list" => package::list::installed_packages(),
         "uninstall" => println!("Run uninstall! "),
         "update" => println!("Run update!"),
         "search" => println!("Run search!"),
