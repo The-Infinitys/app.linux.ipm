@@ -24,19 +24,25 @@ fn main() {
 fn sub_cmd(cmd_name: String, _args: Vec<String>) -> u8 {
     match &*cmd_name {
         "system" => {
-            if _args.len() > 0{
-                if _args[0] == "configure"{
+            if _args.len() > 0 {
+                if _args[0] == "configure" {
                     system::configure::system_configure();
                 }
             } else {
                 help::show_help_msg("system");
             }
-        },
+        }
         "list" => package::list::installed_packages(),
         "uninstall" => println!("Run uninstall! "),
         "update" => println!("Run update!"),
         "search" => println!("Run search!"),
-        "detail" => println!("Run detail!"),
+        "detail" => {
+            if _args.len() > 0 {
+                for package_name in &_args {
+                    package::detail::show(&package_name);
+                }
+            }
+        }
         "help" => {
             if _args.len() > 0 {
                 help::show_help_msg(&_args[0]);

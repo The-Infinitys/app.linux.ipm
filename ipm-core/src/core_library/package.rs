@@ -8,6 +8,7 @@ use tar::Archive;
 mod install;
 mod uninstall;
 pub mod list;
+pub mod detail;
 use serde;
 use serde::Deserialize;
 

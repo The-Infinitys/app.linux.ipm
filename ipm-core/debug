@@ -13,12 +13,13 @@ cargo build
 # list testing command
 
 ipm=./target/debug/ipm
+$ipm system configure # Configure FileSystem
 
 commands=(
   "$ipm version"
   "$ipm help"
   "$ipm update"
-  "$ipm install ../ipm-packages/ipm-default ../ipm-packages/ipm-system-monitor"
+  "sudo $ipm install ../ipm-packages/ipm-default ../ipm-packages/ipm-system-monitor"
 )
 
 results=()
