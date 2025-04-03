@@ -1,5 +1,5 @@
-use crate::core_library::package::PackageInfo;
-use crate::core_library::package::detail;
+use crate::library::package::PackageInfo;
+use crate::library::package::detail;
 use std::fs;
 use std::fs::File;
 use std::io::Read;

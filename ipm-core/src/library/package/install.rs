@@ -1,6 +1,6 @@
-use crate::core_library::package::Dependencies;
-use crate::core_library::package::PackageInfo;
-use crate::core_library::package::detail;
+use crate::library::package::Dependencies;
+use crate::library::package::PackageInfo;
+use crate::library::package::detail;
 use serde_json;
 use std::env;
 use std::fs;

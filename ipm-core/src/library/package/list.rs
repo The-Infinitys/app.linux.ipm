@@ -1,5 +1,5 @@
-use crate::core_library::package::PackageInfo;
-use crate::utilities::shell::color_txt;
+use crate::library::package::PackageInfo;
+use crate::utils::shell::color_txt;
 use std::env;
 use std::path::Path;
 

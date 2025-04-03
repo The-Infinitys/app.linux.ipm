@@ -1,10 +1,10 @@
 use std::env;
-mod core_library;
-mod utilities;
-use core_library::help;
-use core_library::package;
-use core_library::system;
-use core_library::welcome;
+mod library;
+mod utils;
+use library::help;
+use library::package;
+use library::system;
+use library::welcome;
 fn main() {
     system::configure::configure();
     // Prints each argument on a separate line
@@ -16,6 +16,7 @@ fn main() {
     } else {
         sub_cmd(args[1].clone(), args[2..].to_vec());
     }
+    env::set_current_dir(system::current_path());
 }
 
 fn sub_cmd(cmd_name: String, _args: Vec<String>) -> u8 {

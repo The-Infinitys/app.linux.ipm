@@ -9,9 +9,9 @@ pub mod detail;
 mod install;
 pub mod list;
 mod uninstall;
+use crate::library::system;
 use serde;
 use serde::Deserialize;
-use crate::core_library::system;
 
 #[derive(Deserialize, Debug)]
 struct Author {
@@ -64,33 +64,17 @@ pub struct PackageInfo {
 pub fn install_packages(args: Vec<String>) {
     // Function to install a package
     println!("Installing package...");
-    
     if args.is_empty() {
         println!("No package name or file path provided.");
         return;
     }
-    {
-        // tmpディレクトリの中身を空にする
-        let tmp_dir = Path::new(&system::ipm_work_dir()).join("tmp");
-        if tmp_dir.exists() {
-            if let Err(e) = fs::remove_dir_all(&tmp_dir) {
-                eprintln!("Failed to clear tmp directory: {}", e);
-                return;
-            }
-        }
-        if let Err(e) = fs::create_dir_all(tmp_dir) {
-            eprintln!("Failed to recreate tmp directory: {}", e);
-            return;
-        }
-    }
-
-    println!("Successfully cleared tmp directory.");
+    system::configure::cleanup_tmp();
     println!("Downloading {} packages...", args.len());
     for arg in &args {
-        let path = Path::new(arg);
+        let path = system::current_path().join(arg);
         if path.exists() {
             println!("File found: {}. Importing as local package...", arg);
-            import_package_from_local(arg);
+            import_package_from_local(path.to_str().unwrap());
         } else {
             println!("Installing package: {}", arg);
         }

@@ -1,3 +1,4 @@
+use crate::library::system;
 use nix;
 use std::env;
 use std::fs;
@@ -66,4 +67,8 @@ fn create_file_if_not_exists(file: &str) {
     if !path.exists() {
         fs::File::create(path).expect(&format!("ファイル {:?} の作成に失敗しました", path));
     }
+}
+
+pub fn cleanup_tmp() {
+    fs::remove_dir_all(system::tmp_dir());
 }
