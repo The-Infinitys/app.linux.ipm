@@ -1,6 +1,5 @@
-use crate::library::package::Dependencies;
 use crate::library::package::PackageInfo;
-use crate::library::package::detail;
+use crate::library::system;
 use serde_json;
 use std::env;
 use std::fs;
@@ -38,225 +37,57 @@ fn copy_directory(src: &Path, dest: &Path) -> io::Result<()> {
 }
 
 pub fn install_packages() {
-    println!("Starting package installation...");
-    if let Ok(work_dir) = env::var("IPM_WORK_DIR") {
-        if let Err(e) = env::set_current_dir(&work_dir) {
-            eprintln!("Error: Failed to change directory to {}: {}", work_dir, e);
-        } else {
-            println!("Successfully changed directory to {}", work_dir);
-        }
-    } else {
-        eprintln!("Error: IPM_WORK_DIR environment variable is not set.");
-    }
-    if let Err(e) = env::set_current_dir("./tmp") {
-        eprintln!("Error: Failed to change directory to ./tmp: {}", e);
-    } else {
-        println!("Successfully changed directory to ./tmp");
-    }
-    // ここでパッケージのインストール処理を行う
+    env::set_current_dir(&system::tmp_path()).expect("Failed to move current dir.");
     if let Ok(entries) = fs::read_dir(".") {
-        let package_count = fs::read_dir(".").into_iter().count();
-        println!(
-            "Installing {package_count} packages...",
-            package_count = package_count
-        );
         for entry in entries {
             if let Ok(entry) = entry {
-                let path = entry.path();
-                if path.is_dir() {
-                    println!("Directory: {}", path.display());
-                    if let Err(e) = env::set_current_dir(&path) {
-                        eprintln!(
-                            "Error: Failed to change directory to {}: {}",
-                            path.display(),
-                            e
-                        );
-                    } else {
-                        println!("Successfully changed directory to {}", path.display());
-                        // ここでパッケージのインストール処理を行う
-                        install_process();
-                    }
-                    env::set_current_dir("..").unwrap_or_else(|e| {
-                        eprintln!("Error: Failed to change directory to ..: {}", e);
-                    });
-                } else {
-                    println!("File: {}", path.display());
-                }
+                let entry = entry.file_name().into_string().unwrap_or_else(|_| {
+                    eprintln!("Error: Failed to convert OsString to String.");
+                    String::new()
+                });
+                env::set_current_dir(&system::tmp_path().join(&entry))
+                    .expect("Failed to move current dir.");
+                install_process();
+            } else {
+                eprintln!("Error: Failed to read an entry in the directory.");
             }
         }
     } else {
-        eprintln!("Error: Failed to read the directory.");
+        eprintln!("Error: Failed to read the current directory.");
     }
 }
 
 fn install_process() {
     let mut package_info = String::new();
-    let info_file_path = Path::new("information.json");
+    let info_file_path = Path::new("./information.json");
     if info_file_path.exists() {
-        if let Ok(mut file) = File::open(&info_file_path) {
-            if let Err(e) = file.read_to_string(&mut package_info) {
-                eprintln!("Error: Failed to read 'information.json': {}", e);
-            } else {
-                println!("Successfully loaded package information.");
-            }
-        } else {
-            eprintln!("Error: Failed to open 'information.json'.");
-        }
+        let mut file = File::open(info_file_path).expect("Failed to open information file.");
+        file.read_to_string(&mut package_info)
+            .expect("Failed to read information file.");
     } else {
-        eprintln!("Error: 'information.json' does not exist.");
+        eprintln!("Error: information file does not exist.");
+        return;
     }
-    let package_info: Result<PackageInfo, _> = serde_json::from_str(&package_info);
-    match package_info {
-        Ok(info) => {
-            detail::show_from_info(&info);
-            if !check_dependencies(info.about.dependencies) {
-                eprintln!("依存関係を修正できません。");
-                return;
+    let package_info: PackageInfo =
+        serde_json::from_str(&package_info).expect("It is not valid PackageInfo data");
+    let package_path = system::package_path().join(package_info.about.id);
+    let cache_path =
+        Path::new(&env::current_dir().expect("Failed to get cache_path")).to_path_buf();
+    copy_directory(Path::new("./"), &package_path).expect("Failed to copy directory");
+    // ディレクトリを移動、及びキャッシュの削除
+    env::set_current_dir(&package_path).expect("Failed to move current dir.");
+    fs::remove_dir_all(&cache_path).expect("Failed to remove cache");
+    // グローバルファイル(実行ファイルなど)をリンク
+    for global_file in &package_info.files.global {
+        for to_path in &global_file.to {
+            let from_path = package_path.join(&global_file.from);
+            let from_path = std::fs::canonicalize(&from_path).expect("Failed to canonicalize");
+            let to_path = Path::new("/").join(&to_path);
+            println!("{:?}", &from_path);
+            if to_path.exists() {
+                fs::remove_file(&to_path).expect("Failed to remove existing file at to_path.");
             }
-            let destination_dir = Path::new("../../package");
-            if !destination_dir.exists() {
-                if let Err(e) = fs::create_dir_all(&destination_dir) {
-                    eprintln!(
-                        "Error: Failed to create destination directory {}: {}",
-                        destination_dir.display(),
-                        e
-                    );
-                    return;
-                } else {
-                    println!(
-                        "Successfully created destination directory: {}",
-                        destination_dir.display()
-                    );
-                }
-            }
-
-            let package_dir_name = info.about.id.clone();
-            let destination_path = destination_dir.join(&package_dir_name);
-            if let Err(e) = copy_directory(Path::new("."), &destination_path) {
-                eprintln!(
-                    "Error: Failed to move package to {}: {}",
-                    destination_path.display(),
-                    e
-                );
-            } else {
-                println!(
-                    "Successfully moved package to {}",
-                    destination_path.display()
-                );
-            }
-            let cache_dir = env::current_dir().expect("Failed to get current dir.");
-            env::set_current_dir(&destination_path).expect("Failed to set current dir.");
-            {
-                // Install process.
-                // Global installation.
-                for global_file_set in info.files.global {
-                    for to_path in global_file_set.to {
-                        let absolute_to_path = Path::new("/").join(to_path);
-                        if let Some(parent) = absolute_to_path.parent() {
-                            if !parent.exists() {
-                                if let Err(e) = fs::create_dir_all(parent) {
-                                    eprintln!(
-                                        "Error: Failed to create directory {}: {}",
-                                        parent.display(),
-                                        e
-                                    );
-                                    continue;
-                                } else {
-                                    println!(
-                                        "Successfully created directory: {}",
-                                        parent.display()
-                                    );
-                                }
-                            }
-                        }
-                        if let Err(e) = fs::remove_file(&absolute_to_path) {
-                            if e.kind() != io::ErrorKind::NotFound {
-                                eprintln!(
-                                    "Error: Failed to remove existing file {}: {}",
-                                    absolute_to_path.display(),
-                                    e
-                                );
-                            }
-                        } else {
-                            println!(
-                                "Successfully removed existing file: {}",
-                                absolute_to_path.display()
-                            );
-                        }
-
-                        let absolute_from_path = Path::new(&env::current_dir().expect("failed"))
-                            .join(&global_file_set.from);
-                        if let Err(e) = symlink(&absolute_from_path, &absolute_to_path) {
-                            eprintln!(
-                                "Error: Failed to create symlink from {:?} to {}: {}",
-                                global_file_set.from,
-                                absolute_to_path.display(),
-                                e
-                            );
-                        } else {
-                            println!(
-                                "Successfully created symlink from {:?} to {}",
-                                global_file_set.from,
-                                absolute_to_path.display()
-                            );
-                        }
-                    }
-                }
-                // Local installation
-                for local_file_set in info.files.local {
-                    for to_path in local_file_set.to {
-                        let home_dirs = fs::read_dir("/home").unwrap();
-                        for home_dir in home_dirs {
-                            if let Ok(home_dir) = home_dir {
-                                let user_home = home_dir.path();
-                                if user_home.is_dir() {
-                                    let absolute_to_path = user_home.join(&to_path);
-                                    if let Some(parent) = absolute_to_path.parent() {
-                                        if !parent.exists() {
-                                            if let Err(e) = fs::create_dir_all(parent) {
-                                                eprintln!(
-                                                    "Error: Failed to create directory {}: {}",
-                                                    parent.display(),
-                                                    e
-                                                );
-                                                continue;
-                                            } else {
-                                                println!(
-                                                    "Successfully created directory: {}",
-                                                    parent.display()
-                                                );
-                                            }
-                                        }
-                                    }
-                                    if let Err(e) =
-                                        fs::copy(&local_file_set.from, &absolute_to_path)
-                                    {
-                                        eprintln!(
-                                            "Error: Failed to copy file from {} to ~/{}: {}",
-                                            local_file_set.from, to_path, e
-                                        );
-                                    } else {
-                                        println!(
-                                            "Successfully copied file from {} to ~/{}",
-                                            local_file_set.from, to_path
-                                        );
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            env::set_current_dir(cache_dir).expect("Failed to set current dir.");
-        }
-        Err(e) => {
-            eprintln!("Error: Failed to parse package information: {}", e);
-            return;
+            symlink(&from_path, to_path).expect("Failed to generate global file.");
         }
     }
-}
-
-fn check_dependencies(info: Dependencies) -> bool {
-    for _depend_cmd in info.command {}
-    return true;
 }

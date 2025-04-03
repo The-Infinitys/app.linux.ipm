@@ -1,4 +1,5 @@
 use crate::library::package::PackageInfo;
+use crate::library::system;
 use crate::utils::shell::color_txt;
 use std::env;
 use std::path::Path;
@@ -37,11 +38,9 @@ pub fn installed_packages() {
 }
 
 pub fn data() -> Vec<PackageInfo> {
-    let ipm_work_dir =
-        env::var("IPM_WORK_DIR").expect("環境変数 IPM_WORK_DIR が設定されていません");
-    let package_dir = Path::new(&ipm_work_dir).join("package");
-    let mut package_list = Vec::with_capacity(package_dir.read_dir().into_iter().count());
-    for entry in package_dir.read_dir().unwrap() {
+    let mut package_list =
+        Vec::with_capacity(system::package_path().read_dir().into_iter().count());
+    for entry in system::package_path().read_dir().unwrap() {
         let entry = entry.unwrap();
         let path = entry.path();
         if path.is_dir() {

@@ -99,13 +99,11 @@ pub fn import_package_from_local(file_path: &str) {
     let is_directory = path.is_dir();
 
     // 2. カレントディレクトリを ipm のワークディレクトリに変更する
-    let ipm_work_dir =
-        env::var("IPM_WORK_DIR").expect("環境変数 IPM_WORK_DIR が設定されていません");
     let current_dir = env::current_dir().unwrap();
-    env::set_current_dir(&ipm_work_dir).expect("Failed to set current directory");
+    env::set_current_dir(&system::work_dir()).expect("Failed to set current directory");
 
     // 3. 予め取得したデータを ./tmp にコピーする
-    let cache_dir = Path::new("./tmp");
+    let cache_dir = &system::tmp_path();
     if !cache_dir.exists() {
         fs::create_dir_all(cache_dir).expect("Failed to create cache directory");
     }
@@ -114,9 +112,9 @@ pub fn import_package_from_local(file_path: &str) {
         // ディレクトリの場合
         println!("Detected directory. Copying {} to ./tmp...", file_path);
         if let Err(e) = copy_directory(path, &cache_dir.join(path.file_name().unwrap())) {
-            eprintln!("Failed to copy directory: {}", e);
+            eprintln!("Failed to cache directory: {}", e);
         } else {
-            println!("Successfully copied directory to ./tmp");
+            println!("Successfully cache directory");
         }
     } else if let Some(extension) = path.extension() {
         // ファイルの場合
@@ -126,7 +124,7 @@ pub fn import_package_from_local(file_path: &str) {
                     path.file_stem().and_then(|s| Path::new(s).extension())
                 {
                     if parent_extension == "tar" {
-                        println!("Detected .tar.gz file. Extracting to ./tmp...");
+                        println!("Detected .tar.gz file. Extracting...");
                         if let Err(e) = extract_tar_gz_to(file_path, cache_dir) {
                             eprintln!("Failed to extract .tar.gz file: {}", e);
                         }
@@ -136,7 +134,7 @@ pub fn import_package_from_local(file_path: &str) {
                 }
             }
             Some("tar") => {
-                println!("Detected .tar file. Extracting to ./tmp...");
+                println!("Detected .tar file. Extracting...");
                 if let Err(e) = extract_tar_to(file_path, cache_dir) {
                     eprintln!("Failed to extract .tar file: {}", e);
                 }
@@ -146,7 +144,7 @@ pub fn import_package_from_local(file_path: &str) {
                 if let Err(e) = fs::copy(path, cache_dir.join(path.file_name().unwrap())) {
                     eprintln!("Failed to copy file: {}", e);
                 } else {
-                    println!("Successfully copied file to ./tmp");
+                    println!("Successfully copied file");
                 }
             }
         }
@@ -215,7 +213,6 @@ fn extract_tar_to(file_path: &str, dest: &Path) -> io::Result<()> {
 pub fn uninstall_packages(args: Vec<String>) {
     // Function to uninstall packages
     println!("Uninstalling packages...");
-    let ipm_work_dir = env::var("IPM_WORK_DIR").expect("Failed to get work dir");
     if args.is_empty() {
         println!("No package name provided...");
         return;
@@ -231,15 +228,12 @@ pub fn uninstall_packages(args: Vec<String>) {
                 break;
             }
         }
-        if !is_exist {
+        if is_exist {
+            env::set_current_dir(system::package_path().join(&package_id)).expect("Failed to move current dir.");
+            uninstall::uninstall();
+        } else {
             println!("Package not found: {}", package_id);
-            continue;
         }
-        println!("Uninstalling package: {}", package_id);
-        let target_dir = Path::new(&ipm_work_dir).join("package").join(&package_id);
-        println!("{:?}", target_dir);
-        env::set_current_dir(target_dir).expect("failed to set dir");
-        uninstall::uninstall();
     }
 
     env::set_current_dir(current_dir).expect("failed to set dir");

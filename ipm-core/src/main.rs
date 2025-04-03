@@ -16,7 +16,7 @@ fn main() {
     } else {
         sub_cmd(args[1].clone(), args[2..].to_vec());
     }
-    env::set_current_dir(system::current_path());
+    env::set_current_dir(system::current_path()).expect("Failed to move current dir");
 }
 
 fn sub_cmd(cmd_name: String, _args: Vec<String>) -> u8 {

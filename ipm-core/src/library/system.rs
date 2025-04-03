@@ -4,15 +4,15 @@ use std::path::PathBuf;
 
 // Path Configure
 pub fn current_path() -> PathBuf {
-    let work_dir = env::var("CURRENT_DIR").expect("Failed to get $CURRENT_DIR");
+    let work_dir = env::var("IPM_CURRENT_DIR").expect("Failed to get $IPM_CURRENT_DIR");
     return std::fs::canonicalize(work_dir).expect("Failed to convert to absolute path");
 }
 pub fn current_dir() -> String {
     return current_path().to_str().unwrap().to_string();
 }
 pub fn work_path() -> PathBuf {
-    let work_dir = env::var("WORK_DIR").expect("Failed to get $WORK_DIR");
-    return std::fs::canonicalize(work_dir).expect("Failed to convert to absolute path");
+    let work_dir = env::var("IPM_WORK_DIR").expect("Failed to get $IPM_WORK_DIR");
+    return current_path().join(work_dir);
 }
 
 pub fn work_dir() -> String {

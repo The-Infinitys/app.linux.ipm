@@ -8,16 +8,18 @@ pub fn configure() {
     // Configure Information
     const DEBUG: bool = cfg!(debug_assertions);
     let current_dir = env::current_dir().expect("Failed to get current dir");
-    if DEBUG {
-        println!("Debug mode is enabled.");
-        println!("Current directory: {:?}", current_dir);
-    }
-
     const IPM_WORK_DIR: &str = if DEBUG { "./tmp" } else { "/opt/ipm/" };
     unsafe {
         env::set_var("IPM_EXEC_MODE", if DEBUG { "debug" } else { "release" });
         env::set_var("IPM_WORK_DIR", IPM_WORK_DIR);
-        env::set_var("IPM_CURRENT_DIR", current_dir);
+        env::set_var("IPM_CURRENT_DIR", &current_dir);
+    }
+    if DEBUG {
+        println!("Debug mode is enabled.");
+        println!("Current directory: {:?}", &system::current_dir());
+        println!("IPM Working directory: {:?}", &system::work_dir());
+        println!("IPM Temporary directory: {:?}",&system::tmp_dir());
+        println!("IPM Package directory: {:?}",&system::package_dir());
     }
 }
 
@@ -70,5 +72,5 @@ fn create_file_if_not_exists(file: &str) {
 }
 
 pub fn cleanup_tmp() {
-    fs::remove_dir_all(system::tmp_dir());
+    fs::remove_dir_all(system::tmp_dir()).expect("Failed to clean up tmp.");
 }
