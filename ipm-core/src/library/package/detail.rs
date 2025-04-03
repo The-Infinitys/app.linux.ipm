@@ -1,15 +1,10 @@
 use crate::library::package::PackageInfo;
 use crate::utils::shell::color_txt;
-use std::path::Path;
 use termimad::inline as md;
+use crate::library::system;
 
 pub fn show(name: &str) {
-    let package_dir = format!(
-        "{}/package/{}",
-        std::env::var("IPM_WORK_DIR").unwrap_or_default(),
-        name
-    );
-    let package_dir = Path::new(&package_dir);
+    let package_dir = system::package_path().join(name);
     if !package_dir.exists() {
         println!("Package does not exist: {:?}", package_dir);
         return;
@@ -69,4 +64,9 @@ pub fn show_from_info(package_info: &PackageInfo) {
     }
     show_info("dependencies: |\n", &depend_info);
     show_info("License: ", &package_info.about.license);
+    let mut architecture_info = String::new();
+    for architecture in &package_info.about.architecture {
+        architecture_info = architecture_info + &format!("    {}\n", architecture);
+    }
+    show_info("Architecture: ", &architecture_info);
 }

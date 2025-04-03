@@ -1,15 +1,10 @@
 use crate::library::package::PackageInfo;
 use crate::library::system;
 use crate::utils::shell::color_txt;
-use std::env;
-use std::path::Path;
 
 pub fn installed_packages() {
     // Function to list installed packages
-    let ipm_work_dir =
-        env::var("IPM_WORK_DIR").expect("環境変数 IPM_WORK_DIR が設定されていません");
-    let installed_dir = Path::new(&ipm_work_dir).join("package");
-    for entry in installed_dir.read_dir().unwrap() {
+    for entry in system::package_path().read_dir().unwrap() {
         let entry = entry.unwrap();
         let path = entry.path();
         if path.is_dir() {
@@ -62,4 +57,14 @@ pub fn data() -> Vec<PackageInfo> {
         }
     }
     return package_list;
+}
+pub fn update(){
+    let package_list_data=data();
+    let package_list_path=system::package_path().join("list.json");
+    if package_list_path.exists(){
+        
+    }else {
+        eprintln!("Failed to load package list file");
+        return;
+    }
 }

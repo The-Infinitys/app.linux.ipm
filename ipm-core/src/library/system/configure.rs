@@ -18,8 +18,8 @@ pub fn configure() {
         println!("Debug mode is enabled.");
         println!("Current directory: {:?}", &system::current_dir());
         println!("IPM Working directory: {:?}", &system::work_dir());
-        println!("IPM Temporary directory: {:?}",&system::tmp_dir());
-        println!("IPM Package directory: {:?}",&system::package_dir());
+        println!("IPM Temporary directory: {:?}", &system::tmp_dir());
+        println!("IPM Package directory: {:?}", &system::package_dir());
     }
 }
 
@@ -73,4 +73,5 @@ fn create_file_if_not_exists(file: &str) {
 
 pub fn cleanup_tmp() {
     fs::remove_dir_all(system::tmp_dir()).expect("Failed to clean up tmp.");
+    fs::create_dir(system::tmp_dir()).expect("Failed to recreate tmp.");
 }

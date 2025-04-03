@@ -36,6 +36,7 @@ pub struct Dependencies {
 struct FileMapping {
     from: String,
     to: Vec<String>,
+    file_type: String,
 }
 
 #[derive(Deserialize, Debug)]
@@ -53,6 +54,7 @@ struct About {
     description: String,
     license: String,
     dependencies: Dependencies,
+    architecture: Vec<String>,
 }
 
 #[derive(Deserialize, Debug)]
@@ -229,7 +231,8 @@ pub fn uninstall_packages(args: Vec<String>) {
             }
         }
         if is_exist {
-            env::set_current_dir(system::package_path().join(&package_id)).expect("Failed to move current dir.");
+            env::set_current_dir(system::package_path().join(&package_id))
+                .expect("Failed to move current dir.");
             uninstall::uninstall();
         } else {
             println!("Package not found: {}", package_id);

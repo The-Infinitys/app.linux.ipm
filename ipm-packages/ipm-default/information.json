@@ -21,11 +21,13 @@
                     "version": "*"
                 }
             ]
-        }
+        },
+        "architecture":["*"]
     },
     "files": {
         "global": [
             {
+                "file_type":"bin",
                 "from": "source/exec.sh",
                 "to": [
                     "bin/ipm-example",

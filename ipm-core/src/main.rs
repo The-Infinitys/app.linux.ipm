@@ -38,7 +38,7 @@ fn sub_cmd(cmd_name: String, _args: Vec<String>) -> u8 {
                 help::show_help_msg("uninstall");
             }
         }
-        "update" => println!("Run update!"),
+        "update" => package::list::update(),
         "search" => println!("Run search!"),
         "detail" => {
             if _args.len() > 0 {
