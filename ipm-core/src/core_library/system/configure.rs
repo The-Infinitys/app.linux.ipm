@@ -6,17 +6,17 @@ use std::path::Path;
 pub fn configure() {
     // Configure Information
     const DEBUG: bool = cfg!(debug_assertions);
+    let current_dir = env::current_dir().expect("Failed to get current dir");
     if DEBUG {
         println!("Debug mode is enabled.");
-        match env::current_dir() {
-            Ok(current_dir) => println!("Current directory: {:?}", current_dir),
-            Err(e) => eprintln!("Failed to get current directory: {}", e),
-        }
+        println!("Current directory: {:?}", current_dir);
     }
+
     const IPM_WORK_DIR: &str = if DEBUG { "./tmp" } else { "/opt/ipm/" };
     unsafe {
         env::set_var("IPM_EXEC_MODE", if DEBUG { "debug" } else { "release" });
         env::set_var("IPM_WORK_DIR", IPM_WORK_DIR);
+        env::set_var("IPM_CURRENT_DIR", current_dir);
     }
 }
 

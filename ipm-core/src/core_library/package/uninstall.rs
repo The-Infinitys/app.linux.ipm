@@ -1,5 +1,6 @@
 use crate::core_library::package::PackageInfo;
 use crate::core_library::package::detail;
+use std::fs;
 use std::fs::File;
 use std::io::Read;
 use std::path::Path;
@@ -23,6 +24,24 @@ pub fn uninstall() {
     match package_info {
         Ok(info) => {
             detail::show_from_info(&info);
+            println!("Start Uninstalling...");
+            for global_file_set in &info.files.global {
+                for remove_target in &global_file_set.to {
+                    let absolute_path = Path::new("/").join(remove_target);
+                    if let Err(e) = std::fs::remove_file(absolute_path) {
+                        if e.kind() != std::io::ErrorKind::NotFound {
+                            eprintln!("Failed to remove file '{}': {}", remove_target, e);
+                        }
+                    } else {
+                        println!("Successfully removed file '{}'.", remove_target);
+                    }
+                }
+            }
+            if let Err(e) = fs::remove_dir_all(".") {
+                eprintln!("Failed to remove current directory contents: {}", e);
+            } else {
+                println!("Successfully removed all contents of the current directory.");
+            }
         }
         Err(e) => {
             eprintln!("Failed to load information: {}", e);

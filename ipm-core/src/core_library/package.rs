@@ -11,6 +11,7 @@ pub mod list;
 mod uninstall;
 use serde;
 use serde::Deserialize;
+use crate::core_library::system;
 
 #[derive(Deserialize, Debug)]
 struct Author {
@@ -63,15 +64,16 @@ pub struct PackageInfo {
 pub fn install_packages(args: Vec<String>) {
     // Function to install a package
     println!("Installing package...");
+    
     if args.is_empty() {
         println!("No package name or file path provided.");
         return;
     }
     {
         // tmpディレクトリの中身を空にする
-        let tmp_dir = Path::new("./tmp");
+        let tmp_dir = Path::new(&system::ipm_work_dir()).join("tmp");
         if tmp_dir.exists() {
-            if let Err(e) = fs::remove_dir_all(tmp_dir) {
+            if let Err(e) = fs::remove_dir_all(&tmp_dir) {
                 eprintln!("Failed to clear tmp directory: {}", e);
                 return;
             }
