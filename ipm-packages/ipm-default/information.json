@@ -9,19 +9,13 @@
         },
         "description": "README.md",
         "license": "LICENSE",
-        "dependencies": {
-            "command": [
-                "echo",
-                "ls"
-            ],
-            "package": [
-                {
-                    "name": "apt",
-                    "package_type": "dpkg",
-                    "version": "*"
-                }
-            ]
-        },
+        "dependencies": [
+            {
+                "depend_type":"must.cmd",
+                "name":"echo",
+                "version":"*"
+            }
+        ],
         "architecture":["*"]
     },
     "files": {

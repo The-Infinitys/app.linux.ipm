@@ -51,18 +51,11 @@ pub fn show_from_info(package_info: &PackageInfo) {
     let formatted_description = md(&formatted_description);
     let formatted_description = format!("{}", formatted_description);
     show_info("description: |\n", &formatted_description);
-    let mut depend_info = String::new();
-    for command_depend in &package_info.about.dependencies.command {
-        depend_info = depend_info + &format!("    Command: {}\n", command_depend);
+    let mut depend_info_txt = String::new();
+    for depend_info in &package_info.about.dependencies {
+        depend_info_txt = depend_info_txt + &format!("    {depend_type}: {name}(version: {version})\n", depend_type=depend_info.depend_type,name=depend_info.name, version=depend_info.version);
     }
-    for package_depend in &package_info.about.dependencies.package {
-        depend_info = depend_info
-            + &format!(
-                "    Package: {} (version: {},type: {})\n",
-                package_depend.name, package_depend.version, package_depend.package_type
-            );
-    }
-    show_info("dependencies: |\n", &depend_info);
+    show_info("dependencies: |\n", &depend_info_txt);
     show_info("License: ", &package_info.about.license);
     let mut architecture_info = String::new();
     for architecture in &package_info.about.architecture {

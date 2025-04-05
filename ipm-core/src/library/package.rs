@@ -20,17 +20,12 @@ struct Author {
 }
 
 #[derive(Serialize, Deserialize, Debug)]
-struct DependencyPackage {
+struct DependInfo {
+    depend_type:String,
     name: String,
-    package_type: String,
     version: String,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
-pub struct Dependencies {
-    command: Vec<String>,
-    package: Vec<DependencyPackage>,
-}
 
 #[derive(Serialize, Deserialize, Debug)]
 struct FileMapping {
@@ -53,7 +48,7 @@ struct About {
     author: Author,
     description: String,
     license: String,
-    dependencies: Dependencies,
+    dependencies: Vec<DependInfo>,
     architecture: Vec<String>,
 }
 
