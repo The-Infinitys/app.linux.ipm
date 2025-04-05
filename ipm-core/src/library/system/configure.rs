@@ -5,14 +5,16 @@ use std::fs;
 use std::path::Path;
 
 pub fn configure() {
-    // Configure Information
+    // Configure Environment Information
     const DEBUG: bool = cfg!(debug_assertions);
     let current_dir = env::current_dir().expect("Failed to get current dir");
     const IPM_WORK_DIR: &str = if DEBUG { "./tmp" } else { "/opt/ipm/" };
+    const IPM_VERSION: &str = env!("CARGO_PKG_VERSION");
     unsafe {
         env::set_var("IPM_EXEC_MODE", if DEBUG { "debug" } else { "release" });
-        env::set_var("IPM_WORK_DIR", IPM_WORK_DIR);
+        env::set_var("IPM_WORK_DIR", &IPM_WORK_DIR);
         env::set_var("IPM_CURRENT_DIR", &current_dir);
+        env::set_var("IPM_VERSION", &IPM_VERSION);
     }
     if DEBUG {
         println!("Debug mode is enabled.");
@@ -21,6 +23,23 @@ pub fn configure() {
         println!("IPM Temporary directory: {:?}", &system::tmp_dir());
         println!("IPM Package directory: {:?}", &system::package_dir());
     }
+    // Configure System Information
+    std::fs::write(system::system_info_path(), &system_info()).expect("Failed to write system info");
+
+}
+fn system_info() -> String {
+    #[derive(serde::Serialize)]
+    struct SystemInfo {
+        version: String,
+        publish_date: String,
+    }
+    let system_info = SystemInfo {
+        version: env!("CARGO_PKG_VERSION").to_string(),
+        publish_date: env!("CARGO_PKG_BUILD_TIMESTAMP").expect("Failed to get publish date"),
+        // todo: Fix This
+    };
+    let system_info_json = serde_json::to_string_pretty(&system_info).expect("Failed to serialize system info");
+    return system_info_json;
 }
 
 pub fn system_configure() {
@@ -44,7 +63,7 @@ pub fn system_configure() {
     create_file_if_not_exists("www/list.json");
     // バイナリの保存場所
     create_dir_if_not_exists("bin");
-    create_file_if_not_exists("bin/ipm-info.md");
+    create_file_if_not_exists("bin/ipm-info.json");
     // 設定ファイルの保存場所
     create_dir_if_not_exists("setting");
     create_file_if_not_exists("setting/setting.json");

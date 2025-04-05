@@ -31,3 +31,7 @@ pub fn package_path() -> PathBuf {
 pub fn package_dir() -> String {
     return package_path().to_str().unwrap().to_string();
 }
+
+pub fn system_info_path() -> PathBuf {
+    return work_path().join("bin/ipm-info.json");
+}
