@@ -1,0 +1,16 @@
+name: IPM Debug Build
+
+on:
+  push:
+    branches: [ "debug" ]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Build IPM Core
+      run: echo "Start!"
