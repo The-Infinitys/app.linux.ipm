@@ -1,7 +1,7 @@
 use crate::library::package::PackageInfo;
+use crate::library::system;
 use crate::utils::shell::color_txt;
 use termimad::inline as md;
-use crate::library::system;
 
 pub fn show(name: &str) {
     let package_dir = system::package_path().join(name);

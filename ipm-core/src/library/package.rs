@@ -11,41 +11,41 @@ pub mod list;
 mod uninstall;
 use crate::library::system;
 use serde;
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 struct Author {
     name: String,
     id: String,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 struct DependencyPackage {
     name: String,
     package_type: String,
     version: String,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct Dependencies {
     command: Vec<String>,
     package: Vec<DependencyPackage>,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 struct FileMapping {
     from: String,
     to: Vec<String>,
     file_type: String,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 struct Files {
     global: Vec<FileMapping>,
     local: Vec<FileMapping>,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 struct About {
     name: String,
     id: String,
@@ -57,7 +57,7 @@ struct About {
     architecture: Vec<String>,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct PackageInfo {
     about: About,
     files: Files,

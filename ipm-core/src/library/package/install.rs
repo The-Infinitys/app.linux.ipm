@@ -87,7 +87,22 @@ fn install_process() {
             if to_path.exists() {
                 fs::remove_file(&to_path).expect("Failed to remove existing file at to_path.");
             }
-            symlink(&from_path, to_path).expect("Failed to generate global file.");
+            match global_file.file_type.as_str() {
+                "bin" => {
+                    symlink(&from_path, to_path).expect("Failed to generate binary file.");
+                }
+                "data" => {
+                    fs::copy(&from_path, to_path).expect("Failed to generate data file.");
+                }
+
+                "config" => {
+                    fs::copy(&from_path, to_path).expect("Failed to generate config file.");
+                }
+
+                _ => {
+                    eprintln!("Error: Unknown file type for global file.");
+                }
+            }
         }
     }
 }
