@@ -2,7 +2,7 @@ name: IPM Debug Build
 
 on:
   push:
-    branches: [ "debug" ]
+    branches: [ "main" ]
 
 env:
   CARGO_TERM_COLOR: always
