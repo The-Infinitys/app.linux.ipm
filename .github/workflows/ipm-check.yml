@@ -12,5 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-    - name: Build IPM Core
-      run: echo "Start!"
+    - name: Check IPM Core
+      run: ./ipm-core/debug
+    - name: Build and Package IPM Core
+      run: ./build/script
