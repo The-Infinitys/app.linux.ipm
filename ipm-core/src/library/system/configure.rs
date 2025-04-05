@@ -35,7 +35,7 @@ fn system_info() -> String {
     }
     let system_info = SystemInfo {
         version: env!("CARGO_PKG_VERSION").to_string(),
-        publish_date: env!("CARGO_PKG_BUILD_TIMESTAMP").expect("Failed to get publish date"),
+        publish_date: env!("CARGO_PKG_BUILD_TIMESTAMP").to_string(),
         // todo: Fix This
     };
     let system_info_json = serde_json::to_string_pretty(&system_info).expect("Failed to serialize system info");

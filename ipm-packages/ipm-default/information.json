@@ -11,8 +11,23 @@
         "license": "LICENSE",
         "dependencies": [
             {
-                "depend_type":"must.cmd",
+                "depend_type":"must",
                 "name":"echo",
+                "version":"*"
+            },
+            {
+                "depend_type":"should",
+                "name":"apt",
+                "version":"*"
+            },
+            {
+                "depend_type":"conflict",
+                "name":"ipm-anti",
+                "version":"*"
+            },
+            {
+                "depend_type":"replace",
+                "name":"ipm-default-old",
                 "version":"*"
             }
         ],
