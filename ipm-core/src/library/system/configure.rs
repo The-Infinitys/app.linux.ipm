@@ -1,5 +1,5 @@
 use crate::library::system;
-use nix;
+// use nix;
 use std::env;
 use std::fs;
 use std::path::Path;
@@ -8,11 +8,20 @@ pub fn configure() {
     // Configure Environment Information
     const DEBUG: bool = cfg!(debug_assertions);
     let current_dir = env::current_dir().expect("Failed to get current dir");
-    const IPM_WORK_DIR: &str = if DEBUG { "./tmp" } else { "/opt/ipm/" };
+    let ipm_work_dir = match env::current_exe()
+        .expect("Failed to get current exe")
+        .parent()
+    {
+        Some(path) => std::fs::canonicalize(path.join("../"))
+            .expect("Failed to canonicalize")
+            .to_path_buf(),
+        None => panic!("Failed to get parent directory"),
+    };
+    println!("IPM Working directory: {:?}", &ipm_work_dir);
     const IPM_VERSION: &str = env!("CARGO_PKG_VERSION");
     unsafe {
         env::set_var("IPM_EXEC_MODE", if DEBUG { "debug" } else { "release" });
-        env::set_var("IPM_WORK_DIR", &IPM_WORK_DIR);
+        env::set_var("IPM_WORK_DIR", &ipm_work_dir);
         env::set_var("IPM_CURRENT_DIR", &current_dir);
         env::set_var("IPM_VERSION", &IPM_VERSION);
     }
@@ -24,8 +33,8 @@ pub fn configure() {
         println!("IPM Package directory: {:?}", &system::package_dir());
     }
     // Configure System Information
-    std::fs::write(system::system_info_path(), &system_info()).expect("Failed to write system info");
-
+    std::fs::write(system::system_info_path(), &system_info())
+        .expect("Failed to write system info");
 }
 fn system_info() -> String {
     #[derive(serde::Serialize)]
@@ -38,16 +47,17 @@ fn system_info() -> String {
         publish_date: env!("CARGO_PKG_BUILD_TIMESTAMP").to_string(),
         // todo: Fix This
     };
-    let system_info_json = serde_json::to_string_pretty(&system_info).expect("Failed to serialize system info");
+    let system_info_json =
+        serde_json::to_string_pretty(&system_info).expect("Failed to serialize system info");
     return system_info_json;
 }
 
 pub fn system_configure() {
     // Check for superuser privileges
-    if !nix::unistd::Uid::effective().is_root() && !cfg!(debug_assertions) {
-        eprintln!("Error: This program must be run as root.");
-        std::process::exit(1);
-    }
+    // if !nix::unistd::Uid::effective().is_root() && !cfg!(debug_assertions) {
+    //     eprintln!("Error: This program must be run as root.");
+    //     std::process::exit(1);
+    // }
     // 環境変数 IPM_WORK_DIR を取得
     let work_dir = env::var("IPM_WORK_DIR").expect("環境変数 IPM_WORK_DIR が設定されていません");
     let _current_dir = env::current_dir().expect("現在のディレクトリを取得できません");

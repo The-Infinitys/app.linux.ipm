@@ -1,0 +1,17 @@
+#!/bin/bash
+
+self_dir=$(dirname "$0");
+cd $self_dir
+cargo build $1
+if [ $? -ne 0 ]; then
+  echo "cargo build failed"
+  exit 1
+fi
+sudo rm -rf ./ipm
+mkdir -p ipm/bin
+cp -r ./target/debug/ipm ipm/bin/ipm
+./ipm/bin/ipm system configure
+if [ $? -ne 0 ]; then
+  echo "ipm system configure failed"
+  exit 1
+fi

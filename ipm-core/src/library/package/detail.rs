@@ -53,7 +53,13 @@ pub fn show_from_info(package_info: &PackageInfo) {
     show_info("description: |\n", &formatted_description);
     let mut depend_info_txt = String::new();
     for depend_info in &package_info.about.dependencies {
-        depend_info_txt = depend_info_txt + &format!("    {depend_type}: {name}(version: {version})\n", depend_type=depend_info.depend_type,name=depend_info.name, version=depend_info.version);
+        depend_info_txt = depend_info_txt
+            + &format!(
+                "    {depend_type}: {name}(version: {version})\n",
+                depend_type = depend_info.depend_type,
+                name = depend_info.name,
+                version = depend_info.version
+            );
     }
     show_info("dependencies: |\n", &depend_info_txt);
     show_info("License: ", &package_info.about.license);

@@ -1,13 +1,13 @@
 use crate::library::package::PackageInfo;
 use crate::library::system;
 use crate::utils::shell::color_txt;
-use serde_json;
-use serde;
-use serde::Serialize;
-use serde::Deserialize;
 use chrono;
+use serde;
+use serde::Deserialize;
+use serde::Serialize;
+use serde_json;
 
-# [derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct PackageList {
     pub packages: Vec<PackageInfo>,
     pub date: String,
@@ -71,8 +71,8 @@ pub fn data() -> Vec<PackageInfo> {
     return package_list;
 }
 pub fn update() {
-    let package_list= data();
-    let package_list_data =  PackageList {
+    let package_list = data();
+    let package_list_data = PackageList {
         packages: package_list,
         date: chrono::Local::now().format("%Y-%m-%d %H:%M:%S").to_string(),
         count: 0,
@@ -81,7 +81,8 @@ pub fn update() {
     if package_list_path.exists() {
         std::fs::remove_file(&package_list_path).expect("Failed to remove package list file");
     }
-    let package_list_data = serde_json::to_string_pretty(&package_list_data).expect("Failed to convert to json");
-    std::fs::write(&package_list_path, package_list_data).expect("Failed to write package list file");
-
+    let package_list_data =
+        serde_json::to_string_pretty(&package_list_data).expect("Failed to convert to json");
+    std::fs::write(&package_list_path, package_list_data)
+        .expect("Failed to write package list file");
 }

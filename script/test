@@ -2,19 +2,16 @@
 
 # DEBUG IPM CORE SYSTEM
 
-self_dir=$(dirname "$0");
+self_dir=$(dirname "$0")/../ipm-core/;
 cd $self_dir
-rm -rf ./tmp
-mkdir tmp
-echo "Start IPM debug..."
+cargo fmt
 
-cargo build
-
-# list testing command
-
-ipm=./target/debug/ipm
-$ipm system configure # Configure FileSystem
-
+./build-ipm
+if [ $? -ne 0 ]; then
+  echo "cargo build failed"
+  exit 1
+fi
+ipm=./ipm/bin/ipm
 commands=(
   "$ipm version"
   "$ipm help"

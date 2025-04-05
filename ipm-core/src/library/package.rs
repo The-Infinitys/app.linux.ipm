@@ -21,11 +21,10 @@ struct Author {
 
 #[derive(Serialize, Deserialize, Debug)]
 struct DependInfo {
-    depend_type:String,
+    depend_type: String,
     name: String,
     version: String,
 }
-
 
 #[derive(Serialize, Deserialize, Debug)]
 struct FileMapping {

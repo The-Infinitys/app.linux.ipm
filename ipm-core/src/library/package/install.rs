@@ -84,9 +84,19 @@ fn install_process() {
             let from_path = std::fs::canonicalize(&from_path).expect("Failed to canonicalize");
             let to_path = Path::new("/").join(&to_path);
             println!("{:?}", &from_path);
-            if to_path.exists() {
-                fs::remove_file(&to_path).expect("Failed to remove existing file at to_path.");
+            if let Err(e) = fs::remove_file(&to_path) {
+                if e.kind() == std::io::ErrorKind::NotFound {
+                    // File not found, continue
+                } else if e.kind() == std::io::ErrorKind::PermissionDenied {
+                    eprintln!("Permission denied: {}", e);
+
+                }else {
+                    panic!("Failed to remove existing file at to_path: {}", e);
+                }
             }
+
+            fs::remove_file(&to_path).expect("Failed to remove existing file at to_path.");
+
             match global_file.file_type.as_str() {
                 "bin" => {
                     symlink(&from_path, to_path).expect("Failed to generate binary file.");

@@ -1,0 +1,16 @@
+#!/bin/bash
+
+# This script is used to build the project.
+cd $(dirname "$0")/..
+mkdir -p export && rm -rf export/*
+mkdir -p export/build
+
+# Build the project
+cd ipm-core/
+# Create Export workdir
+sudo rm -rf ipm
+./build-ipm --release
+mkdir -p ../export/build/ipm
+cp -r ipm/* ../export/build/ipm/
+echo "Complete to Packaging!"
+
