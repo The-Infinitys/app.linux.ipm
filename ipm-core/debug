@@ -19,7 +19,8 @@ commands=(
   "$ipm version"
   "$ipm help"
   "$ipm update"
-  "sudo $ipm install ../ipm-packages/ipm-default ../ipm-packages/ipm-system-monitor"
+  "sudo $ipm install ../ipm-packages/ipm-default"
+  "$ipm list"
 )
 
 results=()
