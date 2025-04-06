@@ -12,6 +12,11 @@ mod uninstall;
 use crate::core::system;
 use serde;
 use serde::{Deserialize, Serialize};
+// IPM write system
+use crate::write_error;
+use crate::write_info;
+use crate::write_log;
+use crate::write_warn;
 
 #[derive(Serialize, Deserialize, Debug)]
 struct Author {
@@ -59,20 +64,20 @@ pub struct PackageInfo {
 
 pub fn install_packages(args: Vec<String>) {
     // Function to install a package
-    println!("Installing package...");
+    write_info!("Installing package...");
     if args.is_empty() {
-        println!("No package name or file path provided.");
+        write_error!("No package name or file path provided.");
         return;
     }
     system::configure::cleanup_tmp();
-    println!("Downloading {} packages...", args.len());
+    write_info!("Downloading {} packages...", args.len());
     for arg in &args {
         let path = system::current_path().join(arg);
         if path.exists() {
-            println!("File found: {}. Importing as local package...", arg);
+            write_info!("File found: {}. Importing as local package...", arg);
             import_package_from_local(path.to_str().unwrap());
         } else {
-            println!("Installing package: {}", arg);
+            write_info!("Installing package: {}", arg);
         }
     }
     // ここでパッケージのインストール処理を行う
@@ -82,12 +87,12 @@ pub fn install_packages(args: Vec<String>) {
 pub fn import_package_from_local(file_path: &str) {
     // 1. ファイル、フォルダのデータを先に取得する
     let path = &fs::canonicalize(file_path).unwrap_or_else(|_| {
-        eprintln!("Failed to resolve absolute path for: {}", file_path);
+        write_error!("Failed to resolve absolute path for: {}", file_path);
         Path::new(file_path).to_path_buf()
     });
     let file_path = path.to_str().unwrap_or(file_path);
     if !path.exists() {
-        eprintln!("File or directory does not exist: {}", file_path);
+        write_error!("File or directory does not exist: {}", file_path);
         return;
     }
 
@@ -106,11 +111,11 @@ pub fn import_package_from_local(file_path: &str) {
 
     if is_directory {
         // ディレクトリの場合
-        println!("Detected directory. Copying {} to ./tmp...", file_path);
+        write_log!("Detected directory. Copying {} to ./tmp...", file_path);
         if let Err(e) = copy_directory(path, &cache_dir.join(path.file_name().unwrap())) {
-            eprintln!("Failed to cache directory: {}", e);
+            write_error!("Failed to cache directory: {}", e);
         } else {
-            println!("Successfully cache directory");
+            write_log!("Successfully cache directory");
         }
     } else if let Some(extension) = path.extension() {
         // ファイルの場合
@@ -120,32 +125,32 @@ pub fn import_package_from_local(file_path: &str) {
                     path.file_stem().and_then(|s| Path::new(s).extension())
                 {
                     if parent_extension == "tar" {
-                        println!("Detected .tar.gz file. Extracting...");
+                        write_log!("Detected .tar.gz file. Extracting...");
                         if let Err(e) = extract_tar_gz_to(file_path, cache_dir) {
-                            eprintln!("Failed to extract .tar.gz file: {}", e);
+                            write_error!("Failed to extract .tar.gz file: {}", e);
                         }
                     } else {
-                        eprintln!("Unsupported .gz file format: {}", file_path);
+                        write_error!("Unsupported .gz file format: {}", file_path);
                     }
                 }
             }
             Some("tar") => {
-                println!("Detected .tar file. Extracting...");
+                write_log!("Detected .tar file. Extracting...");
                 if let Err(e) = extract_tar_to(file_path, cache_dir) {
-                    eprintln!("Failed to extract .tar file: {}", e);
+                    write_error!("Failed to extract .tar file: {}", e);
                 }
             }
             _ => {
-                println!("Copying file to ./tmp...");
+                write_info!("Copying file to ./tmp...");
                 if let Err(e) = fs::copy(path, cache_dir.join(path.file_name().unwrap())) {
-                    eprintln!("Failed to copy file: {}", e);
+                    write_error!("Failed to copy file: {}", e);
                 } else {
-                    println!("Successfully copied file");
+                    write_log!("Successfully copied file");
                 }
             }
         }
     } else {
-        eprintln!("File has no extension: {}", file_path);
+        write_warn!("File has no extension: {}", file_path);
     }
 
     // 元のカレントディレクトリに戻す
@@ -194,7 +199,7 @@ fn extract_tar_gz_to(file_path: &str, dest: &Path) -> io::Result<()> {
     let decompressed = GzDecoder::new(tar_gz);
     let mut archive = Archive::new(decompressed);
     archive.unpack(dest)?; // 指定されたディレクトリに展開
-    println!("Successfully extracted .tar.gz file to {:?}", dest);
+    write_log!("Successfully extracted .tar.gz file to {:?}", dest);
     Ok(())
 }
 
@@ -202,15 +207,15 @@ fn extract_tar_to(file_path: &str, dest: &Path) -> io::Result<()> {
     let tar = File::open(file_path)?;
     let mut archive = Archive::new(tar);
     archive.unpack(dest)?; // 指定されたディレクトリに展開
-    println!("Successfully extracted .tar file to {:?}", dest);
+    write_log!("Successfully extracted .tar file to {:?}", dest);
     Ok(())
 }
 
 pub fn uninstall_packages(args: Vec<String>) {
     // Function to uninstall packages
-    println!("Uninstalling packages...");
+    write_info!("Uninstalling packages...");
     if args.is_empty() {
-        println!("No package name provided...");
+        write_warn!("No package name provided...");
         return;
     }
     // ここでパッケージのアンインストール処理を行う
@@ -229,7 +234,7 @@ pub fn uninstall_packages(args: Vec<String>) {
                 .expect("Failed to move current dir.");
             uninstall::uninstall();
         } else {
-            println!("Package not found: {}", package_id);
+            write_warn!("Package not found: {}", package_id);
         }
     }
 

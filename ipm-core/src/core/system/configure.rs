@@ -4,6 +4,10 @@ use std::env;
 use std::fs;
 use std::path::Path;
 
+// IPM write system
+use crate::write_info;
+use crate::write_log;
+
 pub fn configure() {
     // Configure Environment Information
     const DEBUG: bool = cfg!(debug_assertions);
@@ -17,7 +21,7 @@ pub fn configure() {
             .to_path_buf(),
         None => panic!("Failed to get parent directory"),
     };
-    println!("IPM Working directory: {:?}", &ipm_work_dir);
+    write_log!("IPM Working directory: {:?}", &ipm_work_dir);
     const IPM_VERSION: &str = env!("CARGO_PKG_VERSION");
     unsafe {
         env::set_var("IPM_EXEC_MODE", if DEBUG { "debug" } else { "release" });
@@ -26,16 +30,17 @@ pub fn configure() {
         env::set_var("IPM_VERSION", &IPM_VERSION);
     }
     if DEBUG {
-        println!("Debug mode is enabled.");
-        println!("Current directory: {:?}", &system::current_dir());
-        println!("IPM Working directory: {:?}", &system::work_dir());
-        println!("IPM Temporary directory: {:?}", &system::tmp_dir());
-        println!("IPM Package directory: {:?}", &system::package_dir());
+        write_info!("Debug mode is enabled.");
+        write_info!("Current directory: {:?}", &system::current_dir());
+        write_info!("IPM Working directory: {:?}", &system::work_dir());
+        write_info!("IPM Temporary directory: {:?}", &system::tmp_dir());
+        write_info!("IPM Package directory: {:?}", &system::package_dir());
     }
     // Configure System Information
     std::fs::write(system::system_info_path(), &system_info())
         .expect("Failed to write system info");
 }
+
 fn system_info() -> String {
     #[derive(serde::Serialize)]
     struct SystemInfo {
@@ -55,7 +60,7 @@ fn system_info() -> String {
 pub fn system_configure() {
     // Check for superuser privileges
     // if !nix::unistd::Uid::effective().is_root() && !cfg!(debug_assertions) {
-    //     eprintln!("Error: This program must be run as root.");
+    //     write_error!("Error: This program must be run as root.");
     //     std::process::exit(1);
     // }
     // 環境変数 IPM_WORK_DIR を取得

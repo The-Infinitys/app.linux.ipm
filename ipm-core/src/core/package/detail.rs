@@ -3,25 +3,29 @@ use crate::core::system;
 use crate::utils::shell::color_txt;
 use termimad::inline as md;
 
+// IPM write system
+use crate::write_error;
+use crate::write_warn;
+
 pub fn show(name: &str) {
     let package_dir = system::package_path().join(name);
     if !package_dir.exists() {
-        println!("Package does not exist: {:?}", package_dir);
+        write_warn!("Package does not exist: {:?}", package_dir);
         return;
     }
     let info_path = package_dir.join("information.json");
     if !info_path.exists() {
-        println!("Information file does not exist: {:?}", info_path);
+        write_warn!("Information file does not exist: {:?}", info_path);
         return;
     }
 
     let info_content = std::fs::read_to_string(&info_path).unwrap_or_else(|_| {
-        println!("Failed to read information file: {:?}", info_path);
+        write_error!("Failed to read information file: {:?}", info_path);
         String::new()
     });
 
     let package_info: PackageInfo =
-        serde_json::from_str(&info_content).expect("Failed to perse Information");
+        serde_json::from_str(&info_content).expect("Failed to parse Information");
     show_from_info(&package_info);
 }
 

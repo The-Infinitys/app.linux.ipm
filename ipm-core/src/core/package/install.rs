@@ -9,6 +9,10 @@ use std::io::Read;
 use std::os::unix::fs::symlink;
 use std::path::Path;
 
+// IPM write system
+use crate::write_error;
+use crate::write_log;
+
 fn copy_directory(src: &Path, dest: &Path) -> io::Result<()> {
     if !src.is_dir() {
         return Err(io::Error::new(
@@ -42,18 +46,18 @@ pub fn install_packages() {
         for entry in entries {
             if let Ok(entry) = entry {
                 let entry = entry.file_name().into_string().unwrap_or_else(|_| {
-                    eprintln!("Error: Failed to convert OsString to String.");
+                    write_error!("Failed to convert OsString to String.");
                     String::new()
                 });
                 env::set_current_dir(&system::tmp_path().join(&entry))
                     .expect("Failed to move current dir.");
                 install_process();
             } else {
-                eprintln!("Error: Failed to read an entry in the directory.");
+                write_error!("Failed to read an entry in the directory.");
             }
         }
     } else {
-        eprintln!("Error: Failed to read the current directory.");
+        write_error!("Failed to read the current directory.");
     }
 }
 
@@ -65,7 +69,7 @@ fn install_process() {
         file.read_to_string(&mut package_info)
             .expect("Failed to read information file.");
     } else {
-        eprintln!("Error: information file does not exist.");
+        write_error!("Information file does not exist.");
         return;
     }
     let package_info: PackageInfo =
@@ -83,12 +87,12 @@ fn install_process() {
             let from_path = package_path.join(&global_file.from);
             let from_path = std::fs::canonicalize(&from_path).expect("Failed to canonicalize");
             let to_path = Path::new("/").join(&to_path);
-            println!("{:?}", &from_path);
+            write_log!("Processing file: {:?}", &from_path);
             if let Err(e) = fs::remove_file(&to_path) {
                 if e.kind() == std::io::ErrorKind::NotFound {
                     // File not found, continue
                 } else if e.kind() == std::io::ErrorKind::PermissionDenied {
-                    eprintln!("Permission denied: {}", e);
+                    write_error!("Permission denied: {}", e);
                 } else {
                     panic!("Failed to remove existing file at to_path: {}", e);
                 }
@@ -109,7 +113,7 @@ fn install_process() {
                 }
 
                 _ => {
-                    eprintln!("Error: Unknown file type for global file.");
+                    write_error!("Unknown file type for global file.");
                 }
             }
         }
