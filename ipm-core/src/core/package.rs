@@ -9,7 +9,7 @@ pub mod detail;
 mod install;
 pub mod list;
 mod uninstall;
-use crate::library::system;
+use crate::core::system;
 use serde;
 use serde::{Deserialize, Serialize};
 

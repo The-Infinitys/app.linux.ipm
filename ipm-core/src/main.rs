@@ -1,10 +1,8 @@
 use std::env;
-mod library;
-mod utils;
-use library::help;
-use library::package;
-use library::system;
-use library::welcome;
+use ipm::core::help;
+use ipm::core::package;
+use ipm::core::system;
+use ipm::core::welcome;
 fn main() {
     system::configure::configure();
     // Prints each argument on a separate line
