@@ -89,8 +89,7 @@ fn install_process() {
                     // File not found, continue
                 } else if e.kind() == std::io::ErrorKind::PermissionDenied {
                     eprintln!("Permission denied: {}", e);
-
-                }else {
+                } else {
                     panic!("Failed to remove existing file at to_path: {}", e);
                 }
             }

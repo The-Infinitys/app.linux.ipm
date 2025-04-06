@@ -1,10 +1,10 @@
+use ipm::core::*;
+use ipm::write_log;
 use std::env;
-use ipm::core::help;
-use ipm::core::package;
-use ipm::core::system;
-use ipm::core::welcome;
+
 fn main() {
     system::configure::configure();
+    write_log!("Hello: {}", "World!");
     // Prints each argument on a separate line
     let args: Vec<String> = env::args().collect();
     if args.len() < 2 {
@@ -60,6 +60,7 @@ fn sub_cmd(cmd_name: String, _args: Vec<String>) -> u8 {
             }
         }
         "version" => welcome::show_version(),
+        "beleave" => easter::show_easter(),
         _ => println!("Tried to run {}.\nHowever, not found.", cmd_name),
     }
     return 0;
