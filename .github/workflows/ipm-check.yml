@@ -13,6 +13,6 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Check IPM Core
-      run: ./ipm-core/debug
+      run: ./script/test
     - name: Build and Package IPM Core
-      run: ./build/script
+      run: ./script/build
