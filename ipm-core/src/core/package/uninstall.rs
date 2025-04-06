@@ -5,13 +5,11 @@ use std::fs::File;
 use std::io::Read;
 use std::path::Path;
 
-
 // IPM write system
 use crate::write_error;
 use crate::write_info;
 use crate::write_log;
 use crate::write_warn;
-
 
 pub fn uninstall() {
     let mut package_info = String::new();

@@ -7,6 +7,7 @@ use std::path::Path;
 use tar::Archive;
 pub mod detail;
 mod install;
+// mod depend;
 pub mod list;
 mod uninstall;
 use crate::core::system;
@@ -18,33 +19,33 @@ use crate::write_info;
 use crate::write_log;
 use crate::write_warn;
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 struct Author {
     name: String,
     id: String,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 struct DependInfo {
     depend_type: String,
     name: String,
     version: String,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 struct FileMapping {
     from: String,
     to: Vec<String>,
     file_type: String,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 struct Files {
     global: Vec<FileMapping>,
     local: Vec<FileMapping>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 struct About {
     name: String,
     id: String,
@@ -56,7 +57,7 @@ struct About {
     architecture: Vec<String>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct PackageInfo {
     about: About,
     files: Files,

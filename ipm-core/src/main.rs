@@ -1,10 +1,9 @@
 use ipm::core::*;
-use ipm::write_log;
+use ipm::third::apt;
 use std::env;
-
 fn main() {
+    test();
     system::configure::configure();
-    write_log!("Hello: {}", "World!");
     // Prints each argument on a separate line
     let args: Vec<String> = env::args().collect();
     if args.len() < 2 {
@@ -64,4 +63,9 @@ fn sub_cmd(cmd_name: String, _args: Vec<String>) -> u8 {
         _ => println!("Tried to run {}.\nHowever, not found.", cmd_name),
     }
     return 0;
+}
+
+fn test() {
+    apt::repository::test();
+    std::process::exit(0);
 }
