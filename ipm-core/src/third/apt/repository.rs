@@ -21,7 +21,7 @@ pub fn get_info(repo_info: AptRepositoryInfo) -> String {
     println!("Options: {:?}", repo_info.options);
     println!("Signed by: {}", repo_info.signed_by);
     println!("Fetching repository info...");
-    let mut result = String::new();
+    let mut apt_index_data = String::new();
     for suite in &repo_info.suites {
         for component in &repo_info.components {
             for architecture in &repo_info.architectures {
@@ -41,8 +41,8 @@ pub fn get_info(repo_info: AptRepositoryInfo) -> String {
                                     let mut decompressed_data = String::new();
                                     match decoder.read_to_string(&mut decompressed_data) {
                                         Ok(_) => {
-                                            result.push_str(&decompressed_data);
-                                            result.push_str("\n");
+                                            apt_index_data.push_str(&decompressed_data);
+                                            apt_index_data.push_str("\n");
                                         }
                                         Err(e) => {
                                             println!("Failed to decompress data from {}: {}", url, e);
@@ -66,19 +66,20 @@ pub fn get_info(repo_info: AptRepositoryInfo) -> String {
             }
         }
     }
-    result
+    let apt_info_strs = apt_index_data.split("\n\n").into_iter();
+    return apt_index_data;
 }
 
 pub fn test() {
     let ubuntu_apt = AptRepositoryInfo {
         name: "ubuntu".to_string(),
         url: "http://archive.ubuntu.com/ubuntu/".to_string(),
-        suites: vec!["focal".to_string(), "bionic".to_string()],
-        components: vec!["main".to_string(), "universe".to_string()],
-        architectures: vec!["amd64".to_string(), "i386".to_string()],
+        suites: vec!["noble".to_string()],
+        components: vec!["main".to_string()],
+        architectures: vec!["amd64".to_string()],
         options: vec!["trusted=yes".to_string()],
         signed_by: "".to_string(),
     };
-    let result = get_info(ubuntu_apt);
-    println!("Result:\n{}", result);
+    let apt_index_data = get_info(ubuntu_apt);
+    println!("apt_index_data:\n{}", apt_index_data);
 }
