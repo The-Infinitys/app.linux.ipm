@@ -2,7 +2,6 @@ use ipm::core::*;
 use ipm::third::apt;
 use std::env;
 fn main() {
-    test();
     system::configure::configure();
     // Prints each argument on a separate line
     let args: Vec<String> = env::args().collect();
@@ -60,6 +59,7 @@ fn sub_cmd(cmd_name: String, _args: Vec<String>) -> u8 {
         }
         "version" => welcome::show_version(),
         "beleave" => easter::show_easter(),
+        "test" => test(),
         _ => println!("Tried to run {}.\nHowever, not found.", cmd_name),
     }
     return 0;

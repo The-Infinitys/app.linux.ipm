@@ -42,6 +42,7 @@ pub fn get_info(repo_info: AptRepositoryInfo) -> String {
                                     match decoder.read_to_string(&mut decompressed_data) {
                                         Ok(_) => {
                                             result.push_str(&decompressed_data);
+                                            result.push_str("\n");
                                         }
                                         Err(e) => {
                                             println!("Failed to decompress data from {}: {}", url, e);

@@ -4,17 +4,19 @@ macro_rules! export_to_logfile {
         use std::io::Write;
         use $crate::core::system;
         let logfile_path = system::logfile_path();
-
         // ログファイルに書き込む処理
-        if let Ok(mut file) = std::fs::OpenOptions::new()
+        match std::fs::OpenOptions::new()
             .create(true)
             .append(true)
-            .open(logfile_path)
+            .open(&logfile_path) 
         {
-            writeln!(file, "{}", $txt)
-                .unwrap_or_else(|e| eprintln!("Failed to write to log file: {}", e));
-        } else {
-            eprintln!("Failed to open log file for writing.");
+            Ok(mut file) => {
+                writeln!(file, "{}", $txt)
+                    .unwrap_or_else(|e| eprintln!("Failed to write to log file: {}", e));
+            }
+            Err(e) => {
+                eprintln!("Failed to open log file for writing: {}. Error: {}", logfile_path.display(), e);
+            }
         }
     }};
 }
@@ -28,13 +30,13 @@ macro_rules! write_log {
 
         // フォーマットされたログメッセージを作成
         let log_txt = format!($($arg)*);
-        let colored_log = format!("[{}] {}", color_txt("LOG  ", 0, 255, 255), log_txt);
+        let colored_log = format!("[{}] {}", color_txt(" LOG ", 0, 255, 255), log_txt);
 
         // 標準出力にログを表示
         println!("{}", colored_log);
 
         // タイムスタンプ付きのログを作成
-        let timestamped_log = format!("[{}][LOG  ] {}", Local::now().to_rfc3339(), log_txt);
+        let timestamped_log = format!("[{}][ LOG ] {}", Local::now().to_rfc3339(), log_txt);
 
         // ログをファイルに書き込む
         export_to_logfile!(timestamped_log);

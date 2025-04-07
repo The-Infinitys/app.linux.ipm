@@ -6,22 +6,24 @@ use std::path::Path;
 
 // IPM write system
 use crate::write_info;
-use crate::write_log;
 
 pub fn configure() {
     // Configure Environment Information
     const DEBUG: bool = cfg!(debug_assertions);
     let current_dir = env::current_dir().expect("Failed to get current dir");
-    let ipm_work_dir = match env::current_exe()
-        .expect("Failed to get current exe")
+    let mut ipm_work_dir = env::current_exe().expect("Failed to get current exe.");
+    if ipm_work_dir.is_symlink() {
+        ipm_work_dir = fs::read_link(ipm_work_dir).expect("Failed to read link.");
+    }
+    ipm_work_dir = ipm_work_dir
         .parent()
-    {
-        Some(path) => std::fs::canonicalize(path.join("../"))
-            .expect("Failed to canonicalize")
-            .to_path_buf(),
-        None => panic!("Failed to get parent directory"),
-    };
-    write_log!("IPM Working directory: {:?}", &ipm_work_dir);
+        .unwrap()
+        .parent()
+        .unwrap()
+        .to_path_buf();
+    ipm_work_dir = std::fs::canonicalize(ipm_work_dir).expect("Failed to canonicalize");
+    println!("{:?}", ipm_work_dir);
+    let ipm_work_dir = ipm_work_dir.to_str().unwrap().to_string();
     const IPM_VERSION: &str = env!("CARGO_PKG_VERSION");
     unsafe {
         env::set_var("IPM_EXEC_MODE", if DEBUG { "debug" } else { "release" });
@@ -37,6 +39,7 @@ pub fn configure() {
         write_info!("IPM Package directory: {:?}", &system::package_dir());
     }
     // Configure System Information
+
     std::fs::write(system::system_info_path(), &system_info())
         .expect("Failed to write system info");
 }
