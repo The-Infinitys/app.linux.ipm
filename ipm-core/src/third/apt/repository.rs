@@ -1,6 +1,7 @@
+use super::package::AptPackageInfo;
+use flate2::read::GzDecoder;
 use reqwest;
 use std::io::Read;
-use flate2::read::GzDecoder; // 変更
 
 pub struct AptRepositoryInfo {
     name: String,
@@ -12,7 +13,7 @@ pub struct AptRepositoryInfo {
     options: Vec<String>,
 }
 
-pub fn get_info(repo_info: AptRepositoryInfo) -> String {
+pub fn get_info(repo_info: AptRepositoryInfo) -> Vec<AptPackageInfo> {
     println!("Fetching repository info for: {}", repo_info.name);
     println!("Repository URL: {}", repo_info.url);
     println!("Suites: {:?}", repo_info.suites);
@@ -45,9 +46,19 @@ pub fn get_info(repo_info: AptRepositoryInfo) -> String {
                                             apt_index_data.push_str("\n");
                                         }
                                         Err(e) => {
-                                            println!("Failed to decompress data from {}: {}", url, e);
-                                            println!("Compressed data size: {}", compressed_data.len());
-                                            println!("First few bytes: {:?}", &compressed_data[..std::cmp::min(32, compressed_data.len())]);
+                                            println!(
+                                                "Failed to decompress data from {}: {}",
+                                                url, e
+                                            );
+                                            println!(
+                                                "Compressed data size: {}",
+                                                compressed_data.len()
+                                            );
+                                            println!(
+                                                "First few bytes: {:?}",
+                                                &compressed_data
+                                                    [..std::cmp::min(32, compressed_data.len())]
+                                            );
                                         }
                                     }
                                 }
@@ -66,8 +77,16 @@ pub fn get_info(repo_info: AptRepositoryInfo) -> String {
             }
         }
     }
-    let apt_info_strs = apt_index_data.split("\n\n").into_iter();
-    return apt_index_data;
+
+    // パッケージ情報を解析して AptPackageInfo のリストを生成
+    let apt_info_strs = apt_index_data.split("\n\n");
+    let mut apt_package_infos = Vec::new();
+    for apt_info_str in apt_info_strs {
+        if let Ok(package_info) = AptPackageInfo::from_string(apt_info_str) {
+            apt_package_infos.push(package_info);
+        }
+    }
+    apt_package_infos
 }
 
 pub fn test() {
@@ -80,6 +99,8 @@ pub fn test() {
         options: vec!["trusted=yes".to_string()],
         signed_by: "".to_string(),
     };
-    let apt_index_data = get_info(ubuntu_apt);
-    println!("apt_index_data:\n{}", apt_index_data);
+    let apt_package_infos = get_info(ubuntu_apt);
+    for package_info in apt_package_infos {
+        println!("{:#?}", package_info);
+    }
 }

@@ -8,14 +8,18 @@ macro_rules! export_to_logfile {
         match std::fs::OpenOptions::new()
             .create(true)
             .append(true)
-            .open(&logfile_path) 
+            .open(&logfile_path)
         {
             Ok(mut file) => {
                 writeln!(file, "{}", $txt)
                     .unwrap_or_else(|e| eprintln!("Failed to write to log file: {}", e));
             }
             Err(e) => {
-                eprintln!("Failed to open log file for writing: {}. Error: {}", logfile_path.display(), e);
+                eprintln!(
+                    "Failed to open log file for writing: {}. Error: {}",
+                    logfile_path.display(),
+                    e
+                );
             }
         }
     }};
