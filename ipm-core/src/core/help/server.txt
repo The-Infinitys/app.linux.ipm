@@ -1,0 +1,4 @@
+ Usage:
+{command_name} server init 
+
+カレントディレクトリをIPMのサーバーとして使用するために初期化します。

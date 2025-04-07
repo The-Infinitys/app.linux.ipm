@@ -59,6 +59,17 @@ fn sub_cmd(cmd_name: String, _args: Vec<String>) -> u8 {
         }
         "version" => welcome::show_version(),
         "beleave" => easter::show_easter(),
+        "server" => {
+            if _args.len() > 0 {
+                if _args[0] == "init" {
+                    server::init_server();
+                } else {
+                    help::show_help_msg("server");
+                }
+            } else {
+                help::show_help_msg("server");
+            }
+        }
         "test" => test(),
         _ => println!("Tried to run {}.\nHowever, not found.", cmd_name),
     }
