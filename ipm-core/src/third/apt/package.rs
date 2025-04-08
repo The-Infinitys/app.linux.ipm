@@ -3,7 +3,7 @@ use std::collections::HashMap;
 /// filepath: src/apt_package_info.rs
 /// 構造体: AptPackageInfo
 /// aptパッケージ情報を表現するための構造体
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub struct AptPackageInfo {
     pub package: String,
     pub architecture: String,
@@ -29,6 +29,7 @@ pub struct AptPackageInfo {
     pub task: Vec<String>,
     pub description_md5: String,
 }
+
 impl AptPackageInfo {
     /// 渡された文字列を解析して `AptPackageInfo` を生成する関数
     pub fn from_string(data: &str) -> Result<Self, String> {

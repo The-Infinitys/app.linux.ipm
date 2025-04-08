@@ -32,7 +32,8 @@
                 "version":"*"
             }
         ],
-        "architecture":["*"]
+        "architecture":["*"],
+        "size":4096
     },
     "files": {
         "global": [

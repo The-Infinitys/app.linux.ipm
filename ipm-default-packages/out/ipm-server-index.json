@@ -14,12 +14,15 @@
   "packages": [
     {
       "name": "Infinity Package Manager's Default Package",
+      "id": "ipm-default-pack",
+      "version": "0.1.0",
       "author": {
         "name": "The Infinity's",
         "id": "the-infinitys",
         "email": "the.infinity.s.infinity@gmail.com"
       },
-      "version": "0.1.0",
+      "description": "README.md",
+      "license": "LICENSE",
       "dependencies": [
         {
           "depend_type": "must",
@@ -41,6 +44,9 @@
           "name": "ipm-default-old",
           "version": "*"
         }
+      ],
+      "architecture": [
+        "*"
       ],
       "size": 4096
     }

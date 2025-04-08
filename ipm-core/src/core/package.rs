@@ -57,6 +57,7 @@ pub struct About {
     license: String,
     pub dependencies: Vec<DependInfo>,
     architecture: Vec<String>,
+    pub size: usize,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]

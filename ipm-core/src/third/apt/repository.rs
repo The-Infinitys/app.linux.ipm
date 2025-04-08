@@ -80,10 +80,12 @@ pub fn get_info(repo_info: AptRepositoryInfo) -> Vec<AptPackageInfo> {
 
     // パッケージ情報を解析して AptPackageInfo のリストを生成
     let apt_info_strs = apt_index_data.split("\n\n");
-    let mut apt_package_infos = Vec::new();
+    let mut apt_package_infos = Vec::with_capacity(apt_info_strs.clone().into_iter().count() - 1);
     for apt_info_str in apt_info_strs {
         if let Ok(package_info) = AptPackageInfo::from_string(apt_info_str) {
-            apt_package_infos.push(package_info);
+            if apt_package_infos.len() != apt_package_infos.capacity() {
+                apt_package_infos.push(package_info);
+            }
         }
     }
     apt_package_infos

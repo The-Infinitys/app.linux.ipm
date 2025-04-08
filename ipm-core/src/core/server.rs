@@ -1,5 +1,5 @@
+use super::package;
 use super::package::Author;
-use super::package::DependInfo;
 use crate::core::package::PackageInfo;
 use crate::core::system;
 use crate::utils::shell::question;
@@ -22,18 +22,9 @@ pub struct ServerInfo {
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
-pub struct IPMpackageInfo {
-    pub name: String,
-    pub author: Author,
-    pub version: String,
-    pub dependencies: Vec<DependInfo>,
-    pub size: u64,
-}
-
-#[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct IPMserverIndex {
     pub info: IPMserverInfo,
-    pub packages: Vec<IPMpackageInfo>,
+    pub packages: Vec<package::About>,
 }
 
 pub fn init_server() {
@@ -149,10 +140,6 @@ pub fn build_server() {
         let package_path = package.path();
         if package_path.is_dir() {
             // Gather package information
-            let package_size = package_path
-                .metadata()
-                .expect("Failed to get package metadata")
-                .len();
             let information_file_path = package_path.join("information.json");
             if !information_file_path.exists() {
                 write_info!("information.json not found in {}", package_path.display());
@@ -162,18 +149,11 @@ pub fn build_server() {
                 .expect("Failed to read information.json");
             let package_info: PackageInfo = serde_json::from_str(&information_file_json)
                 .expect("Failed to parse information.json");
-            let package_info: IPMpackageInfo = IPMpackageInfo {
-                name: package_info.about.name,
-                author: package_info.about.author,
-                version: package_info.about.version,
-                dependencies: package_info.about.dependencies,
-                size: package_size,
-            };
-            ipm_server_index.packages.push(package_info.clone());
+            ipm_server_index.packages.push(package_info.about.clone());
 
             // Compress the package directory
             let zip_file_path = export_packages_path.join(format!(
-                "{}.zip",
+                "{}.ipm",
                 package_path.file_name().unwrap().to_str().unwrap()
             ));
             let file = fs::File::create(&zip_file_path).expect("Failed to create ZIP file");
