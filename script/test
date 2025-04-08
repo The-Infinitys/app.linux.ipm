@@ -16,8 +16,10 @@ commands=(
   "$ipm version"
   "$ipm help"
   "$ipm update"
-  "sudo $ipm install ../ipm-packages/ipm-default"
   "$ipm list"
+  "$ipm beleave"
+  "$ipm"
+  "$ipm test"
 )
 
 results=()
