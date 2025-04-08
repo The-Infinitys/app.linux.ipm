@@ -10,14 +10,16 @@ build = "build.rs"
 
 [dependencies]
 termimad = "*"
-flate2="*"
-tar="*"
+flate2 = "*"
+tar = "*"
 serde = { version = "*", features = ["derive"] }
 serde_json = "*"
 nix = "*"
-chrono="*"
-reqwest= {version = "*",features= ["blocking"]}
+chrono = "*"
+reqwest = { version = "*", features = ["blocking"] }
+regex = "*"
+
 [target.'cfg(unix)'.dependencies]
 
 [build-dependencies]
-chrono="0.4.40"
+chrono = "0.4.40"
