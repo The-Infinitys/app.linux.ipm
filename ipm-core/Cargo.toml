@@ -18,7 +18,7 @@ nix = "*"
 chrono = "*"
 reqwest = { version = "*", features = ["blocking"] }
 regex = "*"
-
+zip = "*"
 [target.'cfg(unix)'.dependencies]
 
 [build-dependencies]

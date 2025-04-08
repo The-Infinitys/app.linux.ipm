@@ -61,10 +61,11 @@ fn sub_cmd(cmd_name: String, _args: Vec<String>) -> u8 {
         "beleave" => easter::show_easter(),
         "server" => {
             if _args.len() > 0 {
-                if _args[0] == "init" {
-                    server::init_server();
-                } else {
-                    help::show_help_msg("server");
+                match _args[0].as_str() {
+                    "build" => server::build_server(),
+                    "init" => server::init_server(),
+                    _ => help::show_help_msg("server"),
+                    
                 }
             } else {
                 help::show_help_msg("server");

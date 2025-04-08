@@ -21,46 +21,47 @@ use crate::write_log;
 use crate::write_warn;
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
-struct Author {
-    name: String,
-    id: String,
+pub struct Author {
+    pub name: String,
+    pub id: String,
+    pub email: String,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
-struct DependInfo {
+pub struct DependInfo {
     depend_type: String,
     name: String,
     version: String,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
-struct FileMapping {
+pub struct FileMapping {
     from: String,
     to: Vec<String>,
     file_type: String,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
-struct Files {
+pub struct Files {
     global: Vec<FileMapping>,
     local: Vec<FileMapping>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
-struct About {
-    name: String,
-    id: String,
-    version: String,
-    author: Author,
+pub struct About {
+    pub name: String,
+    pub id: String,
+    pub version: String,
+    pub author: Author,
     description: String,
     license: String,
-    dependencies: Vec<DependInfo>,
+    pub dependencies: Vec<DependInfo>,
     architecture: Vec<String>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct PackageInfo {
-    about: About,
+    pub about: About,
     files: Files,
 }
 
@@ -142,6 +143,12 @@ pub fn import_package_from_local(file_path: &str) {
                     write_error!("Failed to extract .tar file: {}", e);
                 }
             }
+            Some("zip") => {
+                write_log!("Detected .zip file. Extracting...");
+                if let Err(e) = extract_zip_to(file_path, cache_dir) {
+                    write_error!("Failed to extract .zip file: {}", e);
+                }
+            }
             _ => {
                 write_info!("Copying file to ./tmp...");
                 if let Err(e) = fs::copy(path, cache_dir.join(path.file_name().unwrap())) {
@@ -210,6 +217,14 @@ fn extract_tar_to(file_path: &str, dest: &Path) -> io::Result<()> {
     let mut archive = Archive::new(tar);
     archive.unpack(dest)?; // 指定されたディレクトリに展開
     write_log!("Successfully extracted .tar file to {:?}", dest);
+    Ok(())
+}
+
+fn extract_zip_to(file_path: &str, dest: &Path) -> io::Result<()> {
+    let file = File::open(file_path)?;
+    let mut archive = zip::ZipArchive::new(file)?;
+    archive.extract(dest)?;
+    write_log!("Successfully extracted .zip file to {:?}", dest);
     Ok(())
 }
 
