@@ -3,6 +3,54 @@ use flate2::read::GzDecoder;
 use reqwest;
 use std::io::Read;
 
+#[derive(Debug, PartialEq)]
+pub struct AptReleaseInfo {
+    pub hash: String,
+    pub origin: String,
+    pub label: String,
+    pub suite: String,
+    pub version: String,
+    pub codename: String,
+    pub date: String,
+    pub architectures: Vec<String>,
+    pub components: Vec<String>,
+    pub description: String,
+}
+
+impl AptReleaseInfo {
+    /// `Release`ファイルの内容を解析して `AptReleaseInfo` を生成する関数
+    pub fn from_string(data: &str) -> Result<Self, String> {
+        let mut fields = std::collections::HashMap::new();
+
+        // 各行を解析してフィールドを抽出
+        for line in data.lines() {
+            if let Some((key, value)) = line.split_once(": ") {
+                fields.insert(key.trim().to_string(), value.trim().to_string());
+            }
+        }
+
+        // 必須フィールドを取得し、構造体を生成
+        Ok(AptReleaseInfo {
+            hash: fields.get("Hash").cloned().unwrap_or_default(),
+            origin: fields.get("Origin").cloned().unwrap_or_default(),
+            label: fields.get("Label").cloned().unwrap_or_default(),
+            suite: fields.get("Suite").cloned().unwrap_or_default(),
+            version: fields.get("Version").cloned().unwrap_or_default(),
+            codename: fields.get("Codename").cloned().unwrap_or_default(),
+            date: fields.get("Date").cloned().unwrap_or_default(),
+            architectures: fields
+                .get("Architectures")
+                .map(|v| v.split_whitespace().map(String::from).collect())
+                .unwrap_or_default(),
+            components: fields
+                .get("Components")
+                .map(|v| v.split_whitespace().map(String::from).collect())
+                .unwrap_or_default(),
+            description: fields.get("Description").cloned().unwrap_or_default(),
+        })
+    }
+}
+
 pub struct AptRepositoryInfo {
     name: String,
     url: String,
