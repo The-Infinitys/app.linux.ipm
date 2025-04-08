@@ -14,6 +14,7 @@ use crate::core::system;
 use serde;
 use serde::{Deserialize, Serialize};
 // IPM write system
+// use crate::utils::shell::question;
 use crate::write_error;
 use crate::write_info;
 use crate::write_log;
@@ -241,3 +242,71 @@ pub fn uninstall_packages(args: Vec<String>) {
 
     env::set_current_dir(current_dir).expect("failed to set dir");
 }
+
+// TODO: Create Here
+// pub fn init_package() {
+//     // Initialize the package
+//     println!("IPM Package initialized");
+//     let current_path = system::current_path();
+
+//     // Configure the package
+//     let package_id = question("Enter package id (example: ipm-default-package)", "kebab");
+//     let package_name = question(
+//         "Enter package name (example: IPM Default Package)",
+//         "string",
+//     );
+//     let package_path = Path::new(&current_path).join(&package_id);
+//     // Collect user information
+//     let user_name = question("Enter your name (example: The Infinity's)", "string");
+//     let user_id = question("Enter your id (example: the-infinitys)", "kebab");
+//     let user_email = question("Enter your email address", "email");
+
+//     // Display collected information
+//     println!("Package name: {}", package_name);
+//     println!("Package id: {}", package_id);
+//     println!("Package path: {}", package_path.display());
+//     println!("User name: {}", user_name);
+//     println!("User email: {}", user_email);
+//     println!("User id: {}", user_id);
+
+//     // Confirm the information
+//     let check = question("Is that correct? (yes/no)", "yesno");
+//     if check == "yes" {
+//         write_info!("Start Package Initialization!");
+//     } else {
+//         write_info!("Package initialization canceled");
+//         return;
+//     }
+
+//     // Create the package directory if it doesn't exist
+//     if !package_path.exists() {
+//         fs::create_dir(&package_path).expect("Failed to create package directory");
+//         println!("package directory '{}' created successfully", package_id);
+//         let ipm_info = PackageInfo {};
+//         let ipm_info_path = package_path.join("ipm-info.json");
+//         let ipm_info_json =
+//             serde_json::to_string_pretty(&ipm_info).expect("Failed to serialize IPM package info");
+//         fs::write(&ipm_info_path, ipm_info_json).expect("Failed to write IPM package info to file");
+//         // Create a README.md file in the package directory
+//         let readme_path = package_path.join("README.md");
+//         let readme_content = format!(
+//             "# {}\n\n\
+//         **package ID:** {}\n\n\
+//         **Author:** {}\n\n\
+//         **Email:** {}\n\n\
+//         **Version:** {}\n\n\
+//         This is the README file for the IPM package '{}'.",
+//             &package_name, &package_id, &user_name, &user_email, &ipm_info.version, &package_name
+//         );
+//         fs::write(&readme_path, readme_content).expect("Failed to write README.md file");
+//         let readme_path = package_path.join("package/README.md");
+//         let readme_content = include_str!("./package/default/package/README.md").to_string();
+//         fs::create_dir(&package_path.join("package")).expect("Failed to create package directory");
+//         fs::write(&readme_path, readme_content).expect("Failed to write README.md file");
+//         println!("README.md created at '{}'", readme_path.display());
+//         println!("IPM package info saved to '{}'", ipm_info_path.display());
+//     } else {
+//         println!("package directory '{}' already exists", package_id);
+//         return;
+//     }
+// }
