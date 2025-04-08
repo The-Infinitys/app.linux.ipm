@@ -4,3 +4,4 @@ pub mod package;
 pub mod server;
 pub mod system;
 pub mod welcome;
+pub mod www;

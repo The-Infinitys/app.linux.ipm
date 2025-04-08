@@ -59,13 +59,25 @@ fn sub_cmd(cmd_name: String, _args: Vec<String>) -> u8 {
         }
         "version" => welcome::show_version(),
         "beleave" => easter::show_easter(),
+        "www" => {
+            if _args.len() > 0 {
+                match _args[0].as_str() {
+                    "add" => www::add(_args[1..].to_vec()),
+                    "remove" => www::rm(_args[1..].to_vec()),
+                    "update" => www::update(_args[1..].to_vec()),
+                    "list" => www::list(),
+                    _ => help::show_help_msg("www"),
+                }
+            } else {
+                help::show_help_msg("www");
+            }
+        }
         "server" => {
             if _args.len() > 0 {
                 match _args[0].as_str() {
                     "build" => server::build_server(),
                     "init" => server::init_server(),
                     _ => help::show_help_msg("server"),
-                    
                 }
             } else {
                 help::show_help_msg("server");

@@ -75,22 +75,28 @@ pub fn system_configure() {
     // 必要なディレクトリを作成
     // パッケージの保存場所
     create_dir_if_not_exists("package");
-    create_file_if_not_exists("package/list.json");
+    create_file_if_not_exists("package/list.json", Some("{}"));
     // wwwリポジトリデータの保存場所
     create_dir_if_not_exists("www");
-    create_file_if_not_exists("www/list.json");
-    // バイナリの保存場所
+    {
+        let new_list = super::super::www::WwwList {
+            list: Vec::new(),
+            last_update: chrono::Local::now().to_rfc3339(),
+        };
+        let new_list = serde_json::to_string(&new_list).expect("Failed to serialize");
+        create_file_if_not_exists("www/list.json", Some(&new_list));
+    } // バイナリの保存場所
     create_dir_if_not_exists("bin");
-    create_file_if_not_exists("bin/ipm-info.json");
+    create_file_if_not_exists("bin/ipm-info.json", Some("{}"));
     // 設定ファイルの保存場所
     create_dir_if_not_exists("setting");
-    create_file_if_not_exists("setting/setting.json");
+    create_file_if_not_exists("setting/setting.json", Some("{}"));
     // ログの保存場所
     create_dir_if_not_exists("log");
-    create_file_if_not_exists("log/log.txt");
+    create_file_if_not_exists("log/log.txt", None);
     // 一時ディレクトリの保存場所
     create_dir_if_not_exists("tmp");
-    create_file_if_not_exists("tmp/tmp");
+    create_file_if_not_exists("tmp/tmp", None);
     // 本来の作業ディレクトリに移動
     env::set_current_dir(&_current_dir).expect("作業ディレクトリに移動できません");
 }
@@ -101,10 +107,18 @@ fn create_dir_if_not_exists(dir: &str) {
         fs::create_dir(path).expect(&format!("ディレクトリ {:?} の作成に失敗しました", path));
     }
 }
-fn create_file_if_not_exists(file: &str) {
+fn create_file_if_not_exists(file: &str, data: Option<&str>) {
     let path = Path::new(file);
     if !path.exists() {
-        fs::File::create(path).expect(&format!("ファイル {:?} の作成に失敗しました", path));
+        let mut file =
+            fs::File::create(path).expect(&format!("ファイル {:?} の作成に失敗しました", path));
+        if let Some(content) = data {
+            use std::io::Write;
+            file.write_all(content.as_bytes()).expect(&format!(
+                "ファイル {:?} にデータを書き込むのに失敗しました",
+                path
+            ));
+        }
     }
 }
 

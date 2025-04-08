@@ -39,3 +39,10 @@ pub fn system_info_path() -> PathBuf {
 pub fn logfile_path() -> PathBuf {
     return work_path().join("log/log.txt");
 }
+
+pub fn www_list_path() -> PathBuf {
+    return work_path().join("www/list.json");
+}
+pub fn www_list_dir() -> String {
+    return www_list_path().to_str().unwrap().to_string();
+}

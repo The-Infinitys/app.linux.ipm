@@ -8,32 +8,32 @@ use serde::{Deserialize, Serialize};
 use serde_json;
 use std::fs;
 use std::path::Path;
-#[derive(Serialize, Deserialize, Clone)]
+#[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct IPMserverInfo {
-    server: ServerInfo,
-    author: Author,
-    version: String,
+    pub server: ServerInfo,
+    pub author: Author,
+    pub version: String,
 }
 
-#[derive(Serialize, Deserialize, Clone)]
+#[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct ServerInfo {
-    name: String,
-    id: String,
+    pub name: String,
+    pub id: String,
 }
 
-#[derive(Serialize, Deserialize, Clone)]
+#[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct IPMpackageInfo {
-    name: String,
-    author: Author,
-    version: String,
-    dependencies: Vec<DependInfo>,
-    size: u64,
+    pub name: String,
+    pub author: Author,
+    pub version: String,
+    pub dependencies: Vec<DependInfo>,
+    pub size: u64,
 }
 
-#[derive(Serialize, Deserialize, Clone)]
+#[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct IPMserverIndex {
-    info: IPMserverInfo,
-    packages: Vec<IPMpackageInfo>,
+    pub info: IPMserverInfo,
+    pub packages: Vec<IPMpackageInfo>,
 }
 
 pub fn init_server() {
