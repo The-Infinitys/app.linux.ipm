@@ -8,21 +8,24 @@ pub fn init_server() {
     println!("IPM Server initialized");
     let current_path = system::current_path();
     // Configure the server
-    let server_name = question("Enter server id(example: ipm_custom_server)", "id");
-    let server_path = Path::new(&current_path).join(&server_name);
+    let server_id = question("Enter server id(example: ipm_custom_server)", "kebab");
+    let server_name = question("Enter server name(example: IPM Custom Server)", "string");
+    let server_path = Path::new(&current_path).join(&server_id);
     if !server_path.exists() {
         fs::create_dir(&server_path).expect("Failed to create server directory");
-        println!("Server directory '{}' created successfully", server_name);
+        println!("Server directory '{}' created successfully", server_id);
     } else {
-        println!("Server directory '{}' already exists", server_name);
+        println!("Server directory '{}' already exists", server_id);
+    
     }
     // Change the current working directory to the server directory
     std::env::set_current_dir(&server_path).expect("Failed to change directory");
     // Delete all files and directories in the server directory
     let user_name = question("Enter your name(example: The Infinity's)", "string");
+    let user_id = question("Enter your id(example: the-infinitys)", "kebab");
     let user_email = question("Enter your email address","email");
-    let user_id = question("Enter your id(example: the_infinitys)", "id");
     println!("Server name: {}", server_name);
+    println!("Server id: {}", server_id);
     println!("Server path: {}", server_path.display());
     println!("User name: {}", user_name);
     println!("User email: {}", user_email);

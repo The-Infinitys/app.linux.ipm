@@ -1,0 +1,12 @@
+{
+  "server": {
+    "name": "IPM Default Server",
+    "id": "ipm-default-server"
+  },
+  "author": {
+    "name":"The IPM Team",
+    "id":"ipm-team",
+    "email":"owner@ipm.team"
+  },
+  "version": "0.0.0"
+}
