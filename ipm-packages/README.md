@@ -1,2 +1,0 @@
-# Infinity Package Manager Examples
-

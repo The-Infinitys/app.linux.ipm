@@ -1,2 +1,0 @@
-# IPM Server Configuration
-
