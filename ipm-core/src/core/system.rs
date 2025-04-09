@@ -46,3 +46,10 @@ pub fn www_list_path() -> PathBuf {
 pub fn www_list_dir() -> String {
     return www_list_path().to_str().unwrap().to_string();
 }
+
+pub fn www_packages_path() -> PathBuf {
+    return work_path().join("www/packages.json");
+}
+pub fn www_packages_dir() -> String {
+    return www_packages_path().to_str().unwrap().to_string();
+}

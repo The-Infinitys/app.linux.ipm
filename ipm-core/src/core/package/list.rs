@@ -74,7 +74,7 @@ pub fn update() {
     let package_list = data();
     let package_list_data = PackageList {
         packages: package_list,
-        date: chrono::Local::now().format("%Y-%m-%d %H:%M:%S").to_string(),
+        date: chrono::Local::now().to_rfc3339(),
         count: 0,
     };
     let package_list_path = system::package_path().join("list.json");

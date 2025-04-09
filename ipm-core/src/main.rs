@@ -64,7 +64,7 @@ fn sub_cmd(cmd_name: String, _args: Vec<String>) -> u8 {
                 match _args[0].as_str() {
                     "add" => www::add(_args[1..].to_vec()),
                     "remove" => www::rm(_args[1..].to_vec()),
-                    "update" => www::update(_args[1..].to_vec()),
+                    "update" => www::update(),
                     "list" => www::list(),
                     _ => help::show_help_msg("www"),
                 }

@@ -1,3 +1,7 @@
+use std::collections::LinkedList;
+use std::fs;
+
+use super::package::About;
 use super::server;
 use super::system;
 use crate::write_error;
@@ -19,6 +23,17 @@ pub struct WwwInfo {
     pub url: String,
     pub www_type: String,
 }
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct WwwPackages {
+    pub list: Vec<WwwPackageInfo>,
+    pub last_update: String,
+}
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct WwwPackageInfo {
+    pub about: About,
+    pub package_url: String,
+}
+
 pub fn add(args: Vec<String>) {
     if args.len() < 1 {
         write_error!("Please provide a website to add");
@@ -69,8 +84,46 @@ pub fn add(args: Vec<String>) {
 pub fn rm(args: Vec<String>) {
     println!("Remove a website from the list{}", args[0]);
 }
-pub fn update(args: Vec<String>) {
-    println!("Update the website list{}", args[0]);
+
+pub fn update() {
+    let www_list = system::www_list_path();
+    let www_list = std::fs::read_to_string(&www_list).expect("Failed to read file");
+    let www_list: WwwList = serde_json::from_str(&www_list).expect("Failed to parse JSON");
+    let mut www_packages: LinkedList<WwwPackageInfo> = LinkedList::new();
+    for www_server in &www_list.list {
+        match &*www_server.www_type {
+            "ipm" => {
+                let server_url = &www_server.url;
+                let index_data = format!("{}/ipm-server-index.json", &www_server.url);
+                let index_data = reqwest::blocking::get(index_data)
+                    .expect("Failed to get Index Data.")
+                    .text()
+                    .expect("Failed to perse to text.");
+                let index_data: server::IPMserverIndex =
+                    serde_json::from_str(&index_data).expect("Failed to parse JSON");
+                for www_package_info in &index_data.packages {
+                    let package_url =
+                        format!("{}/package/{}.ipm", &server_url, &www_package_info.id);
+                    let adding_package = WwwPackageInfo {
+                        about: www_package_info.clone(),
+                        package_url: package_url,
+                    };
+                    www_packages.push_back(adding_package);
+                }
+            }
+            "apt" => {}
+            _ => write_error!("Invalid www type!"),
+        }
+    }
+    let www_packages = www_packages.into_iter().collect();
+    let www_packages_list = system::www_packages_path();
+    let www_packages_data = WwwPackages {
+        list: www_packages,
+        last_update: chrono::Local::now().to_rfc3339(),
+    };
+    let www_packages_data =
+        serde_json::to_string_pretty(&www_packages_data).expect("Failed to parse.");
+    fs::write(www_packages_list, www_packages_data).expect("Failed to write package's data");
 }
 pub fn list() {
     println!("List all websites");
