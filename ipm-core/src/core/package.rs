@@ -29,9 +29,9 @@ pub struct Author {
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct DependInfo {
-    depend_type: String,
-    name: String,
-    version: String,
+    pub depend_type: String, // `pub`を追加
+    pub name: String,        // `pub`を追加
+    pub version: String,     // `pub`を追加
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -53,10 +53,10 @@ pub struct About {
     pub id: String,
     pub version: String,
     pub author: Author,
-    description: String,
-    license: String,
+    pub description: String, // `pub`を追加
+    pub license: String,     // `pub`を追加
     pub dependencies: Vec<DependInfo>,
-    architecture: Vec<String>,
+    pub architecture: Vec<String>, // `pub`を追加
     pub size: usize,
 }
 
