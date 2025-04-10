@@ -2,7 +2,7 @@ use super::package::AptPackageInfo;
 use flate2::read::GzDecoder;
 use reqwest;
 use std::io::Read;
-
+use serde::{Serialize,Deserialize};
 #[derive(Debug, PartialEq)]
 pub struct AptReleaseInfo {
     pub hash: String,
@@ -51,14 +51,14 @@ impl AptReleaseInfo {
     }
 }
 
+#[derive(Debug, PartialEq,Serialize,Deserialize)]
 pub struct AptRepositoryInfo {
-    name: String,
-    url: String,
-    suites: Vec<String>,
-    components: Vec<String>,
-    architectures: Vec<String>,
-    signed_by: String,
-    options: Vec<String>,
+    pub name: String,
+    pub url: String,
+    pub suites: Vec<String>,
+    pub components: Vec<String>,
+    pub architectures: Vec<String>,
+    pub options: Vec<String>,
 }
 
 pub fn get_info(repo_info: AptRepositoryInfo) -> Vec<AptPackageInfo> {
@@ -68,7 +68,6 @@ pub fn get_info(repo_info: AptRepositoryInfo) -> Vec<AptPackageInfo> {
     println!("Components: {:?}", repo_info.components);
     println!("Architectures: {:?}", repo_info.architectures);
     println!("Options: {:?}", repo_info.options);
-    println!("Signed by: {}", repo_info.signed_by);
     println!("Fetching repository info...");
     let mut apt_index_data = String::new();
     for suite in &repo_info.suites {
@@ -147,7 +146,6 @@ pub fn test() {
         components: vec!["main".to_string()],
         architectures: vec!["amd64".to_string()],
         options: vec!["trusted=yes".to_string()],
-        signed_by: "".to_string(),
     };
     let apt_package_infos = get_info(ubuntu_apt);
     for package_info in apt_package_infos {

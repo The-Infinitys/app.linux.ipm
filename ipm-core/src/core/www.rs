@@ -4,6 +4,7 @@ use std::fs;
 use super::package::About;
 use super::server;
 use super::system;
+use crate::third::*;
 use crate::write_error;
 use crate::write_info;
 use crate::write_log;
@@ -31,6 +32,7 @@ pub struct WwwPackages {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct WwwPackageInfo {
     pub about: About,
+    pub package_type: String,
     pub package_url: String,
 }
 
@@ -71,6 +73,65 @@ pub fn add(args: Vec<String>) {
         }
         "apt" => {
             write_log!("Adding apt www: {}", www_url);
+            let mut repo_info = apt::repository::AptRepositoryInfo {
+                name: String::new(),
+                url: www_url,
+                suites: Vec::new(),
+                components: Vec::new(),
+                architectures: Vec::new(),
+                options: Vec::new(),
+            };
+            let args = args[2..].to_vec();
+            for arg in args {
+                if let Some((key, value)) = arg.split_once('=') {
+                    match key {
+                        "--name" =>{
+                            repo_info.name = value.trim().to_string();
+                        }
+                        "--suites" => {
+                            repo_info.suites =
+                                value.split(',').map(|s| s.trim().to_string()).collect();
+                        }
+                        "--components" => {
+                            repo_info.components =
+                                value.split(',').map(|c| c.trim().to_string()).collect();
+                        }
+                        "--architectures" => {
+                            repo_info.architectures =
+                                value.split(',').map(|a| a.trim().to_string()).collect();
+                        }
+                        "--options" => {
+                            repo_info.options =
+                                value.split(',').map(|o| o.trim().to_string()).collect();
+                        }
+                        _ => {
+                            write_error!("Unknown argument: {}", key);
+                        }
+                    }
+                } else {
+                    write_error!("Invalid argument format: {}", arg);
+                }
+            }
+            
+            // Validate that all required fields in AptRepositoryInfo are set
+            if repo_info.name.is_empty() {
+                write_error!("The '--name' argument is required for an apt repository.");
+                return;
+            }
+            if repo_info.suites.is_empty() {
+                write_error!("The '--suites' argument is required for an apt repository.");
+                return;
+            }
+            if repo_info.components.is_empty() {
+                write_error!("The '--components' argument is required for an apt repository.");
+                return;
+            }
+            if repo_info.architectures.is_empty() {
+                write_error!("The '--architectures' argument is required for an apt repository.");
+                return;
+            }
+            
+            println!("{:?}",repo_info);
         }
         _ => {
             write_error!("Unknown wwww type: {}", www_type);
@@ -107,6 +168,7 @@ pub fn update() {
                     let adding_package = WwwPackageInfo {
                         about: www_package_info.clone(),
                         package_url: package_url,
+                        package_type: "ipm".to_string(),
                     };
                     www_packages.push_back(adding_package);
                 }
