@@ -23,6 +23,8 @@ pub struct WwwInfo {
     pub name: String,
     pub url: String,
     pub www_type: String,
+    pub apt_info: Option<apt::repository::AptRepositoryInfo>,
+    pub ipm_info: Option<server::IPMserverInfo>,
 }
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct WwwPackages {
@@ -67,6 +69,8 @@ pub fn add(args: Vec<String>) {
                 name: www_index.info.server.id.clone(),
                 url: www_url.clone(),
                 www_type: www_type.clone(),
+                apt_info: None,
+                ipm_info: Some(www_index.info.clone()),
             };
             www_list.list.push(adding_www_info);
             write_info!("{:?}", &www_index);
@@ -75,7 +79,7 @@ pub fn add(args: Vec<String>) {
             write_log!("Adding apt www: {}", www_url);
             let mut repo_info = apt::repository::AptRepositoryInfo {
                 name: String::new(),
-                url: www_url,
+                url: www_url.clone(),
                 suites: Vec::new(),
                 components: Vec::new(),
                 architectures: Vec::new(),
@@ -85,7 +89,7 @@ pub fn add(args: Vec<String>) {
             for arg in args {
                 if let Some((key, value)) = arg.split_once('=') {
                     match key {
-                        "--name" =>{
+                        "--name" => {
                             repo_info.name = value.trim().to_string();
                         }
                         "--suites" => {
@@ -112,12 +116,6 @@ pub fn add(args: Vec<String>) {
                     write_error!("Invalid argument format: {}", arg);
                 }
             }
-            
-            // Validate that all required fields in AptRepositoryInfo are set
-            if repo_info.name.is_empty() {
-                write_error!("The '--name' argument is required for an apt repository.");
-                return;
-            }
             if repo_info.suites.is_empty() {
                 write_error!("The '--suites' argument is required for an apt repository.");
                 return;
@@ -130,8 +128,17 @@ pub fn add(args: Vec<String>) {
                 write_error!("The '--architectures' argument is required for an apt repository.");
                 return;
             }
-            
-            println!("{:?}",repo_info);
+            let release_info = apt::repository::get_release(&repo_info.clone());
+            let release_info = release_info.first().expect("Failed to get release info.");
+            let repo_name = &release_info.origin;
+            let adding_www_info = WwwInfo {
+                name: repo_name.clone(),
+                url: www_url.clone(),
+                www_type: www_type.clone(),
+                apt_info: Some(repo_info.clone()),
+                ipm_info: None,
+            };
+            www_list.list.push(adding_www_info);
         }
         _ => {
             write_error!("Unknown wwww type: {}", www_type);
@@ -188,5 +195,8 @@ pub fn update() {
     fs::write(www_packages_list, www_packages_data).expect("Failed to write package's data");
 }
 pub fn list() {
-    println!("List all websites");
+    let www_list = system::www_list_path();
+    let www_list = std::fs::read_to_string(&www_list).expect("Failed to read file");
+    let www_list: WwwList = serde_json::from_str(&www_list).expect("Failed to parse JSON");
+    println!("{:?}",www_list);
 }

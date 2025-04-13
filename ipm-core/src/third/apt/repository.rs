@@ -1,8 +1,8 @@
 use super::package::AptPackageInfo;
 use flate2::read::GzDecoder;
 use reqwest;
+use serde::{Deserialize, Serialize};
 use std::io::Read;
-use serde::{Serialize,Deserialize};
 #[derive(Debug, PartialEq)]
 pub struct AptReleaseInfo {
     pub hash: String,
@@ -51,7 +51,7 @@ impl AptReleaseInfo {
     }
 }
 
-#[derive(Debug, PartialEq,Serialize,Deserialize)]
+#[derive(Debug, PartialEq, Serialize, Deserialize, Clone)]
 pub struct AptRepositoryInfo {
     pub name: String,
     pub url: String,
@@ -60,15 +60,76 @@ pub struct AptRepositoryInfo {
     pub architectures: Vec<String>,
     pub options: Vec<String>,
 }
+pub fn get_release(repo_info: &AptRepositoryInfo) -> Vec<AptReleaseInfo> {
+    let mut apt_release_data = String::new();
+    for suite in &repo_info.suites {
+        for component in &repo_info.components {
+            for architecture in &repo_info.architectures {
+                let url = format!(
+                    "{}/dists/{}/{}/binary-{}/Packages.gz", // 拡張子を .gz に変更
+                    repo_info.url, suite, component, architecture
+                );
+                let response = reqwest::blocking::get(&url);
+                match response {
+                    Ok(res) => {
+                        if res.status().is_success() {
+                            println!("Successfully fetched: {}", url);
+                            match res.bytes() {
+                                Ok(compressed_data) => {
+                                    let mut decoder = GzDecoder::new(&compressed_data[..]); // GzDecoder を使用
+                                    let mut decompressed_data = String::new();
+                                    match decoder.read_to_string(&mut decompressed_data) {
+                                        Ok(_) => {
+                                            apt_release_data.push_str(&decompressed_data);
+                                            apt_release_data.push_str("\n");
+                                        }
+                                        Err(e) => {
+                                            println!(
+                                                "Failed to decompress data from {}: {}",
+                                                url, e
+                                            );
+                                            println!(
+                                                "Compressed data size: {}",
+                                                compressed_data.len()
+                                            );
+                                            println!(
+                                                "First few bytes: {:?}",
+                                                &compressed_data
+                                                    [..std::cmp::min(32, compressed_data.len())]
+                                            );
+                                        }
+                                    }
+                                }
+                                Err(e) => {
+                                    println!("Failed to read bytes from {}: {}", url, e);
+                                }
+                            }
+                        } else {
+                            println!("Failed to fetch {} with status: {}", url, res.status());
+                        }
+                    }
+                    Err(e) => {
+                        println!("Error during request to {}: {}", url, e);
+                    }
+                }
+            }
+        }
+    }
+
+    // パッケージ情報を解析して AptPackageInfo のリストを生成
+    let apt_info_strs = apt_release_data.split("\n\n");
+    let mut apt_release_infos = Vec::with_capacity(apt_info_strs.clone().into_iter().count() - 1);
+    for apt_info_str in apt_info_strs {
+        if let Ok(release_info) = AptReleaseInfo::from_string(apt_info_str) {
+            if apt_release_infos.len() != apt_release_infos.capacity() {
+                apt_release_infos.push(release_info);
+            }
+        }
+    }
+    apt_release_infos
+}
 
 pub fn get_info(repo_info: AptRepositoryInfo) -> Vec<AptPackageInfo> {
-    println!("Fetching repository info for: {}", repo_info.name);
-    println!("Repository URL: {}", repo_info.url);
-    println!("Suites: {:?}", repo_info.suites);
-    println!("Components: {:?}", repo_info.components);
-    println!("Architectures: {:?}", repo_info.architectures);
-    println!("Options: {:?}", repo_info.options);
-    println!("Fetching repository info...");
     let mut apt_index_data = String::new();
     for suite in &repo_info.suites {
         for component in &repo_info.components {
@@ -77,7 +138,6 @@ pub fn get_info(repo_info: AptRepositoryInfo) -> Vec<AptPackageInfo> {
                     "{}/dists/{}/{}/binary-{}/Packages.gz", // 拡張子を .gz に変更
                     repo_info.url, suite, component, architecture
                 );
-                println!("Fetching: {}", url);
                 let response = reqwest::blocking::get(&url);
                 match response {
                     Ok(res) => {
