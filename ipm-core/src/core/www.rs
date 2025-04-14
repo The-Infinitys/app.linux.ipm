@@ -181,8 +181,11 @@ pub fn update() {
                 }
             }
             "apt" => {
-                let repo_info = www_server.apt_info.unwrap().clone();
-                let apt_packages_data = apt::repository::get_info(repo_info.clone());
+                let repo_info = www_server.apt_info.as_ref().unwrap().clone();
+                let apt_packages_datas = apt::repository::get_info(repo_info.clone());
+                for apt_packages_data in &apt_packages_datas {
+                    println!("{:?}", apt_packages_data);
+                }
             }
             _ => write_error!("Invalid www type!"),
         }
@@ -201,5 +204,5 @@ pub fn list() {
     let www_list = system::www_list_path();
     let www_list = std::fs::read_to_string(&www_list).expect("Failed to read file");
     let www_list: WwwList = serde_json::from_str(&www_list).expect("Failed to parse JSON");
-    println!("{:?}",www_list);
+    println!("{:?}", www_list);
 }
