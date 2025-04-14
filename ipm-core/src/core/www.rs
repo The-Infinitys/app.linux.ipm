@@ -180,7 +180,10 @@ pub fn update() {
                     www_packages.push_back(adding_package);
                 }
             }
-            "apt" => {}
+            "apt" => {
+                let repo_info = www_server.apt_info.unwrap().clone();
+                let apt_packages_data = apt::repository::get_info(repo_info.clone());
+            }
             _ => write_error!("Invalid www type!"),
         }
     }
