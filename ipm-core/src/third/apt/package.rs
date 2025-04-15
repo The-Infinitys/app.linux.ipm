@@ -15,9 +15,14 @@ pub struct AptPackageInfo {
     pub original_maintainer: String,
     pub bugs: String,
     pub installed_size: u64,
+    pub pre_depends: Vec<String>,
     pub depends: Vec<String>,
     pub recommends: Vec<String>,
     pub suggests: Vec<String>,
+    pub enhances: Vec<String>,
+    pub replaces: Vec<String>,
+    pub breaks: Vec<String>,
+    pub conflicts: Vec<String>,
     pub filename: String,
     pub size: u64,
     pub md5sum: String,
@@ -64,12 +69,32 @@ impl AptPackageInfo {
                 .get("Depends")
                 .map(|v| v.split(", ").map(String::from).collect())
                 .unwrap_or_default(),
+            pre_depends: fields
+                .get("Pre-Depends")
+                .map(|v| v.split(", ").map(String::from).collect())
+                .unwrap_or_default(),
             recommends: fields
                 .get("Recommends")
                 .map(|v| v.split(", ").map(String::from).collect())
                 .unwrap_or_default(),
             suggests: fields
                 .get("Suggests")
+                .map(|v| v.split(", ").map(String::from).collect())
+                .unwrap_or_default(),
+            breaks: fields
+                .get("Breaks")
+                .map(|v| v.split(", ").map(String::from).collect())
+                .unwrap_or_default(),
+            conflicts: fields
+                .get("Conflicts")
+                .map(|v| v.split(", ").map(String::from).collect())
+                .unwrap_or_default(),
+            replaces: fields
+                .get("Replaces")
+                .map(|v| v.split(", ").map(String::from).collect())
+                .unwrap_or_default(),
+            enhances: fields
+                .get("Enhances")
                 .map(|v| v.split(", ").map(String::from).collect())
                 .unwrap_or_default(),
             filename: fields.get("Filename").cloned().unwrap_or_default(),
