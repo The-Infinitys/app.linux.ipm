@@ -169,7 +169,8 @@ pub fn get_info(repo_info: AptRepositoryInfo) -> Vec<AptPackageInfo> {
     let mut apt_package_infos = Vec::with_capacity(apt_info_strs.clone().into_iter().count() - 1);
     for apt_info_str in apt_info_strs {
         if let Ok(package_info) = AptPackageInfo::from_string(apt_info_str) {
-            if apt_package_infos.len() != apt_package_infos.capacity() {
+            if apt_package_infos.len() != apt_package_infos.capacity() && package_info.package != ""
+            {
                 apt_package_infos.push(package_info);
             }
         }

@@ -196,7 +196,8 @@ pub fn update() {
             _ => write_error!("Invalid www type!"),
         }
     }
-    let www_packages = www_packages.into_iter().collect();
+    let mut www_packages: Vec<WwwPackageInfo> = www_packages.into_iter().collect();
+    www_packages.sort_by(|a, b| a.about.id.cmp(&b.about.id));
     let www_packages_list = system::www_packages_path();
     let www_packages_data = WwwPackages {
         list: www_packages,
