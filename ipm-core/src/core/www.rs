@@ -184,7 +184,13 @@ pub fn update() {
                 let repo_info = www_server.apt_info.as_ref().unwrap().clone();
                 let apt_packages_datas = apt::repository::get_info(repo_info.clone());
                 for apt_packages_data in &apt_packages_datas {
-                    println!("{:?}", apt_packages_data);
+                    let package_url = format!("{}/{}", &repo_info.url, &apt_packages_data.filename);
+                    let adding_package = WwwPackageInfo {
+                        about: apt_packages_data.to_about(),
+                        package_url: package_url,
+                        package_type: "apt".to_string(),
+                    };
+                    www_packages.push_back(adding_package);
                 }
             }
             _ => write_error!("Invalid www type!"),

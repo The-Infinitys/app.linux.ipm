@@ -22,9 +22,9 @@ impl AptPackageInfo {
                 .depends
                 .iter()
                 .map(|dep| DependInfo {
-                    depend_type: "apt".to_string(),
-                    name: dep.clone(),
-                    version: String::new(), // バージョン情報がないため空文字列
+                    depend_type: "must".to_string(),
+                    name: parse_dependency(&dep.clone()).0,
+                    version: parse_dependency(&dep.clone()).1, // バージョン情報がないため空文字列
                 })
                 .collect(),
             architecture: vec![self.architecture.clone()],
@@ -51,13 +51,23 @@ impl DebPackageInfo {
                 .depends
                 .iter()
                 .map(|dep| DependInfo {
-                    depend_type: "deb".to_string(),
-                    name: dep.clone(),
-                    version: String::new(), // バージョン情報がないため空文字列
+                    depend_type: "apt".to_string(),
+                    name: parse_dependency(&dep.clone()).0,
+                    version: parse_dependency(&dep.clone()).1, // バージョン情報がないため空文字列
                 })
                 .collect(),
             architecture: vec![self.architecture.clone()],
             size: self.installed_size as usize,
         }
+    }
+}
+
+fn parse_dependency(dep: &str) -> (String, String) {
+    if let Some(start) = dep.find('(') {
+        let name = dep[..start].trim().to_string();
+        let version = dep[start + 1..dep.len() - 1].trim().to_string();
+        (name, version)
+    } else {
+        (dep.to_string(), "*".to_string())
     }
 }

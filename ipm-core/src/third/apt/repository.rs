@@ -66,7 +66,7 @@ pub fn get_release(repo_info: &AptRepositoryInfo) -> Vec<AptReleaseInfo> {
         for component in &repo_info.components {
             for architecture in &repo_info.architectures {
                 let url = format!(
-                    "{}/dists/{}/{}/binary-{}/Packages.gz", // 拡張子を .gz に変更
+                    "{}/dists/{}/{}/binary-{}/Release", // 拡張子を .gz に変更
                     repo_info.url, suite, component, architecture
                 );
                 let response = reqwest::blocking::get(&url);
@@ -74,31 +74,10 @@ pub fn get_release(repo_info: &AptRepositoryInfo) -> Vec<AptReleaseInfo> {
                     Ok(res) => {
                         if res.status().is_success() {
                             println!("Successfully fetched: {}", url);
-                            match res.bytes() {
-                                Ok(compressed_data) => {
-                                    let mut decoder = GzDecoder::new(&compressed_data[..]); // GzDecoder を使用
-                                    let mut decompressed_data = String::new();
-                                    match decoder.read_to_string(&mut decompressed_data) {
-                                        Ok(_) => {
-                                            apt_release_data.push_str(&decompressed_data);
-                                            apt_release_data.push_str("\n");
-                                        }
-                                        Err(e) => {
-                                            println!(
-                                                "Failed to decompress data from {}: {}",
-                                                url, e
-                                            );
-                                            println!(
-                                                "Compressed data size: {}",
-                                                compressed_data.len()
-                                            );
-                                            println!(
-                                                "First few bytes: {:?}",
-                                                &compressed_data
-                                                    [..std::cmp::min(32, compressed_data.len())]
-                                            );
-                                        }
-                                    }
+                            match res.text() {
+                                Ok(text_data) => {
+                                    apt_release_data.push_str(&text_data);
+                                    apt_release_data.push_str("\n");
                                 }
                                 Err(e) => {
                                     println!("Failed to read bytes from {}: {}", url, e);
