@@ -17,7 +17,6 @@ use serde;
 use serde::{Deserialize, Serialize};
 // IPM write system
 // use crate::utils::shell::question;
-use crate::core::www;
 use crate::write_error;
 use crate::write_info;
 use crate::write_log;
@@ -189,16 +188,31 @@ fn resolve_dependencies(package_id: &str, resolved: &mut HashMap<String, Vec<Dep
 fn get_package_dependencies(package_id: &str) -> Vec<DependInfo> {
     write_log!("Fetching dependencies for package: {}", package_id);
 
-    let package_list = www::package_list();
-    let package_info = match package_list.iter().find(|p| p.about.id == package_id) {
-        Some(info) => info,
-        None => {
-            write_warn!("Package not found in www list: {}", package_id);
+    let package_path = system::package_path().join(package_id);
+    let metadata_path = package_path.join("package.json");
+
+    if !metadata_path.exists() {
+        write_warn!("Package metadata not found for: {}", package_id);
+        return Vec::new();
+    }
+
+    let metadata_content = match fs::read_to_string(&metadata_path) {
+        Ok(content) => content,
+        Err(e) => {
+            write_error!("Failed to read package metadata: {}", e);
             return Vec::new();
         }
     };
 
-    let dependencies = package_info.about.dependencies.clone();
+    let package_info: PackageInfo = match serde_json::from_str(&metadata_content) {
+        Ok(info) => info,
+        Err(e) => {
+            write_error!("Failed to parse package metadata: {}", e);
+            return Vec::new();
+        }
+    };
+
+    let dependencies = package_info.about.dependencies;
     let mut valid_dependencies = Vec::new();
 
     for dep in dependencies {
