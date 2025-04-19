@@ -8,7 +8,7 @@ use std::path::Path;
 use tar::Archive;
 pub mod detail;
 mod install;
-// mod depend;
+mod depend;
 pub mod list;
 pub mod search;
 mod uninstall;
@@ -22,7 +22,7 @@ use crate::write_error;
 use crate::write_info;
 use crate::write_log;
 use crate::write_warn;
-use std::collections::{HashMap, HashSet};
+use std::collections::{HashSet, LinkedList};
 use std::fmt;
 use std::sync::Mutex;
 
@@ -102,230 +102,18 @@ lazy_static! {
 }
 
 pub fn install_packages(args: Vec<String>) {
-    write_info!("Installing package...");
-    if args.is_empty() {
-        write_error!("No package name or file path provided.");
-        return;
-    }
-
-    system::configure::cleanup_tmp();
-    write_info!("Downloading {} packages...", args.len());
-
-    let mut packages_to_install = Vec::new();
-    let mut local_packages = Vec::new();
-
-    // パッケージの分類と依存関係の収集
-    for arg in &args {
-        let path = system::current_path().join(arg);
-        if path.exists() {
-            write_info!("File found: {}. Importing as local package...", arg);
-            local_packages.push(path);
-        } else {
-            packages_to_install.push(arg.clone());
+    let mut package_list: Vec<About> = list::data().into_iter().map(|p| p.about).collect();
+    package_list.reserve(args.len());
+    for pkg_id in args {
+        let pkg_about = www::get_package_info(&pkg_id);
+        if pkg_about.is_none() {
+            write_error!("Package not found: {}", pkg_id);
+            return;
         }
+        package_list.push(pkg_about.unwrap());
     }
-
-    // ローカルパッケージの処理
-    for package_path in local_packages {
-        import_package_from_local(package_path.to_str().unwrap());
-    }
-
-    // 依存関係の解決とインストール
-    let mut resolved_dependencies = HashMap::new();
-    for package in &packages_to_install {
-        resolve_dependencies(package, &mut resolved_dependencies);
-    }
-
-    // 依存関係に基づいてインストール順序を決定
-    let install_order = determine_install_order(&resolved_dependencies);
-
-    // パッケージのインストール
-    for package_id in install_order {
-        if !INSTALLED_PACKAGES.lock().unwrap().contains(&package_id) {
-            write_info!("Installing package: {}", package_id);
-            install_package(&package_id);
-            INSTALLED_PACKAGES
-                .lock()
-                .unwrap()
-                .insert(package_id.clone());
-        }
-    }
-}
-
-fn install_package(package_id: &str) {
-    // TODO: 実際のパッケージインストール処理を実装
-    write_info!("Installing package: {}", package_id);
-    // ここにパッケージのインストール処理を実装
-}
-
-fn resolve_dependencies(package_id: &str, resolved: &mut HashMap<String, Vec<DependInfo>>) {
-    // 循環依存のチェック
-    if PENDING_PACKAGES.lock().unwrap().contains(package_id) {
-        write_error!("Circular dependency detected for package: {}", package_id);
-        return;
-    }
-
-    if INSTALLED_PACKAGES.lock().unwrap().contains(package_id) {
-        return;
-    }
-
-    PENDING_PACKAGES
-        .lock()
-        .unwrap()
-        .insert(package_id.to_string());
-
-    // パッケージの依存関係を取得
-    let dependencies = get_package_dependencies(package_id);
-    resolved.insert(package_id.to_string(), dependencies.clone());
-
-    // 依存パッケージの依存関係を再帰的に解決
-    for dep in dependencies {
-        resolve_dependencies(&dep.name, resolved);
-    }
-
-    PENDING_PACKAGES.lock().unwrap().remove(package_id);
-}
-
-fn get_package_dependencies(package_id: &str) -> Vec<DependInfo> {
-    write_log!("Fetching dependencies for package: {}", package_id);
-
-    let package_list = www::package_list();
-    let package_info = match package_list.iter().find(|p| p.about.id == package_id) {
-        Some(info) => info,
-        None => {
-            write_warn!("Package not found in www list: {}", package_id);
-            return Vec::new();
-        }
-    };
-
-    let dependencies = package_info.about.dependencies.clone();
-    let mut valid_dependencies = Vec::new();
-
-    for dep in dependencies {
-        // 依存関係タイプの解析
-        let (depend_type, index) = parse_dependency_type(&dep.depend_type.to_string());
-
-        // バージョン要件の解析（deb形式）
-        let version_req = parse_deb_version(&dep.version);
-
-        valid_dependencies.push(DependInfo {
-            depend_type,
-            name: dep.name,
-            version: version_req,
-            index,
-        });
-    }
-
-    write_log!(
-        "Found {} dependencies for package: {}",
-        valid_dependencies.len(),
-        package_id
-    );
-    valid_dependencies
-}
-
-fn parse_dependency_type(type_str: &str) -> (DependencyType, Option<u32>) {
-    let parts: Vec<&str> = type_str.split('.').collect();
-    let base_type = parts[0];
-    let index = parts.get(1).and_then(|&s| {
-        if s == "index" {
-            parts.get(2).and_then(|&num| num.parse::<u32>().ok())
-        } else {
-            None
-        }
-    });
-
-    let depend_type = match base_type {
-        "must" => DependencyType::Must,
-        "must.pre" => DependencyType::MustPre,
-        "should" => DependencyType::Should,
-        "may" => DependencyType::May,
-        "cannot.break" => DependencyType::CannotBreak,
-        "cannot.conflict" => DependencyType::CannotConflict,
-        _ => {
-            write_warn!("Invalid dependency type: {}", type_str);
-            DependencyType::Must
-        }
-    };
-
-    (depend_type, index)
-}
-
-fn parse_deb_version(version_str: &str) -> String {
-    // deb形式のバージョン要件を解析
-    // 例: ">= 1.0.0", "= 2.3.4", "<< 3.0.0", ">> 1.5.0"
-    version_str.to_string()
-}
-
-// 依存関係のグループ化を行う関数
-fn group_dependencies_by_index(dependencies: Vec<DependInfo>) -> Vec<Vec<DependInfo>> {
-    let mut groups: HashMap<Option<u32>, Vec<DependInfo>> = HashMap::new();
-
-    for dep in dependencies {
-        let group = groups.entry(dep.index).or_insert_with(Vec::new);
-        group.push(dep);
-    }
-
-    // indexのない依存関係を個別のグループとして扱う
-    let mut result: Vec<Vec<DependInfo>> = groups.into_iter().map(|(_, deps)| deps).collect();
-
-    // indexの昇順でソート
-    result.sort_by(|a, b| {
-        let a_index = a.first().and_then(|d| d.index);
-        let b_index = b.first().and_then(|d| d.index);
-        a_index.cmp(&b_index)
-    });
-
-    result
-}
-
-fn determine_install_order(dependencies: &HashMap<String, Vec<DependInfo>>) -> Vec<String> {
-    let mut install_order = Vec::new();
-    let mut visited = HashSet::new();
-    let mut temp = HashSet::new();
-
-    for package in dependencies.keys() {
-        if !visited.contains(package) {
-            topological_sort(
-                package,
-                dependencies,
-                &mut visited,
-                &mut temp,
-                &mut install_order,
-            );
-        }
-    }
-
-    install_order
-}
-
-fn topological_sort(
-    package: &str,
-    dependencies: &HashMap<String, Vec<DependInfo>>,
-    visited: &mut HashSet<String>,
-    temp: &mut HashSet<String>,
-    result: &mut Vec<String>,
-) {
-    if temp.contains(package) {
-        write_error!("Circular dependency detected for package: {}", package);
-        return;
-    }
-
-    if visited.contains(package) {
-        return;
-    }
-
-    temp.insert(package.to_string());
-
-    if let Some(deps) = dependencies.get(package) {
-        for dep in deps {
-            topological_sort(&dep.name, dependencies, visited, temp, result);
-        }
-    }
-
-    temp.remove(package);
-    visited.insert(package.to_string());
-    result.push(package.to_string());
+    package_list.sort_by(|a, b| a.id.cmp(&b.id));
+    let install_task=depend::task_for_resolve(&package_list);
 }
 
 pub fn import_package_from_local(file_path: &str) {

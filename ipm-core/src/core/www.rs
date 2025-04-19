@@ -225,3 +225,14 @@ pub fn package_list() -> Vec<WwwPackageInfo> {
     let www_list: WwwPackages = serde_json::from_str(&www_list).expect("Failed to parse JSON");
     return www_list.list;
 }
+
+pub fn get_package_info(package_id: &str) -> Option<About> {
+    let www_list = package_list();
+    for package in &www_list {
+        if package.about.id == package_id {
+            return Some(package.about.clone());
+        }
+    }
+    write_error!("Package not found: {}", package_id);
+    return None;
+}
