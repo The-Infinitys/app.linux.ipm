@@ -9,7 +9,7 @@ mkdir -p export/build
 cd ipm-core/
 # Create Export workdir
 sudo rm -rf ipm
-./build-ipm --release
+./build-ipm release
 mkdir -p ../export/build/ipm
 cp -r ipm/* ../export/build/ipm/
 echo "Complete to Packaging!"

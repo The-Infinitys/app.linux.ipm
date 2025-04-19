@@ -1,0 +1,12 @@
+#!/bin/bash
+
+cd $(dirname $0)
+if [ -d ./virt-env.d/opt ]; then
+  rm -rf ./virt-env.d/opt
+fi
+
+mkdir -p ./virt-env.d/opt/ipm
+cp -fr ../ipm-core/ipm ./virt-env.d/opt/
+podman build -t ipm-virt-env ./virt-env.d
+
+podman run -it --rm ipm-virt-env
