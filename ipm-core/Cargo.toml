@@ -19,6 +19,7 @@ chrono = "*"
 reqwest = { version = "*", features = ["blocking"] }
 regex = "*"
 zip = "*"
+lazy_static = "1.4.0"
 [target.'cfg(unix)'.dependencies]
 
 [build-dependencies]
