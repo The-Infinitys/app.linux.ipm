@@ -1,17 +1,48 @@
 #!/bin/bash
 
-self_dir=$(dirname "$0");
-cd $self_dir
-cargo build $1
-if [ $? -ne 0 ]; then
-  echo "cargo build failed"
-  exit 1
+set -e  # Exit on error
+
+self_dir=$(dirname "$0")
+cd "$self_dir"
+
+# Validate input
+if [ "$1" != "debug" ] && [ "$1" != "release" ]; then
+    echo "Usage: $0 [debug|release]"
+    exit 1
 fi
-sudo rm -rf ./ipm
-mkdir -p ipm/bin
-cp -r ./target/debug/ipm ipm/bin/ipm
-./ipm/bin/ipm system configure
-if [ $? -ne 0 ]; then
-  echo "ipm system configure failed"
-  exit 1
+
+# Build
+if [ "$1" = "debug" ]; then
+    cargo build
+    target_dir="debug"
+else
+    cargo build --release
+    target_dir="release"
 fi
+
+if [ $? -ne 0 ]; then
+    echo "cargo build failed"
+    exit 1
+fi
+
+# Clean up and copy binary
+if [ "$1" = "debug" ]; then
+    rm -f ./ipm/bin/ipm
+    mkdir -p ipm/bin
+    cp "./target/debug/ipm" ipm/bin/ipm
+else
+    rm -rf ./ipm
+    mkdir -p ipm/bin
+    cp "./target/release/ipm" ipm/bin/ipm
+fi
+
+# Configure system for release build
+if [ "$1" = "release" ]; then
+    ./ipm/bin/ipm system configure
+    if [ $? -ne 0 ]; then
+        echo "ipm system configure failed"
+        exit 1
+    fi
+fi
+
+echo "Build completed successfully"

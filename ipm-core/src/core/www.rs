@@ -207,9 +207,21 @@ pub fn update() {
         serde_json::to_string_pretty(&www_packages_data).expect("Failed to parse.");
     fs::write(www_packages_list, www_packages_data).expect("Failed to write package's data");
 }
-pub fn list() {
+pub fn list() -> WwwList {
     let www_list = system::www_list_path();
     let www_list = std::fs::read_to_string(&www_list).expect("Failed to read file");
     let www_list: WwwList = serde_json::from_str(&www_list).expect("Failed to parse JSON");
-    println!("{:?}", www_list);
+    return www_list;
+}
+pub fn show_list() {
+    let www_list = list();
+    for www_server in &www_list.list {
+        println!("{}", www_server.name);
+    }
+}
+pub fn package_list() -> Vec<WwwPackageInfo> {
+    let www_list = system::www_packages_path();
+    let www_list = std::fs::read_to_string(&www_list).expect("Failed to read file");
+    let www_list: WwwPackages = serde_json::from_str(&www_list).expect("Failed to parse JSON");
+    return www_list.list;
 }

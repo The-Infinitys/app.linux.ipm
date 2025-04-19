@@ -35,7 +35,13 @@ fn sub_cmd(cmd_name: String, _args: Vec<String>) -> u8 {
             }
         }
         "update" => package::list::update(),
-        "search" => println!("Run search!"),
+        "search" => {
+            if _args.len() > 0 {
+                package::search_packages(&_args[0]);
+            } else {
+                help::show_help_msg("search");
+            }
+        }
         "detail" => {
             if _args.len() > 0 {
                 for package_name in &_args {
@@ -65,7 +71,7 @@ fn sub_cmd(cmd_name: String, _args: Vec<String>) -> u8 {
                     "add" => www::add(_args[1..].to_vec()),
                     "remove" => www::rm(_args[1..].to_vec()),
                     "update" => www::update(),
-                    "list" => www::list(),
+                    "list" => www::show_list(),
                     _ => help::show_help_msg("www"),
                 }
             } else {
